@@ -1,104 +1,187 @@
 ---
-description: 在任务生成后，对 spec.md、plan.md 和 tasks.md 执行非破坏性的跨工件一致性和质量分析。
+description: Perform a non-destructive cross-artifact consistency and quality analysis across spec.md, plan.md, and tasks.md after task generation.
 scripts:
   sh: scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks
   ps: scripts/powershell/check-prerequisites.ps1 -Json -RequireTasks -IncludeTasks
 ---
 
-用户输入可以直接由代理提供或作为命令参数提供给您 - 您**必须**考虑它（如果不为空）。
+## User Input
 
-用户输入：
-
+```text
 $ARGUMENTS
+```
 
-目标：在实施前识别三个核心工件（`spec.md`、`plan.md`、`tasks.md`）之间的不一致性、重复、模糊性和未指定项。此命令必须在 `/tasks` 成功生成完整的 `tasks.md` 后运行。
+You **MUST** consider the user input before proceeding (if not empty).
 
-严格只读：**不要**修改任何文件。输出结构化分析报告。提供可选的修复计划（用户必须明确批准，任何后续编辑命令都将手动调用）。
+## Goal
 
-章程权威：项目章程（`/memory/constitution.md`）在此分析范围内是**不可协商的**。章程冲突自动为CRITICAL，需要调整规范、计划或任务——而不是稀释、重新解释或静默忽略原则。如果原则本身需要更改，那必须在 `/analyze` 之外的单独、明确的章程更新中发生。
+Identify inconsistencies, duplications, ambiguities, and underspecified items across the three core artifacts (`spec.md`, `plan.md`, `tasks.md`) before implementation. This command MUST run only after `/tasks` has successfully produced a complete `tasks.md`.
 
-执行步骤：
+## Operating Constraints
 
-1. 从仓库根目录运行一次 `{SCRIPT}` 并解析 JSON 以获取 FEATURE_DIR 和 AVAILABLE_DOCS。推导绝对路径：
-   - SPEC = FEATURE_DIR/spec.md
-   - PLAN = FEATURE_DIR/plan.md
-   - TASKS = FEATURE_DIR/tasks.md
-   如果任何必需文件缺失则中止并显示错误消息（指示用户运行缺失的先决条件命令）。
+**STRICTLY READ-ONLY**: Do **not** modify any files. Output a structured analysis report. Offer an optional remediation plan (user must explicitly approve before any follow-up editing commands would be invoked manually).
 
-2. 加载工件：
-   - 解析 spec.md 部分：概述/上下文、功能需求、非功能需求、用户故事、边界情况（如果存在）。
-   - 解析 plan.md：架构/技术栈选择、数据模型引用、阶段、技术约束。
-   - 解析 tasks.md：任务ID、描述、阶段分组、并行标记 [P]、引用的文件路径。
-   - 加载章程 `/memory/constitution.md` 以进行原则验证。
+**Constitution Authority**: The project constitution (`/memory/constitution.md`) is **non-negotiable** within this analysis scope. Constitution conflicts are automatically CRITICAL and require adjustment of the spec, plan, or tasks—not dilution, reinterpretation, or silent ignoring of the principle. If a principle itself needs to change, that must occur in a separate, explicit constitution update outside `/analyze`.
 
-3. 构建内部语义模型：
-   - 需求清单：每个功能+非功能需求都有稳定键（基于祈使短语推导slug；例如，"用户可以上传文件" -> `user-can-upload-file`）。
-   - 用户故事/行动清单。
-   - 任务覆盖映射：将每个任务映射到一个或多个需求或故事（通过关键字/显式引用模式如ID或关键短语进行推断）。
-   - 章程规则集：提取原则名称和任何 MUST/SHOULD 规范性陈述。
+## Execution Steps
 
-4. 检测过程：
-   A. 重复检测：
-      - 识别近乎重复的需求。标记较低质量的措辞以进行合并。
-   B. 模糊性检测：
-      - 标记缺乏可衡量标准的模糊形容词（快速、可扩展、安全、直观、健壮）。
-      - 标记未解决的占位符（TODO、TKTK、???、<placeholder> 等）。
-   C. 未指定性检测：
-      - 有动词但缺少对象或可衡量结果的需求。
-      - 缺少验收标准对齐的用户故事。
-      - 引用规范/计划中未定义的文件或组件的任务。
-   D. 章程对齐：
-      - 任何与 MUST 原则冲突的需求或计划元素。
-      - 缺少章程中规定的部分或质量门控。
-   E. 覆盖空白：
-      - 零个关联任务的需求。
-      - 没有映射需求/故事的任务。
-      - 任务中未反映的非功能需求（例如，性能、安全性）。
-   F. 不一致性：
-      - 术语漂移（相同概念在不同文件中命名不同）。
-      - 计划中引用但规范中缺失的数据实体（反之亦然）。
-      - 任务顺序矛盾（例如，集成任务在没有依赖说明的情况下先于基础设置任务）。
-      - 冲突的需求（例如，一个要求使用 Next.js 而另一个说使用 Vue 作为框架）。
+### 1. Initialize Analysis Context
 
-5. 严重性分配评估标准：
-   - CRITICAL：违反章程 MUST、缺失核心规范工件、或零覆盖阻碍基线功能的需求。
-   - HIGH：重复或冲突的需求、模糊的安全/性能属性、不可测试的验收标准。
-   - MEDIUM：术语漂移、缺少非功能任务覆盖、未指定的边界情况。
-   - LOW：样式/措辞改进、不影响执行顺序的轻微重复。
+Run `{SCRIPT}` once from repo root and parse JSON for FEATURE_DIR and AVAILABLE_DOCS. Derive absolute paths:
 
-6. 生成Markdown报告（无文件写入），包含以下部分：
+- SPEC = FEATURE_DIR/spec.md
+- PLAN = FEATURE_DIR/plan.md
+- TASKS = FEATURE_DIR/tasks.md
 
-   ### 规范分析报告
-   | ID | 类别 | 严重性 | 位置 | 摘要 | 建议 |
-   |----|--------|----------|------|---------|---------|
-   | A1 | 重复 | HIGH | spec.md:L120-134 | 两个相似需求... | 合并措辞；保留更清晰版本 |
-   （每个发现添加一行；按类别首字母生成稳定ID。）
+Abort with an error message if any required file is missing (instruct the user to run missing prerequisite command).
+For single quotes in args like "I'm Groot", use escape syntax: e.g 'I'\''m Groot' (or double-quote if possible: "I'm Groot").
 
-   附加小节：
-   - 覆盖摘要表：
-     | 需求键 | 有任务？ | 任务ID | 备注 |
-   - 章程对齐问题（如果有）
-   - 未映射任务（如果有）
-   - 指标：
-     * 总需求数
-     * 总任务数
-     * 覆盖百分比（具有>=1个任务的需求）
-     * 模糊性计数
-     * 重复计数
-     * 关键问题计数
+### 2. Load Artifacts (Progressive Disclosure)
 
-7. 在报告末尾，输出简洁的后续操作块：
-   - 如果存在CRITICAL问题：建议在 `/implement` 前解决。
-   - 如果只有LOW/MEDIUM：用户可以继续，但提供改进建议。
-   - 提供显式命令建议：例如，"运行 /specify 进行细化"，"运行 /plan 调整架构"，"手动编辑 tasks.md 添加 'performance-metrics' 的覆盖"。
+Load only the minimal necessary context from each artifact:
 
-8. 询问用户："您希望我为前N个问题建议具体的修复编辑吗？"（不要自动应用它们。）
+**From spec.md:**
 
-行为规则：
-- 永远不要修改文件。
-- 永远不要虚构缺失部分——如果缺失，报告它们。
-- 保持发现确定性：如果无更改重新运行，产生一致的ID和计数。
-- 限制主表中的总发现数到50；在汇总溢出注释中聚合余数。
-- 如果发现零问题，发出包含覆盖统计和继续建议的成功报告。
+- Overview/Context
+- Functional Requirements
+- Non-Functional Requirements
+- User Stories
+- Edge Cases (if present)
 
-上下文：{ARGS}
+**From plan.md:**
+
+- Architecture/stack choices
+- Data Model references
+- Phases
+- Technical constraints
+
+**From tasks.md:**
+
+- Task IDs
+- Descriptions
+- Phase grouping
+- Parallel markers [P]
+- Referenced file paths
+
+**From constitution:**
+
+- Load `/memory/constitution.md` for principle validation
+
+### 3. Build Semantic Models
+
+Create internal representations (do not include raw artifacts in output):
+
+- **Requirements inventory**: Each functional + non-functional requirement with a stable key (derive slug based on imperative phrase; e.g., "User can upload file" → `user-can-upload-file`)
+- **User story/action inventory**: Discrete user actions with acceptance criteria
+- **Task coverage mapping**: Map each task to one or more requirements or stories (inference by keyword / explicit reference patterns like IDs or key phrases)
+- **Constitution rule set**: Extract principle names and MUST/SHOULD normative statements
+
+### 4. Detection Passes (Token-Efficient Analysis)
+
+Focus on high-signal findings. Limit to 50 findings total; aggregate remainder in overflow summary.
+
+#### A. Duplication Detection
+
+- Identify near-duplicate requirements
+- Mark lower-quality phrasing for consolidation
+
+#### B. Ambiguity Detection
+
+- Flag vague adjectives (fast, scalable, secure, intuitive, robust) lacking measurable criteria
+- Flag unresolved placeholders (TODO, TKTK, ???, `<placeholder>`, etc.)
+
+#### C. Underspecification
+
+- Requirements with verbs but missing object or measurable outcome
+- User stories missing acceptance criteria alignment
+- Tasks referencing files or components not defined in spec/plan
+
+#### D. Constitution Alignment
+
+- Any requirement or plan element conflicting with a MUST principle
+- Missing mandated sections or quality gates from constitution
+
+#### E. Coverage Gaps
+
+- Requirements with zero associated tasks
+- Tasks with no mapped requirement/story
+- Non-functional requirements not reflected in tasks (e.g., performance, security)
+
+#### F. Inconsistency
+
+- Terminology drift (same concept named differently across files)
+- Data entities referenced in plan but absent in spec (or vice versa)
+- Task ordering contradictions (e.g., integration tasks before foundational setup tasks without dependency note)
+- Conflicting requirements (e.g., one requires Next.js while other specifies Vue)
+
+### 5. Severity Assignment
+
+Use this heuristic to prioritize findings:
+
+- **CRITICAL**: Violates constitution MUST, missing core spec artifact, or requirement with zero coverage that blocks baseline functionality
+- **HIGH**: Duplicate or conflicting requirement, ambiguous security/performance attribute, untestable acceptance criterion
+- **MEDIUM**: Terminology drift, missing non-functional task coverage, underspecified edge case
+- **LOW**: Style/wording improvements, minor redundancy not affecting execution order
+
+### 6. Produce Compact Analysis Report
+
+Output a Markdown report (no file writes) with the following structure:
+
+## Specification Analysis Report
+
+| ID | Category | Severity | Location(s) | Summary | Recommendation |
+|----|----------|----------|-------------|---------|----------------|
+| A1 | Duplication | HIGH | spec.md:L120-134 | Two similar requirements ... | Merge phrasing; keep clearer version |
+
+(Add one row per finding; generate stable IDs prefixed by category initial.)
+
+**Coverage Summary Table:**
+
+| Requirement Key | Has Task? | Task IDs | Notes |
+|-----------------|-----------|----------|-------|
+
+**Constitution Alignment Issues:** (if any)
+
+**Unmapped Tasks:** (if any)
+
+**Metrics:**
+
+- Total Requirements
+- Total Tasks
+- Coverage % (requirements with >=1 task)
+- Ambiguity Count
+- Duplication Count
+- Critical Issues Count
+
+### 7. Provide Next Actions
+
+At end of report, output a concise Next Actions block:
+
+- If CRITICAL issues exist: Recommend resolving before `/implement`
+- If only LOW/MEDIUM: User may proceed, but provide improvement suggestions
+- Provide explicit command suggestions: e.g., "Run /specify with refinement", "Run /plan to adjust architecture", "Manually edit tasks.md to add coverage for 'performance-metrics'"
+
+### 8. Offer Remediation
+
+Ask the user: "Would you like me to suggest concrete remediation edits for the top N issues?" (Do NOT apply them automatically.)
+
+## Operating Principles
+
+### Context Efficiency
+
+- **Minimal high-signal tokens**: Focus on actionable findings, not exhaustive documentation
+- **Progressive disclosure**: Load artifacts incrementally; don't dump all content into analysis
+- **Token-efficient output**: Limit findings table to 50 rows; summarize overflow
+- **Deterministic results**: Rerunning without changes should produce consistent IDs and counts
+
+### Analysis Guidelines
+
+- **NEVER modify files** (this is read-only analysis)
+- **NEVER hallucinate missing sections** (if absent, report them accurately)
+- **Prioritize constitution violations** (these are always CRITICAL)
+- **Use examples over exhaustive rules** (cite specific instances, not generic patterns)
+- **Report zero issues gracefully** (emit success report with coverage statistics)
+
+## Context
+
+{ARGS}

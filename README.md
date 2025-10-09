@@ -12,12 +12,12 @@
 
 [![Release](https://github.com/Linfee/spec-kit-cn/actions/workflows/release.yml/badge.svg)](https://github.com/Linfee/spec-kit-cn/actions/workflows/release.yml)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-spec--kit--cn-blue?logo=github)](https://github.com/Linfee/spec-kit-cn.git)
-[![Current Version](https://img.shields.io/badge/version-0.0.55-green)](https://github.com/Linfee/spec-kit-cn/releases)
+[![Current Version](https://img.shields.io/badge/version-0.0.58-green)](https://github.com/Linfee/spec-kit-cn/releases)
 
 </div>
 
 > **💡 这是 [GitHub Spec Kit](https://github.com/github/spec-kit) 的官方中文复刻版本**
-> **🔄 对应原版提交**: [`e3b456c4c88be456ab190b3bebdb1e97c94fa6db`](https://github.com/github/spec-kit/commit/e3b456c4c88be456ab190b3bebdb1e97c94fa6db)
+> **🔄 对应原版提交**: [`89f4b0b`](https://github.com/github/spec-kit/commit/89f4b0b) (v0.0.58)
 > **📦 包名**: `specify-cn-cli` | **🛠️ 命令**: `specify-cn`
 
 > **⚠️ 保持同步**: 本项目将定期与原版保持同步，确保中文用户能够享受最新的功能和改进。

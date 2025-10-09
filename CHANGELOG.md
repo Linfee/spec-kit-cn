@@ -5,6 +5,33 @@
 格式基于[Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)，
 并且本项目遵循[语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [0.0.58] - 2025-01-09
+
+### 同步原版
+- 同步原版 [v0.0.58](https://github.com/github/spec-kit/releases/tag/v0.0.58)
+- 对应原版提交：多个提交（详见git log v0.0.55..v0.0.58）
+- 主要提交：
+  - `de1db34` - feat(agent): Added Amazon Q Developer CLI Integration
+  - `af2b14e` - Add escaping guidelines to command templates
+  - `ba8144d` - Package up VS Code settings for Copilot
+  - `4dc4887` - Update templates/tasks-template.md
+  - `a6be9be` - Update checklist.md
+
+### 新增功能
+- ✨ Amazon Q Developer CLI 支持（新增 AI 助手）
+- ✨ Checklist 功能：新增 `/speckit.checklist` 命令用于需求质量验证
+- ✨ VS Code 设置模板：为 GitHub Copilot 用户提供配置支持
+- 🔧 命令模板转义指南：处理特殊字符的标准化方法
+
+### 中文本地化更新
+- 完整中文翻译所有新增内容
+- 优化现有模板的中文表达
+- 更新 CLI 输出中文界面
+- 本地化 checklist-template.md 模板
+
+### 已知问题
+- Amazon Q Developer CLI 不支持自定义参数（原版限制）
+
 ## [0.0.55] - 2025-10-02
 
 ### 同步原版

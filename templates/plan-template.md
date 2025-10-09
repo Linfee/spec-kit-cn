@@ -1,81 +1,62 @@
----
-description: "功能开发的实施计划模板"
-scripts:
-  sh: scripts/bash/update-agent-context.sh __AGENT__
-  ps: scripts/powershell/update-agent-context.ps1 -AgentType __AGENT__
----
+# Implementation Plan: [FEATURE]
 
-# 实施计划：[FEATURE]
+**Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
+**Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
 
-**分支**: `[###-feature-name]` | **日期**: [DATE] | **规格**: [link]
-**输入**: 来自 `/specs/[###-feature-name]/spec.md` 的功能规格
+**Note**: This template is filled in by the `/speckit.plan` command. See `.specify/templates/commands/plan.md` for the execution workflow.
 
-## 执行流程（/plan 命令范围）
-```
-1. 从输入路径加载功能规格
-   → 如果未找到：错误 "在 {path} 处未找到功能规格"
-2. 填充技术上下文（扫描需要澄清的内容）
-   → 从文件系统结构或上下文检测项目类型（web=前端+后端，mobile=应用+api）
-   → 根据项目类型设置架构决策
-3. 根据章程文档内容填写章程检查部分
-4. 评估下面的章程检查部分
-   → 如果存在违规：在复杂性跟踪中记录
-   → 如果无法证明合理性：错误 "请先简化方法"
-   → 更新进度跟踪：初始章程检查
-5. 执行阶段 0 → research.md
-   → 如果仍有需要澄清的内容：错误 "请解决未知问题"
-6. 执行阶段 1 → contracts, data-model.md, quickstart.md, agent-specific 模板文件（例如，Claude Code 的 `CLAUDE.md`，GitHub Copilot 的 `.github/copilot-instructions.md`，或 Gemini CLI 的 `GEMINI.md`，Qwen Code 的 `QWEN.md` 或 opencode 的 `AGENTS.md`）
-7. 重新评估章程检查部分
-   → 如果有新的违规：重构设计，返回阶段 1
-   → 更新进度跟踪：设计后章程检查
-8. 计划阶段 2 → 描述任务生成方法（不要创建 tasks.md）
-9. 停止 - 准备执行 /tasks 命令
-```
+## Summary
 
-**重要说明**: /plan 命令在第 7 步停止。阶段 2-4 由其他命令执行：
-- 阶段 2: /tasks 命令创建 tasks.md
-- 阶段 3-4: 实施执行（手动或通过工具）
+[Extract from feature spec: primary requirement + technical approach from research]
 
-## 摘要
-[从功能规格中提取：主要需求 + 来自研究的技术方法]
+## Technical Context
 
-## 技术上下文
-**语言/版本**: [例如，Python 3.11, Swift 5.9, Rust 1.75 或需要澄清]
-**主要依赖**: [例如，FastAPI, UIKit, LLVM 或需要澄清]
-**存储**: [如果适用，例如，PostgreSQL, CoreData, files 或不适用]
-**测试**: [例如，pytest, XCTest, cargo test 或需要澄清]
-**目标平台**: [例如，Linux 服务器，iOS 15+, WASM 或需要澄清]
-**项目类型**: [单个/web/移动 - 决定源代码结构]
-**性能目标**: [特定领域，例如 1000 请求/秒，10k 行/秒，60 fps 或需要澄清]
-**约束**: [特定领域，例如 <200ms p95，<100MB 内存，离线能力 或需要澄清]
-**规模/范围**: [特定领域，例如 10k 用户，1M LOC，50 个屏幕 或需要澄清]
+<!--
+  ACTION REQUIRED: Replace the content in this section with the technical details
+  for the project. The structure here is presented in advisory capacity to guide
+  the iteration process.
+-->
 
-## 章程检查
-*门控：必须在阶段 0 研究之前通过。在阶段 1 设计后重新检查。*
+**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
+**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
+**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
+**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
+**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
+**Project Type**: [single/web/mobile - determines source structure]  
+**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
+**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
+**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
 
-[根据章程文件确定的门控]
+## Constitution Check
 
-## 项目结构
+*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-### 文档（此功能）
+[Gates determined based on constitution file]
+
+## Project Structure
+
+### Documentation (this feature)
+
 ```
 specs/[###-feature]/
-├── plan.md              # 此文件（/plan 命令输出）
-├── research.md          # 阶段 0 输出（/plan 命令）
-├── data-model.md        # 阶段 1 输出（/plan 命令）
-├── quickstart.md        # 阶段 1 输出（/plan 命令）
-├── contracts/           # 阶段 1 输出（/plan 命令）
-└── tasks.md             # 阶段 2 输出（/tasks 命令 - 不由 /plan 创建）
+├── plan.md              # This file (/speckit.plan command output)
+├── research.md          # Phase 0 output (/speckit.plan command)
+├── data-model.md        # Phase 1 output (/speckit.plan command)
+├── quickstart.md        # Phase 1 output (/speckit.plan command)
+├── contracts/           # Phase 1 output (/speckit.plan command)
+└── tasks.md             # Phase 2 output (/speckit.tasks command - NOT created by /speckit.plan)
 ```
 
-### 源代码（仓库根目录）
+### Source Code (repository root)
 <!--
-  操作要求：用此功能的具体布局替换下面的占位符树。
-  删除未使用的选项并使用真实路径扩展所选结构（例如，apps/admin，packages/something）。
-  交付的计划不得包含选项标签。
+  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
+  for this feature. Delete unused options and expand the chosen structure with
+  real paths (e.g., apps/admin, packages/something). The delivered plan must
+  not include Option labels.
 -->
+
 ```
-# [如果未使用则删除] 选项 1：单个项目（默认）
+# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
 src/
 ├── models/
 ├── services/
@@ -87,7 +68,7 @@ tests/
 ├── integration/
 └── unit/
 
-# [如果未使用则删除] 选项 2：Web 应用程序（当检测到 "frontend" + "backend" 时）
+# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
 backend/
 ├── src/
 │   ├── models/
@@ -102,122 +83,22 @@ frontend/
 │   └── services/
 └── tests/
 
-# [如果未使用则删除] 选项 3：移动应用 + API（当检测到 "iOS/Android" 时）
+# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
 api/
-└── [与上面的 backend 相同]
+└── [same as backend above]
 
-ios/ 或 android/
-└── [平台特定结构]
+ios/ or android/
+└── [platform-specific structure: feature modules, UI flows, platform tests]
 ```
 
-**架构决策**: [记录所选架构并参考上面捕获的实际目录]
+**Structure Decision**: [Document the selected structure and reference the real
+directories captured above]
 
-## 阶段 0：大纲与研究
-1. **从上面的技术上下文中提取未知内容**：
-   - 对于每个需要澄清的内容 → 研究任务
-   - 对于每个依赖 → 最佳实践任务
-   - 对于每个集成 → 模式任务
+## Complexity Tracking
 
-2. **生成并派遣研究代理**：
-   ```
-   对于技术上下文中的每个未知内容：
-     任务："为 {feature context} 研究 {unknown}"
-   对于每个技术选择：
-     任务："在 {domain} 中找到 {tech} 的最佳实践"
-   ```
+*Fill ONLY if Constitution Check has violations that must be justified*
 
-3. **在 `research.md` 中整合发现**，使用格式：
-   - 决策：[选择了什么]
-   - 理由：[为什么选择]
-   - 考虑的替代方案：[还评估了什么]
-
-**输出**: research.md，所有需要澄清的内容都已解决
-
-## 阶段 1：设计与合约
-*前提条件：research.md 完成*
-
-1. **从功能规格中提取实体** → `data-model.md`：
-   - 实体名称、字段、关系
-   - 来自需求的验证规则
-   - 状态转换（如果适用）
-
-2. **从功能需求生成 API 合约**：
-   - 对于每个用户操作 → 端点
-   - 使用标准 REST/GraphQL 模式
-   - 输出 OpenAPI/GraphQL 模式到 `/contracts/`
-
-3. **从合约生成合约测试**：
-   - 每个端点一个测试文件
-   - 断言请求/响应模式
-   - 测试必须失败（尚未实现）
-
-4. **从用户故事中提取测试场景**：
-   - 每个故事 → 集成测试场景
-   - 快速启动测试 = 故事验证步骤
-
-5. **逐步更新代理文件**（O(1) 操作）：
-   - 运行 `{SCRIPT}`
-     **重要说明**: 必须完全按照上述说明执行，不要添加或删除任何参数。
-   - 如果存在：仅添加当前计划中的新技术
-   - 保留标记之间的手动添加内容
-   - 更新最近的更改（保留最后 3 个）
-   - 保持低于 150 行以提高 token 效率
-   - 输出到仓库根目录
-
-**输出**: data-model.md, /contracts/*, 失败的测试, quickstart.md, agent-specific 文件
-
-## 阶段 2：任务规划方法
-*本节描述 /tasks 命令将做什么 - 不要在 /plan 期间执行*
-
-**任务生成策略**：
-- 加载 `.specify/templates/tasks-template.md` 作为基础
-- 从阶段 1 设计文档生成任务（合约、数据模型、快速启动）
-- 每个合约 → 合约测试任务 [P]
-- 每个实体 → 模型创建任务 [P]
-- 每个用户故事 → 集成测试任务
-- 使测试通过的实施任务
-
-**排序策略**：
-- TDD 顺序：测试在实现之前
-- 依赖顺序：模型在服务之前，服务在 UI 之前
-- 标记 [P] 用于并行执行（独立文件）
-
-**预计输出**: tasks.md 中 25-30 个编号的、有序的任务
-
-**重要说明**: 此阶段由 /tasks 命令执行，而不是由 /plan 执行
-
-## 阶段 3+：未来实施
-*这些阶段超出了 /plan 命令的范围*
-
-**阶段 3**: 任务执行（/tasks 命令创建 tasks.md）
-**阶段 4**: 实施（按照项目章程原则执行 tasks.md）
-**阶段 5**: 验证（运行测试，执行 quickstart.md，性能验证）
-
-## 复杂度跟踪
-*仅在章程检查有必须证明合理性的违规时填写*
-
-| 违规 | 需要原因 | 拒绝的更简单替代方案 |
-|------|----------|-------------------|
-| [例如，第 4 个项目] | [当前需求] | [为什么 3 个项目不够] |
-| [例如，Repository 模式] | [特定问题] | [为什么直接数据库访问不够] |
-
-
-## 进度追踪
-*此检查清单在执行流程期间更新*
-
-**阶段状态**：
-- [ ] 阶段 0：研究完成（/plan 命令）
-- [ ] 阶段 1：设计完成（/plan 命令）
-- [ ] 阶段 2：任务规划完成（/plan 命令 - 仅描述方法）
-- [ ] 阶段 3：任务生成（/tasks 命令）
-- [ ] 阶段 4：实施完成
-- [ ] 阶段 5：验证通过
-
-**门控状态**：
-- [ ] 初始章程检查：通过
-- [ ] 设计后章程检查：通过
-- [ ] 所有需要澄清的内容已解决
-- [ ] 复杂性偏差已记录
-
----
-*基于项目章程 v2.1.1 - 参见 `/memory/constitution.md`*
+| Violation | Why Needed | Simpler Alternative Rejected Because |
+|-----------|------------|-------------------------------------|
+| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
+| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |

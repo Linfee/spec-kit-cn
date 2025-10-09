@@ -68,11 +68,12 @@ specify-cn --help | grep -E "中文|Spec Kit CN"  # 验证中文输出
 | 项目文档 | `docs/`, `README.md`          | 结构参考 | 完全中文翻译        |
 | 项目章程 | `memory/constitution.md`      | 结构同步 | 完全中文翻译        |
 | 原版追踪 | `spec-kit/`                   | 不提交   | 不适用              |
+| 项目描述 | `AGENTS.md`                   | 完全同步 | 不翻译              |
 
 ### 版本对应关系
-- 当前版本：查看 `pyproject.toml` 中的 `version` 字段
-- 原版版本：查看 `pyproject.toml` 中的 `description` 字段
-- 同步状态：查看 `CHANGELOG.md` 中的同步记录
+- 当前版本：v0.0.58（查看 `pyproject.toml` 中的 `version` 字段）
+- 原版版本：v0.0.58（查看 `pyproject.toml` 中的 `description` 字段）
+- 同步状态：已同步至 v0.0.58（查看 `CHANGELOG.md` 中的同步记录）
 
 ### 紧急情况处理
 1. **同步冲突**：优先保留原版功能，仅在本地化内容上保留修改
@@ -147,9 +148,10 @@ specify-cn --help | grep -E "中文|Spec Kit CN"  # 验证中文输出
 | Qwen Code      | `qwen`         | `.qwen/commands/`      | TOML     | CLI    |
 | opencode       | `opencode`     | `.opencode/command/`   | Markdown | CLI    |
 | Windsurf       | 无（IDE 集成） | `.windsurf/workflows/` | Markdown | IDE    |
-| Codex          | 待确认         | `.codex/`              | 待确认   | 待确认 |
-| Kilocode       | 待确认         | `.kilocode/`           | 待确认   | 待确认 |
-| Auggie         | 待确认         | `.auggie/`             | 待确认   | 待确认 |
+| Codex          | `codex`        | `.codex/`              | Markdown | CLI    |
+| Kilocode       | `kilocode`     | `.kilocode/`           | Markdown | CLI    |
+| Auggie         | `auggie`       | `.auggie/`             | Markdown | CLI    |
+| Amazon Q Developer CLI | `q` | `.amazonq/prompts/` | Markdown | CLI    |
 
 ### 模板系统
 
@@ -214,10 +216,11 @@ specify-cn --help | grep -E "中文|Spec Kit CN"  # 验证中文输出
 **同步工作流程**：
 1. 检查当前版本对应的原版 tag/commit
 2. 在 `spec-kit/` 目录检出对应原版版本
-3. 对比分析原版变更内容
-4. **关键步骤**：将原版 `AGENTS.md` 拷贝到当前项目，比对项目记忆是否有缺失并补充
-5. 根据文件分类策略执行同步
-6. 更新 CHANGELOG.md 记录同步信息
+3. 始终完全同步scripts, 使用命令`rsync -avp spec-kit/scripts/ scripts/`
+4. **关键步骤**：将原版 `AGENTS.md` 拷贝到当前项目，比对项目记忆是否有缺失并补充, 使用命令`cp spec-kit/AGENTS.md AGENTS.md`
+5. 对比分析原版变更内容
+6. 根据文件分类策略执行同步
+7. 更新 CHANGELOG.md 记录同步信息
 
 **AGENTS.md 比对的重要性**：
 - 原版 `AGENTS.md` 包含最新的 AI 助手支持信息和技术细节

@@ -1,116 +1,115 @@
-# 功能规范：[功能名称]
+# Feature Specification: [FEATURE NAME]
 
-**功能分支**: `[###-feature-name]`
-**创建时间**: [日期]
-**状态**: 草稿
-**输入**: 用户描述："$ARGUMENTS"
+**Feature Branch**: `[###-feature-name]`  
+**Created**: [DATE]  
+**Status**: Draft  
+**Input**: User description: "$ARGUMENTS"
 
-## 主要执行流程
-```
-1. 从输入解析用户描述
-   → 如果为空：错误 "未提供功能描述"
-2. 从描述中提取关键概念
-   → 识别：参与者、动作、数据、约束
-3. 对于每个不明确的方面：
-   → 标记为 [需要澄清：具体问题]
-4. 填写用户场景和测试部分
-   → 如果没有明确的用户流程：错误 "无法确定用户场景"
-5. 生成功能需求
-   → 每个需求必须是可测试的
-   → 标记模糊的需求
-6. 识别关键实体（如果涉及数据）
-7. 运行审查清单
-   → 如果有任何 [需要澄清]：警告 "规范存在不确定性"
-   → 如果发现实现细节：错误 "移除技术细节"
-8. 返回：成功（规范已准备好进行规划）
-```
+## User Scenarios & Testing *(mandatory)*
 
----
+<!--
+  IMPORTANT: User stories should be PRIORITIZED as user journeys ordered by importance.
+  Each user story/journey must be INDEPENDENTLY TESTABLE - meaning if you implement just ONE of them,
+  you should still have a viable MVP (Minimum Viable Product) that delivers value.
+  
+  Assign priorities (P1, P2, P3, etc.) to each story, where P1 is the most critical.
+  Think of each story as a standalone slice of functionality that can be:
+  - Developed independently
+  - Tested independently
+  - Deployed independently
+  - Demonstrated to users independently
+-->
 
-## ⚡ 快速指南
-- ✅ 专注于用户需要什么以及为什么需要
-- ❌ 避免如何实现（不涉及技术栈、API、代码结构）
-- 👥 为业务利益相关者编写，而不是开发者
+### User Story 1 - [Brief Title] (Priority: P1)
 
-### 章节要求
-- **必需章节**：每个功能都必须完成
-- **可选章节**：仅在与功能相关时包含
-- 当某个章节不适用时，完全删除它（不要保留为"不适用"）
+[Describe this user journey in plain language]
 
-### 用于AI生成
-当从用户提示创建此规范时：
-1. **标记所有模糊之处**：对于任何需要做出的假设，使用 [需要澄清：具体问题]
-2. **不要猜测**：如果提示没有明确说明某些内容（例如，"登录系统"没有说明认证方法），请标记它
-3. **像测试人员一样思考**：每个模糊的需求都应该在"可测试且清晰"的检查项目中失败
-4. **常见的规格不足领域**：
-   - 用户类型和权限
-   - 数据保留/删除策略
-   - 性能目标和规模
-   - 错误处理行为
-   - 集成要求
-   - 安全/合规需求
+**Why this priority**: [Explain the value and why it has this priority level]
+
+**Independent Test**: [Describe how this can be tested independently - e.g., "Can be fully tested by [specific action] and delivers [specific value]"]
+
+**Acceptance Scenarios**:
+
+1. **Given** [initial state], **When** [action], **Then** [expected outcome]
+2. **Given** [initial state], **When** [action], **Then** [expected outcome]
 
 ---
 
-## 用户场景和测试 *（必需）*
+### User Story 2 - [Brief Title] (Priority: P2)
 
-### 主要用户故事
-[用简单的语言描述主要用户旅程]
+[Describe this user journey in plain language]
 
-### 验收场景
-1. **给定** [初始状态]，**当** [动作发生时]，**那么** [预期结果]
-2. **给定** [初始状态]，**当** [动作发生时]，**那么** [预期结果]
+**Why this priority**: [Explain the value and why it has this priority level]
 
-### 边界情况
-- 当 [边界条件] 发生时会发生什么？
-- 系统如何处理 [错误场景]？
+**Independent Test**: [Describe how this can be tested independently]
 
-## 需求 *（必需）*
+**Acceptance Scenarios**:
 
-### 功能需求
-- **FR-001**：系统必须 [具体能力，例如："允许用户创建账户"]
-- **FR-002**：系统必须 [具体能力，例如："验证电子邮件地址"]
-- **FR-003**：用户必须能够 [关键交互，例如："重置他们的密码"]
-- **FR-004**：系统必须 [数据需求，例如："持久化用户偏好"]
-- **FR-005**：系统必须 [行为，例如："记录所有安全事件"]
-
-*标记不明确需求的示例：*
-- **FR-006**：系统必须通过 [需要澄清：未指定认证方法 - 电子邮件/密码、SSO、OAuth？] 认证用户
-- **FR-007**：系统必须保留用户数据 [需要澄清：未指定保留期限]
-
-### 关键实体 *（如果功能涉及数据则包含）*
-- **[实体1]**：[它代表什么，关键属性但不涉及实现]
-- **[实体2]**：[它代表什么，与其他实体的关系]
+1. **Given** [initial state], **When** [action], **Then** [expected outcome]
 
 ---
 
-## 审查和验收清单
-*门控：在main()执行期间运行自动检查*
+### User Story 3 - [Brief Title] (Priority: P3)
 
-### 内容质量
-- [ ] 没有实现细节（语言、框架、API）
-- [ ] 专注于用户价值和业务需求
-- [ ] 为非技术利益相关者编写
-- [ ] 所有必需章节已完成
+[Describe this user journey in plain language]
 
-### 需求完整性
-- [ ] 没有 [需要澄清] 标记剩余
-- [ ] 需求是可测试且清晰的
-- [ ] 成功标准是可衡量的
-- [ ] 范围边界清晰
-- [ ] 已识别依赖关系和假设
+**Why this priority**: [Explain the value and why it has this priority level]
+
+**Independent Test**: [Describe how this can be tested independently]
+
+**Acceptance Scenarios**:
+
+1. **Given** [initial state], **When** [action], **Then** [expected outcome]
 
 ---
 
-## 执行状态
-*在处理期间由main()更新*
+[Add more user stories as needed, each with an assigned priority]
 
-- [ ] 已解析用户描述
-- [ ] 已提取关键概念
-- [ ] 已标记模糊之处
-- [ ] 已定义用户场景
-- [ ] 已生成需求
-- [ ] 已识别实体
-- [ ] 已通过审查清单
+### Edge Cases
 
----
+<!--
+  ACTION REQUIRED: The content in this section represents placeholders.
+  Fill them out with the right edge cases.
+-->
+
+- What happens when [boundary condition]?
+- How does system handle [error scenario]?
+
+## Requirements *(mandatory)*
+
+<!--
+  ACTION REQUIRED: The content in this section represents placeholders.
+  Fill them out with the right functional requirements.
+-->
+
+### Functional Requirements
+
+- **FR-001**: System MUST [specific capability, e.g., "allow users to create accounts"]
+- **FR-002**: System MUST [specific capability, e.g., "validate email addresses"]  
+- **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
+- **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
+- **FR-005**: System MUST [behavior, e.g., "log all security events"]
+
+*Example of marking unclear requirements:*
+
+- **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
+- **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
+
+### Key Entities *(include if feature involves data)*
+
+- **[Entity 1]**: [What it represents, key attributes without implementation]
+- **[Entity 2]**: [What it represents, relationships to other entities]
+
+## Success Criteria *(mandatory)*
+
+<!--
+  ACTION REQUIRED: Define measurable success criteria.
+  These must be technology-agnostic and measurable.
+-->
+
+### Measurable Outcomes
+
+- **SC-001**: [Measurable metric, e.g., "Users can complete account creation in under 2 minutes"]
+- **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
+- **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
+- **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
