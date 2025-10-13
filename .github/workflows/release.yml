@@ -2,12 +2,8 @@ name: Create Release
 
 on:
   push:
-    branches: [ main ]
-    paths:
-      - 'memory/**'
-      - 'scripts/**'
-      - 'templates/**'
-      - '.github/workflows/**'
+    tags:
+      - 'v*.*.*-cn'
   workflow_dispatch:
 
 jobs:
@@ -25,36 +21,23 @@ jobs:
         fetch-depth: 0
         token: ${{ secrets.GITHUB_TOKEN }}
         
-    - name: Get latest tag
+    - name: Get current tag
       id: get_tag
       run: |
-        # Get the latest tag, or use v0.0.0 if no tags exist
-        LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
-        echo "latest_tag=$LATEST_TAG" >> $GITHUB_OUTPUT
-        
-        # Extract version number and increment
-        VERSION=$(echo $LATEST_TAG | sed 's/v//')
-        IFS='.' read -ra VERSION_PARTS <<< "$VERSION"
-        MAJOR=${VERSION_PARTS[0]:-0}
-        MINOR=${VERSION_PARTS[1]:-0}
-        PATCH=${VERSION_PARTS[2]:-0}
-        
-        # Increment patch version
-        PATCH=$((PATCH + 1))
-        NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
-        
-        echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
-        echo "New version will be: $NEW_VERSION"
+        # Get the current tag that triggered this workflow
+        CURRENT_TAG=${{ github.ref_name }}
+        echo "current_tag=$CURRENT_TAG" >> $GITHUB_OUTPUT
+        echo "Using tag: $CURRENT_TAG"
         
     - name: Check if release already exists
       id: check_release
       run: |
-        if gh release view ${{ steps.get_tag.outputs.new_version }} >/dev/null 2>&1; then
+        if gh release view ${{ steps.get_tag.outputs.current_tag }} >/dev/null 2>&1; then
           echo "exists=true" >> $GITHUB_OUTPUT
-          echo "Release ${{ steps.get_tag.outputs.new_version }} already exists, skipping..."
+          echo "Release ${{ steps.get_tag.outputs.current_tag }} already exists, skipping..."
         else
           echo "exists=false" >> $GITHUB_OUTPUT
-          echo "Release ${{ steps.get_tag.outputs.new_version }} does not exist, proceeding..."
+          echo "Release ${{ steps.get_tag.outputs.current_tag }} does not exist, proceeding..."
         fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -63,55 +46,56 @@ jobs:
       if: steps.check_release.outputs.exists == 'false'
       run: |
         chmod +x .github/workflows/scripts/create-release-packages.sh
-        .github/workflows/scripts/create-release-packages.sh ${{ steps.get_tag.outputs.new_version }}
+        .github/workflows/scripts/create-release-packages.sh ${{ steps.get_tag.outputs.current_tag }}
         
     - name: Generate release notes
       if: steps.check_release.outputs.exists == 'false'
       id: release_notes
       run: |
-        # Get commits since last tag
-        LAST_TAG=${{ steps.get_tag.outputs.latest_tag }}
-        if [ "$LAST_TAG" = "v0.0.0" ]; then
-          # Check how many commits we have and use that as the limit
-          COMMIT_COUNT=$(git rev-list --count HEAD)
-          if [ "$COMMIT_COUNT" -gt 10 ]; then
-            COMMITS=$(git log --oneline --pretty=format:"- %s" HEAD~10..HEAD)
+        # Get commits since last non-CN tag
+        LAST_CN_TAG=$(git describe --tags --match="v*.*.*-cn" --abbrev=0 HEAD~1 2>/dev/null || echo "")
+        if [ -z "$LAST_CN_TAG" ]; then
+          # Find the last regular tag to compare against
+          LAST_REGULAR_TAG=$(git describe --tags --match="v*.*.*" --exclude="*-*-cn" --abbrev=0 HEAD~1 2>/dev/null || echo "")
+          if [ -z "$LAST_REGULAR_TAG" ]; then
+            # If no previous tags, get last 20 commits
+            COMMITS=$(git log --oneline --pretty=format:"- %s" HEAD~20..HEAD)
           else
-            COMMITS=$(git log --oneline --pretty=format:"- %s" HEAD~$COMMIT_COUNT..HEAD 2>/dev/null || git log --oneline --pretty=format:"- %s")
+            COMMITS=$(git log --oneline --pretty=format:"- %s" $LAST_REGULAR_TAG..HEAD)
           fi
         else
-          COMMITS=$(git log --oneline --pretty=format:"- %s" $LAST_TAG..HEAD)
+          COMMITS=$(git log --oneline --pretty=format:"- %s" $LAST_CN_TAG..HEAD)
         fi
-        
+
         # Create release notes
         cat > release_notes.md << EOF
-        Template release ${{ steps.get_tag.outputs.new_version }}
+        Spec Kit CN 中文模板发布 ${{ steps.get_tag.outputs.current_tag }}
 
         Updated specification-driven development templates for multiple AI assistants including GitHub Copilot, Claude Code, Gemini CLI, Cursor, Qwen, OpenCode, Windsurf, Codex, Kilocode, Auggie, and Roo.
 
         Download the template for your preferred AI assistant and script type:
-        - spec-kit-template-copilot-sh-${{ steps.get_tag.outputs.new_version }}.zip
-        - spec-kit-template-copilot-ps-${{ steps.get_tag.outputs.new_version }}.zip
-        - spec-kit-template-claude-sh-${{ steps.get_tag.outputs.new_version }}.zip
-        - spec-kit-template-claude-ps-${{ steps.get_tag.outputs.new_version }}.zip
-        - spec-kit-template-gemini-sh-${{ steps.get_tag.outputs.new_version }}.zip
-        - spec-kit-template-gemini-ps-${{ steps.get_tag.outputs.new_version }}.zip
-        - spec-kit-template-cursor-sh-${{ steps.get_tag.outputs.new_version }}.zip
-        - spec-kit-template-cursor-ps-${{ steps.get_tag.outputs.new_version }}.zip
-        - spec-kit-template-qwen-sh-${{ steps.get_tag.outputs.new_version }}.zip
-        - spec-kit-template-qwen-ps-${{ steps.get_tag.outputs.new_version }}.zip
-        - spec-kit-template-opencode-sh-${{ steps.get_tag.outputs.new_version }}.zip
-        - spec-kit-template-opencode-ps-${{ steps.get_tag.outputs.new_version }}.zip
-        - spec-kit-template-windsurf-sh-${{ steps.get_tag.outputs.new_version }}.zip
-        - spec-kit-template-windsurf-ps-${{ steps.get_tag.outputs.new_version }}.zip
-        - spec-kit-template-codex-sh-${{ steps.get_tag.outputs.new_version }}.zip
-        - spec-kit-template-codex-ps-${{ steps.get_tag.outputs.new_version }}.zip
-        - spec-kit-template-kilocode-sh-${{ steps.get_tag.outputs.new_version }}.zip
-        - spec-kit-template-kilocode-ps-${{ steps.get_tag.outputs.new_version }}.zip
-        - spec-kit-template-auggie-sh-${{ steps.get_tag.outputs.new_version }}.zip
-        - spec-kit-template-auggie-ps-${{ steps.get_tag.outputs.new_version }}.zip
-        - spec-kit-template-roo-sh-${{ steps.get_tag.outputs.new_version }}.zip
-        - spec-kit-template-roo-ps-${{ steps.get_tag.outputs.new_version }}.zip
+        - spec-kit-cn-template-copilot-sh-${{ steps.get_tag.outputs.current_tag }}.zip
+        - spec-kit-cn-template-copilot-ps-${{ steps.get_tag.outputs.current_tag }}.zip
+        - spec-kit-cn-template-claude-sh-${{ steps.get_tag.outputs.current_tag }}.zip
+        - spec-kit-cn-template-claude-ps-${{ steps.get_tag.outputs.current_tag }}.zip
+        - spec-kit-cn-template-gemini-sh-${{ steps.get_tag.outputs.current_tag }}.zip
+        - spec-kit-cn-template-gemini-ps-${{ steps.get_tag.outputs.current_tag }}.zip
+        - spec-kit-cn-template-cursor-sh-${{ steps.get_tag.outputs.current_tag }}.zip
+        - spec-kit-cn-template-cursor-ps-${{ steps.get_tag.outputs.current_tag }}.zip
+        - spec-kit-cn-template-qwen-sh-${{ steps.get_tag.outputs.current_tag }}.zip
+        - spec-kit-cn-template-qwen-ps-${{ steps.get_tag.outputs.current_tag }}.zip
+        - spec-kit-cn-template-opencode-sh-${{ steps.get_tag.outputs.current_tag }}.zip
+        - spec-kit-cn-template-opencode-ps-${{ steps.get_tag.outputs.current_tag }}.zip
+        - spec-kit-cn-template-windsurf-sh-${{ steps.get_tag.outputs.current_tag }}.zip
+        - spec-kit-cn-template-windsurf-ps-${{ steps.get_tag.outputs.current_tag }}.zip
+        - spec-kit-cn-template-codex-sh-${{ steps.get_tag.outputs.current_tag }}.zip
+        - spec-kit-cn-template-codex-ps-${{ steps.get_tag.outputs.current_tag }}.zip
+        - spec-kit-cn-template-kilocode-sh-${{ steps.get_tag.outputs.current_tag }}.zip
+        - spec-kit-cn-template-kilocode-ps-${{ steps.get_tag.outputs.current_tag }}.zip
+        - spec-kit-cn-template-auggie-sh-${{ steps.get_tag.outputs.current_tag }}.zip
+        - spec-kit-cn-template-auggie-ps-${{ steps.get_tag.outputs.current_tag }}.zip
+        - spec-kit-cn-template-roo-sh-${{ steps.get_tag.outputs.current_tag }}.zip
+        - spec-kit-cn-template-roo-ps-${{ steps.get_tag.outputs.current_tag }}.zip
         EOF
         
         echo "Generated release notes:"
@@ -121,33 +105,33 @@ jobs:
       if: steps.check_release.outputs.exists == 'false'
       run: |
         # Remove 'v' prefix from version for release title
-        VERSION_NO_V=${{ steps.get_tag.outputs.new_version }}
+        VERSION_NO_V=${{ steps.get_tag.outputs.current_tag }}
         VERSION_NO_V=${VERSION_NO_V#v}
 
-        gh release create ${{ steps.get_tag.outputs.new_version }} \
-          spec-kit-template-copilot-sh-${{ steps.get_tag.outputs.new_version }}.zip \
-          spec-kit-template-copilot-ps-${{ steps.get_tag.outputs.new_version }}.zip \
-          spec-kit-template-claude-sh-${{ steps.get_tag.outputs.new_version }}.zip \
-          spec-kit-template-claude-ps-${{ steps.get_tag.outputs.new_version }}.zip \
-          spec-kit-template-gemini-sh-${{ steps.get_tag.outputs.new_version }}.zip \
-          spec-kit-template-gemini-ps-${{ steps.get_tag.outputs.new_version }}.zip \
-          spec-kit-template-cursor-sh-${{ steps.get_tag.outputs.new_version }}.zip \
-          spec-kit-template-cursor-ps-${{ steps.get_tag.outputs.new_version }}.zip \
-          spec-kit-template-qwen-sh-${{ steps.get_tag.outputs.new_version }}.zip \
-          spec-kit-template-qwen-ps-${{ steps.get_tag.outputs.new_version }}.zip \
-          spec-kit-template-opencode-sh-${{ steps.get_tag.outputs.new_version }}.zip \
-          spec-kit-template-opencode-ps-${{ steps.get_tag.outputs.new_version }}.zip \
-          spec-kit-template-windsurf-sh-${{ steps.get_tag.outputs.new_version }}.zip \
-          spec-kit-template-windsurf-ps-${{ steps.get_tag.outputs.new_version }}.zip \
-          spec-kit-template-codex-sh-${{ steps.get_tag.outputs.new_version }}.zip \
-          spec-kit-template-codex-ps-${{ steps.get_tag.outputs.new_version }}.zip \
-          spec-kit-template-kilocode-sh-${{ steps.get_tag.outputs.new_version }}.zip \
-          spec-kit-template-kilocode-ps-${{ steps.get_tag.outputs.new_version }}.zip \
-          spec-kit-template-auggie-sh-${{ steps.get_tag.outputs.new_version }}.zip \
-          spec-kit-template-auggie-ps-${{ steps.get_tag.outputs.new_version }}.zip \
-          spec-kit-template-roo-sh-${{ steps.get_tag.outputs.new_version }}.zip \
-          spec-kit-template-roo-ps-${{ steps.get_tag.outputs.new_version }}.zip \
-          --title "Spec Kit Templates - $VERSION_NO_V" \
+        gh release create ${{ steps.get_tag.outputs.current_tag }} \
+          spec-kit-cn-template-copilot-sh-${{ steps.get_tag.outputs.current_tag }}.zip \
+          spec-kit-cn-template-copilot-ps-${{ steps.get_tag.outputs.current_tag }}.zip \
+          spec-kit-cn-template-claude-sh-${{ steps.get_tag.outputs.current_tag }}.zip \
+          spec-kit-cn-template-claude-ps-${{ steps.get_tag.outputs.current_tag }}.zip \
+          spec-kit-cn-template-gemini-sh-${{ steps.get_tag.outputs.current_tag }}.zip \
+          spec-kit-cn-template-gemini-ps-${{ steps.get_tag.outputs.current_tag }}.zip \
+          spec-kit-cn-template-cursor-sh-${{ steps.get_tag.outputs.current_tag }}.zip \
+          spec-kit-cn-template-cursor-ps-${{ steps.get_tag.outputs.current_tag }}.zip \
+          spec-kit-cn-template-qwen-sh-${{ steps.get_tag.outputs.current_tag }}.zip \
+          spec-kit-cn-template-qwen-ps-${{ steps.get_tag.outputs.current_tag }}.zip \
+          spec-kit-cn-template-opencode-sh-${{ steps.get_tag.outputs.current_tag }}.zip \
+          spec-kit-cn-template-opencode-ps-${{ steps.get_tag.outputs.current_tag }}.zip \
+          spec-kit-cn-template-windsurf-sh-${{ steps.get_tag.outputs.current_tag }}.zip \
+          spec-kit-cn-template-windsurf-ps-${{ steps.get_tag.outputs.current_tag }}.zip \
+          spec-kit-cn-template-codex-sh-${{ steps.get_tag.outputs.current_tag }}.zip \
+          spec-kit-cn-template-codex-ps-${{ steps.get_tag.outputs.current_tag }}.zip \
+          spec-kit-cn-template-kilocode-sh-${{ steps.get_tag.outputs.current_tag }}.zip \
+          spec-kit-cn-template-kilocode-ps-${{ steps.get_tag.outputs.current_tag }}.zip \
+          spec-kit-cn-template-auggie-sh-${{ steps.get_tag.outputs.current_tag }}.zip \
+          spec-kit-cn-template-auggie-ps-${{ steps.get_tag.outputs.current_tag }}.zip \
+          spec-kit-cn-template-roo-sh-${{ steps.get_tag.outputs.current_tag }}.zip \
+          spec-kit-cn-template-roo-ps-${{ steps.get_tag.outputs.current_tag }}.zip \
+          --title "Spec Kit CN 中文模板 - $VERSION_NO_V" \
           --notes-file release_notes.md
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -156,7 +140,7 @@ jobs:
       if: steps.check_release.outputs.exists == 'false'
       run: |
         # Update version in pyproject.toml (remove 'v' prefix for Python versioning)
-        VERSION=${{ steps.get_tag.outputs.new_version }}
+        VERSION=${{ steps.get_tag.outputs.current_tag }}
         PYTHON_VERSION=${VERSION#v}
         
         if [ -f "pyproject.toml" ]; then

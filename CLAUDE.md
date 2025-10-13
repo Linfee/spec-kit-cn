@@ -87,11 +87,6 @@ specify-cn --help | grep -E "中文|Spec Kit CN"  # 验证中文输出
 | 原版追踪 | `spec-kit/`                   | 不提交   | 不适用              |
 | 项目描述 | `AGENTS.md`                   | 完全同步 | 不翻译              |
 
-### 版本对应关系
-- 当前版本：v0.0.58（查看 `pyproject.toml` 中的 `version` 字段）
-- 原版版本：v0.0.58（查看 `pyproject.toml` 中的 `description` 字段）
-- 同步状态：已同步至 v0.0.58（查看 `CHANGELOG.md` 中的同步记录）
-
 ---
 
 ## 技术架构
@@ -268,3 +263,5 @@ specify-cn --help | grep -E "中文|Spec Kit CN"  # 验证中文输出
 ## 其他Rule
 
 - 原版项目位于`./spec-kit`，如果没有，就将它克隆到这个位置，始终从该位置访问原版文件
+- 同步src下脚本文件时，务必将repo_name和repo_user替换为本项目的
+- 记得在提交代码前更新README.md中的版本信息
