@@ -13,46 +13,48 @@ $ARGUMENTS
 
 执行步骤：
 
-1. 验证环境准备：
+1. 验证环境准备, 使用tree命令来检查这些项, 需要完全同步的使用rsync命令确保同步
    - 确认spec-kit目录存在且包含原版文件
-   - 确认templates/和templates/commands/目录结构完整
-   - 确认memory/目录存在
+   - 确认templates目录结构和spec-kit/templates保持一致
+   - 确认memory目录结构和spec-kit/docs保持一致
+   - 确认docs目录结构和spec-kit/docs保持一致
+   - 确认src目录结构和spec-kit/src保持一致
+   - 确认scripts目录结构和spec-kit/scripts保持一致（需完全同步）
+   - 确认media目录结构和spec-kit/media保持一致（需完全同步）
+   - 确认AGENTS.md文件存在且与spec-kit/AGENTS.md一致（需完全同步）
+   - 确认pyproject.toml配置文件与原版结构一致
+   
+2. review核心md文件翻译质量
+  - 深度遍历 templates, memory, docs 三个目录, 对找到的每个md文件，对比原版对应文件，review翻译质量。此步骤使用Task工具并行执行
 
-2. 目录结构对比分析：
-   - 对比原项目spec-kit中templates和templates/commands目录结构
-   - 对比当前项目templates目录与原项目的差异
-   - 对比当前项目memory目录与原项目的差异
+3. review项目级别md文件翻译质量, 以下子项务必使用Task工具并行处理
+  - review spec-driven.md (对比原版 spec-kit/spec-driven.md) 的翻译质量
+  - review SUPPORT.md (对比原版 spec-kit/SUPPORT.md) 的翻译质量
+  - review SECURITY.md (对比原版 spec-kit/SECURITY.md) 的翻译质量
+  - review README.md (对比原版 spec-kit/README.md) 的翻译质量
+  - review CONTRIBUTING.md (对比原版 spec-kit/CONTRIBUTING.md) 的翻译质量
+  - review CODE_OF_CONDUCT.md (对比原版 spec-kit/CODE_OF_CONDUCT.md) 的翻译质量
+  
+4. review src/specify_cli 目录下python文件的功能与翻译质量
+   - 遍历 src/specify_cli 下的python文件，对比原版文件，review其功能是否保持一致，是否对脚本中的文案进行了适当的翻译
 
-3. 翻译质量系统性review：
-   - **templates目录核心文件**：
-     * agent-file-template.md - AI助手文件模板
-     * spec-template.md - 功能规范模板
-     * plan-template.md - 实施计划模板
-     * tasks-template.md - 任务生成模板
+5. 检查.github/目录更新情况
+   - 对比原版.github/目录结构，列出新增或修改的文件
+   - 如有更新，详细说明变更内容并提供同步建议
+   - 不强制要求同步，仅提供信息供用户决策
 
-   - **templates/commands目录所有文件**：
-     * analyze.md - 分析命令
-     * clarify.md - 澄清命令
-     * constitution.md - 章程命令
-     * implement.md - 实施命令
-     * plan.md - 计划命令
-     * specify.md - 规范命令
-     * tasks.md - 任务命令
-
-   - **memory目录**：
-     * constitution.md - 项目章程模板
-     
-   - 上述目录中新出现的一切没有提到的文件也需要review
-
-4. 输出结构化报告等待人类审核：
+6. 输出结构化报告等待人类审核：
+   - 报告应包含执行摘要、详细问题列表、术语一致性检查、功能验证结果和修复建议
+   - 参考 @TRANSLATION_STANDARDS.md 中的输出报告结构要求
 
 行为规则：
 - 必须对比原版spec-kit中的对应文件
 - 使用Task工具并行对比
 - 所有文件翻译后，必须确保和原版表达是一样的语义，不能新增或减少内容
 - 所有的路径，不需要翻译，都以原版为准
+  - 特别原文中包含`.specify`开头的路径，绝对不要做额外处理
+  - 唯一的例外，原文中如果提到命令specify需要替换为specify-cn
 - 确保修复后的功能与原版完全一致
-- 优先修复功能逻辑错误
-- 保持技术术语的准确性
-- 输出详细的修复报告
+- 翻译标准参考 @TRANSLATION_STANDARDS.md, 术语表参考 @TERMINOLOGY.md
+- 输出详细的修复报告，按照错误分类进行优先级排序
 - 所有没有问题，请直接告诉用户

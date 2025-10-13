@@ -2,7 +2,7 @@
 
 ## 前置要求
 
-- **Linux/macOS**（或在Windows上的WSL2）
+- **Linux/macOS**（或在 Windows 上的 WSL2）
 - AI编码助手：[Claude Code](https://www.anthropic.com/claude-code)、[GitHub Copilot](https://code.visualstudio.com/)或[Gemini CLI](https://github.com/google-gemini/gemini-cli)
 - [uv](https://docs.astral.sh/uv/) 用于包管理
 - [Python 3.11+](https://www.python.org/downloads/)
@@ -26,9 +26,9 @@ uvx --from git+https://github.com/Linfee/spec-kit-cn.git specify-cn init .
 uvx --from git+https://github.com/Linfee/spec-kit-cn.git specify-cn init --here
 ```
 
-### 指定AI助手
+### 指定 AI 助手
 
-您可以在初始化时主动指定您的AI助手：
+您可以在初始化时主动指定您的 AI 助手：
 
 ```bash
 uvx --from git+https://github.com/Linfee/spec-kit-cn.git specify-cn init <project_name> --ai claude
@@ -46,16 +46,16 @@ uvx --from git+https://github.com/Linfee/spec-kit-cn.git specify-cn init <projec
 
 ## 验证
 
-初始化后，您应该在AI助手中看到以下可用命令：
-- `/specify` - 创建规范
-- `/plan` - 生成实施计划
-- `/tasks` - 分解为可执行任务
+初始化后，您应该在 AI 助手中看到以下可用命令：
+- `/speckit.specify` - 创建规范
+- `/speckit.plan` - 生成实施计划
+- `/speckit.tasks` - 分解为可执行任务
 
 ## 故障排除
 
-### Linux上的Git凭据管理器
+### Linux 上的 Git 凭据管理器
 
-如果您在Linux上遇到Git身份验证问题，可以安装Git凭据管理器：
+如果您在 Linux 上遇到 Git 身份验证问题，可以安装 Git 凭据管理器：
 
 ```bash
 #!/usr/bin/env bash

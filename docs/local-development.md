@@ -1,6 +1,6 @@
 # 本地开发指南
 
-本指南展示如何在本地对 `specify` CLI 进行迭代开发，无需先发布版本或提交到 `main` 分支。
+本指南展示如何在本地对 `specify-cn` CLI 进行迭代开发，无需先发布版本或提交到 `main` 分支。
 
 ## 1. 克隆和切换分支
 
@@ -39,8 +39,8 @@ source .venv/bin/activate  # 或在 Windows 上：.venv\\Scripts\\activate
 # 以可编辑模式安装项目
 uv pip install -e .
 
-# 现在 'specify' 入口点可用
-specify --help
+# 现在 'specify-cn' 入口点可用
+specify-cn --help
 ```
 
 由于是可编辑模式，代码编辑后重新运行无需重新安装。
@@ -50,7 +50,7 @@ specify --help
 `uvx` 可以从本地路径（或 Git 引用）运行，以模拟用户流程：
 
 ```bash
-uvx --from . specify init demo-uvx --ai copilot --ignore-agent-tools
+uvx --from . specify-cn init demo-uvx --ai copilot --ignore-agent-tools
 ```
 
 您也可以将 uvx 指向特定分支而无需合并：
@@ -66,6 +66,7 @@ uvx --from git+https://github.com/Linfee/spec-kit-cn.git@your-feature-branch spe
 如果您在其他目录中，使用绝对路径代替 `.`：
 
 ```bash
+# 注意：以下示例使用原版 spec-kit 作为参考
 uvx --from /mnt/c/GitHub/spec-kit specify --help
 uvx --from /mnt/c/GitHub/spec-kit specify init demo-anywhere --ai copilot --ignore-agent-tools
 ```
@@ -81,6 +82,13 @@ uvx --from "$SPEC_KIT_SRC" specify init demo-env --ai copilot --ignore-agent-too
 specify-dev() { uvx --from /mnt/c/GitHub/spec-kit specify "$@"; }
 # 然后
 specify-dev --help
+```
+
+**中文版等效命令**：
+```bash
+# 对于中文版，使用以下命令：
+export SPEC_KIT_CN_SRC=/path/to/spec-kit-cn
+uvx --from "$SPEC_KIT_CN_SRC" specify-cn init demo-env --ai copilot --ignore-agent-tools
 ```
 
 ## 5. 测试脚本权限逻辑
@@ -125,8 +133,8 @@ python -m src.specify_cli init --here --ai claude --ignore-agent-tools  # 如果
 如果在实验时需要绕过 TLS 验证：
 
 ```bash
-specify check --skip-tls
-specify init demo --skip-tls --ai gemini --ignore-agent-tools
+specify-cn check --skip-tls
+specify-cn init demo --skip-tls --ai gemini --ignore-agent-tools
 ```
 （仅用于本地实验。）
 
@@ -135,10 +143,10 @@ specify init demo --skip-tls --ai gemini --ignore-agent-tools
 | 操作 | 命令 |
 |------|------|
 | 直接运行 CLI | `python -m src.specify_cli --help` |
-| 可编辑安装 | `uv pip install -e .` 然后 `specify ...` |
-| 本地 uvx 运行（仓库根目录） | `uvx --from . specify ...` |
-| 本地 uvx 运行（绝对路径） | `uvx --from /mnt/c/GitHub/spec-kit specify ...` |
-| Git 分支 uvx | `uvx --from git+URL@branch specify ...` |
+| 可编辑安装 | `uv pip install -e .` 然后 `specify-cn ...` |
+| 本地 uvx 运行（仓库根目录） | `uvx --from . specify-cn ...` |
+| 本地 uvx 运行（绝对路径） | `uvx --from /path/to/spec-kit-cn specify-cn ...` |
+| Git 分支 uvx | `uvx --from git+URL@branch specify-cn ...` |
 | 构建 wheel | `uv build` |
 
 ## 11. 清理

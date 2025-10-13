@@ -2,6 +2,8 @@
 
 本指南将帮助您使用 Spec Kit 开始规范驱动开发。
 
+> **🆕 新功能**: 所有自动化脚本现在都提供 Bash (`.sh`) 和 PowerShell (`.ps1`) 两种版本。`specify-cn` CLI 会根据操作系统自动选择，除非您传递 `--script sh|ps` 参数。
+
 ## 四步流程
 
 ### 1. 安装 Specify CN
@@ -9,36 +11,42 @@
 使用中文版本的编码代理初始化项目：
 
 ```bash
-uvx --from git+https://github.com/Linfee/spec-kit-cn.git specify-cn init <PROJECT_NAME>
+uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <PROJECT_NAME>
+```
+
+显式选择脚本类型（可选）：
+```bash
+uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <PROJECT_NAME> --script ps  # 强制使用 PowerShell
+uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <PROJECT_NAME> --script sh  # 强制使用 POSIX shell
 ```
 
 > **🔍 温馨提示**: 这是中文版本的安装命令。如果您需要英文原版，请使用 `github/spec-kit` 仓库。
 
 ### 2. 创建规范
 
-使用 `/specify` 命令描述您想要构建的内容。重点关注**做什么**和**为什么**，而不是技术栈。
+使用 `/speckit.specify` 命令描述您想要构建的内容。重点关注**做什么**和**为什么**，而不是技术栈。
 
 ```bash
-/specify 构建一个可以帮助我将照片整理到不同相册中的应用程序。相册按日期分组，可以通过在主页上拖拽来重新组织。相册不会嵌套在其他相册中。在每个相册内，照片以类似瓦片的界面预览。
+/speckit.specify 构建一个可以帮助我将照片整理到不同相册中的应用程序。相册按日期分组，可以通过在主页上拖拽来重新组织。相册不会嵌套在其他相册中。在每个相册内，照片以瓦片式界面预览。
 ```
 
 ### 3. 创建技术实施计划
 
-使用 `/plan` 命令提供您的技术栈和架构选择。
+使用 `/speckit.plan` 命令提供您的技术栈和架构选择。
 
 ```bash
-/plan 应用程序使用 Vite 和最少数量的库。尽可能使用原生 HTML、CSS 和 JavaScript。图片不会上传到任何地方，元数据存储在本地 SQLite 数据库中。
+/speckit.plan 应用程序使用 Vite 和最少数量的库。尽可能使用纯 HTML、CSS 和 JavaScript。图片不会上传到任何地方，元数据存储在本地 SQLite 数据库中。
 ```
 
 ### 4. 分解并实施
 
-使用 `/tasks` 创建可操作的任务列表，然后让您的代理实施功能。
+使用 `/speckit.tasks` 创建可操作的任务列表，然后让您的代理实施功能。
 
 ## 详细示例：构建 Taskify
 
 以下是构建团队生产力平台的完整示例：
 
-### 步骤 1：使用 `/specify` 定义需求
+### 步骤 1：使用 `/speckit.specify` 定义需求
 
 ```text
 开发 Taskify，一个团队生产力平台。它应该允许用户创建项目、添加团队成员、
@@ -73,7 +81,7 @@ Taskify 时，它会为您提供五个用户供您选择。不需要密码。当
 阅读审查和验收清单，如果功能规范符合标准，请勾选清单中的每个项目。如果不符合，请留空。
 ```
 
-### 步骤 3：使用 `/plan` 生成技术计划
+### 步骤 3：使用 `/speckit.plan` 生成技术计划
 
 具体说明您的技术栈和技术要求：
 

@@ -10,7 +10,7 @@
 # ]
 # ///
 """
-Specify CN CLI - Setup tool for Specify projects
+Spec Kit CN CLI - Setup tool for Spec Kit CN projects
 
 Usage:
     uvx specify-cn-cli.py init <project-name>
@@ -64,20 +64,90 @@ def _github_auth_headers(cli_token: str | None = None) -> dict:
     token = _github_token(cli_token)
     return {"Authorization": f"Bearer {token}"} if token else {}
 
-AI_CHOICES = {
-    "copilot": "GitHub Copilot",
-    "claude": "Claude Code",
-    "gemini": "Gemini CLI",
-    "cursor": "Cursor",
-    "qwen": "Qwen Code",
-    "opencode": "opencode",
-    "codex": "Codex CLI",
-    "windsurf": "Windsurf",
-    "kilocode": "Kilo Code",
-    "auggie": "Auggie CLI",
-    "roo": "Roo Code",
-    "q": "Amazon Q Developer CLI",
+# Agent configuration with name, folder, install URL, and CLI tool requirement
+AGENT_CONFIG = {
+    "copilot": {
+        "name": "GitHub Copilot",
+        "folder": ".github/",
+        "install_url": None,  # IDE-based, no CLI check needed
+        "requires_cli": False,
+    },
+    "claude": {
+        "name": "Claude Code",
+        "folder": ".claude/",
+        "install_url": "https://docs.anthropic.com/en/docs/claude-code/setup",
+        "requires_cli": True,
+    },
+    "gemini": {
+        "name": "Gemini CLI",
+        "folder": ".gemini/",
+        "install_url": "https://github.com/google-gemini/gemini-cli",
+        "requires_cli": True,
+    },
+    "cursor-agent": {
+        "name": "Cursor",
+        "folder": ".cursor/",
+        "install_url": None,  # IDE-based
+        "requires_cli": False,
+    },
+    "qwen": {
+        "name": "Qwen Code",
+        "folder": ".qwen/",
+        "install_url": "https://github.com/QwenLM/qwen-code",
+        "requires_cli": True,
+    },
+    "opencode": {
+        "name": "opencode",
+        "folder": ".opencode/",
+        "install_url": "https://opencode.ai",
+        "requires_cli": True,
+    },
+    "codex": {
+        "name": "Codex CLI",
+        "folder": ".codex/",
+        "install_url": "https://github.com/openai/codex",
+        "requires_cli": True,
+    },
+    "windsurf": {
+        "name": "Windsurf",
+        "folder": ".windsurf/",
+        "install_url": None,  # IDE-based
+        "requires_cli": False,
+    },
+    "kilocode": {
+        "name": "Kilo Code",
+        "folder": ".kilocode/",
+        "install_url": None,  # IDE-based
+        "requires_cli": False,
+    },
+    "auggie": {
+        "name": "Auggie CLI",
+        "folder": ".augment/",
+        "install_url": "https://docs.augmentcode.com/cli/setup-auggie/install-auggie-cli",
+        "requires_cli": True,
+    },
+    "codebuddy": {
+        "name": "CodeBuddy",
+        "folder": ".codebuddy/",
+        "install_url": "https://www.codebuddy.ai",
+        "requires_cli": True,
+    },
+    "roo": {
+        "name": "Roo Code",
+        "folder": ".roo/",
+        "install_url": None,  # IDE-based
+        "requires_cli": False,
+    },
+    "q": {
+        "name": "Amazon Q Developer CLI",
+        "folder": ".amazonq/",
+        "install_url": "https://aws.amazon.com/developer/learning/q-developer-cli/",
+        "requires_cli": True,
+    },
 }
+
+# For backward compatibility - maintain AI_CHOICES for existing code
+AI_CHOICES = {agent_key: config["name"] for agent_key, config in AGENT_CONFIG.items()}
 
 SCRIPT_TYPE_CHOICES = {"sh": "POSIX Shell (bash/zsh)", "ps": "PowerShell"}
 
@@ -257,19 +327,19 @@ def select_with_arrows(options: dict, prompt_text: str = "Select an option", def
                         selected_key = option_keys[selected_index]
                         break
                     elif key == 'escape':
-                        console.print("\n[yellow]Selection cancelled[/yellow]")
+                        console.print("\n[yellow]选择已取消[/yellow]")
                         raise typer.Exit(1)
 
                     live.update(create_selection_panel(), refresh=True)
 
                 except KeyboardInterrupt:
-                    console.print("\n[yellow]Selection cancelled[/yellow]")
+                    console.print("\n[yellow]选择已取消[/yellow]")
                     raise typer.Exit(1)
 
     run_selection_loop()
 
     if selected_key is None:
-        console.print("\n[red]Selection failed.[/red]")
+        console.print("\n[red]选择失败[/red]")
         raise typer.Exit(1)
 
     # Suppress explicit selection print; tracker / later logic will report consolidated status
@@ -288,7 +358,7 @@ class BannerGroup(TyperGroup):
 
 app = typer.Typer(
     name="specify-cn",
-    help="Setup tool for Specify spec-driven development projects",
+    help="Setup tool for Spec Kit CN spec-driven development projects",
     add_completion=False,
     invoke_without_command=True,
     cls=BannerGroup,
@@ -316,7 +386,7 @@ def callback(ctx: typer.Context):
     # (help is handled by BannerGroup)
     if ctx.invoked_subcommand is None and "--help" not in sys.argv and "-h" not in sys.argv:
         show_banner()
-        console.print(Align.center("[dim]Run 'specify --help' for usage information[/dim]"))
+        console.print(Align.center("[dim]运行 'specify-cn --help' 获取使用信息[/dim]"))
         console.print()
 
 def run_command(cmd: list[str], check_return: bool = True, capture: bool = False, shell: bool = False) -> Optional[str]:
@@ -330,10 +400,10 @@ def run_command(cmd: list[str], check_return: bool = True, capture: bool = False
             return None
     except subprocess.CalledProcessError as e:
         if check_return:
-            console.print(f"[red]Error running command:[/red] {' '.join(cmd)}")
-            console.print(f"[red]Exit code:[/red] {e.returncode}")
+            console.print(f"[red]命令运行错误:[/red] {' '.join(cmd)}")
+            console.print(f"[red]退出代码:[/red] {e.returncode}")
             if hasattr(e, 'stderr') and e.stderr:
-                console.print(f"[red]Error output:[/red] {e.stderr}")
+                console.print(f"[red]错误输出:[/red] {e.stderr}")
             raise
         return None
 
@@ -383,26 +453,38 @@ def is_git_repo(path: Path = None) -> bool:
     except (subprocess.CalledProcessError, FileNotFoundError):
         return False
 
-def init_git_repo(project_path: Path, quiet: bool = False) -> bool:
+def init_git_repo(project_path: Path, quiet: bool = False) -> Tuple[bool, Optional[str]]:
     """Initialize a git repository in the specified path.
-    quiet: if True suppress console output (tracker handles status)
+
+    Args:
+        project_path: Path to initialize git repository in
+        quiet: if True suppress console output (tracker handles status)
+
+    Returns:
+        Tuple of (success: bool, error_message: Optional[str])
     """
     try:
         original_cwd = Path.cwd()
         os.chdir(project_path)
         if not quiet:
-            console.print("[cyan]Initializing git repository...[/cyan]")
-        subprocess.run(["git", "init"], check=True, capture_output=True)
-        subprocess.run(["git", "add", "."], check=True, capture_output=True)
-        subprocess.run(["git", "commit", "-m", "Initial commit from Specify template"], check=True, capture_output=True)
+            console.print("[cyan]正在初始化 Git 仓库...[/cyan]")
+        subprocess.run(["git", "init"], check=True, capture_output=True, text=True)
+        subprocess.run(["git", "add", "."], check=True, capture_output=True, text=True)
+        subprocess.run(["git", "commit", "-m", "Initial commit from Spec Kit CN template"], check=True, capture_output=True, text=True)
         if not quiet:
-            console.print("[green]✓[/green] Git repository initialized")
-        return True
+            console.print("[green]✓[/green] Git 仓库初始化完成")
+        return True, None
 
     except subprocess.CalledProcessError as e:
+        error_msg = f"Command: {' '.join(e.cmd)}\nExit code: {e.returncode}"
+        if e.stderr:
+            error_msg += f"\nError: {e.stderr.strip()}"
+        elif e.stdout:
+            error_msg += f"\nOutput: {e.stdout.strip()}"
+
         if not quiet:
-            console.print(f"[red]Error initializing git repository:[/red] {e}")
-        return False
+            console.print(f"[red]Git 仓库初始化错误:[/red] {e}")
+        return False, error_msg
     finally:
         os.chdir(original_cwd)
 
@@ -413,7 +495,7 @@ def download_template_from_github(ai_assistant: str, download_dir: Path, *, scri
         client = httpx.Client(verify=ssl_context)
 
     if verbose:
-        console.print("[cyan]Fetching latest release information...[/cyan]")
+        console.print("[cyan]正在获取最新发布信息...[/cyan]")
     api_url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/releases/latest"
 
     try:
@@ -434,8 +516,8 @@ def download_template_from_github(ai_assistant: str, download_dir: Path, *, scri
         except ValueError as je:
             raise RuntimeError(f"Failed to parse release JSON: {je}\nRaw (truncated 400): {response.text[:400]}")
     except Exception as e:
-        console.print(f"[red]Error fetching release information[/red]")
-        console.print(Panel(str(e), title="Fetch Error", border_style="red"))
+        console.print(f"[red]获取发布信息错误[/red]")
+        console.print(Panel(str(e), title="获取错误", border_style="red"))
         raise typer.Exit(1)
 
     # Find the template asset for the specified AI assistant
@@ -449,9 +531,9 @@ def download_template_from_github(ai_assistant: str, download_dir: Path, *, scri
     asset = matching_assets[0] if matching_assets else None
 
     if asset is None:
-        console.print(f"[red]No matching release asset found[/red] for [bold]{ai_assistant}[/bold] (expected pattern: [bold]{pattern}[/bold])")
+        console.print(f"[red]未找到匹配的发布资源[/red] [bold]{ai_assistant}[/bold] (期望模式: [bold]{pattern}[/bold])")
         asset_names = [a.get('name', '?') for a in assets]
-        console.print(Panel("\n".join(asset_names) or "(no assets)", title="Available Assets", border_style="yellow"))
+        console.print(Panel("\n".join(asset_names) or "(无资源)", title="可用资源", border_style="yellow"))
         raise typer.Exit(1)
 
     download_url = asset["browser_download_url"]
@@ -459,13 +541,13 @@ def download_template_from_github(ai_assistant: str, download_dir: Path, *, scri
     file_size = asset["size"]
 
     if verbose:
-        console.print(f"[cyan]Found template:[/cyan] {filename}")
-        console.print(f"[cyan]Size:[/cyan] {file_size:,} bytes")
-        console.print(f"[cyan]Release:[/cyan] {release_data['tag_name']}")
+        console.print(f"[cyan]找到模板:[/cyan] {filename}")
+        console.print(f"[cyan]大小:[/cyan] {file_size:,} 字节")
+        console.print(f"[cyan]版本:[/cyan] {release_data['tag_name']}")
 
     zip_path = download_dir / filename
     if verbose:
-        console.print(f"[cyan]Downloading template...[/cyan]")
+        console.print(f"[cyan]正在下载模板...[/cyan]")
 
     try:
         with client.stream(
@@ -501,14 +583,14 @@ def download_template_from_github(ai_assistant: str, download_dir: Path, *, scri
                         for chunk in response.iter_bytes(chunk_size=8192):
                             f.write(chunk)
     except Exception as e:
-        console.print(f"[red]Error downloading template[/red]")
+        console.print(f"[red]模板下载错误[/red]")
         detail = str(e)
         if zip_path.exists():
             zip_path.unlink()
-        console.print(Panel(detail, title="Download Error", border_style="red"))
+        console.print(Panel(detail, title="下载错误", border_style="red"))
         raise typer.Exit(1)
     if verbose:
-        console.print(f"Downloaded: {filename}")
+        console.print(f"已下载: {filename}")
     metadata = {
         "filename": filename,
         "size": file_size,
@@ -553,7 +635,7 @@ def download_and_extract_template(project_path: Path, ai_assistant: str, script_
         tracker.add("extract", "Extract template")
         tracker.start("extract")
     elif verbose:
-        console.print("Extracting template...")
+        console.print("正在解压模板...")
 
     try:
         # Create project directory only if not using current directory
@@ -722,7 +804,7 @@ def ensure_executable_scripts(project_path: Path, tracker: StepTracker | None = 
 @app.command()
 def init(
     project_name: str = typer.Argument(None, help="Name for your new project directory (optional if using --here, or use '.' for current directory)"),
-    ai_assistant: str = typer.Option(None, "--ai", help="AI assistant to use: claude, gemini, copilot, cursor, qwen, opencode, codex, windsurf, kilocode, auggie or q"),
+    ai_assistant: str = typer.Option(None, "--ai", help="AI assistant to use: claude, gemini, copilot, cursor-agent, qwen, opencode, codex, windsurf, kilocode, auggie, codebuddy, roo or q"),
     script_type: str = typer.Option(None, "--script", help="Script type to use: sh or ps"),
     ignore_agent_tools: bool = typer.Option(False, "--ignore-agent-tools", help="Skip checks for AI agent tools like Claude Code"),
     no_git: bool = typer.Option(False, "--no-git", help="Skip git repository initialization"),
@@ -733,8 +815,8 @@ def init(
     github_token: str = typer.Option(None, "--github-token", help="GitHub token to use for API requests (or set GH_TOKEN or GITHUB_TOKEN environment variable)"),
 ):
     """
-    Initialize a new Specify project from the latest template.
-    
+    Initialize a new Spec Kit CN project from the latest template.
+
     This command will:
     1. Check that required tools are installed (git is optional)
     2. Let you choose your AI assistant (Claude Code, Gemini CLI, GitHub Copilot, Cursor, Qwen Code, opencode, Codex CLI, Windsurf, Kilo Code, Auggie CLI, or Amazon Q Developer CLI)
@@ -742,18 +824,18 @@ def init(
     4. Extract the template to a new project directory or current directory
     5. Initialize a fresh git repository (if not --no-git and no existing repo)
     6. Optionally set up AI assistant commands
-    
+
     Examples:
-        specify init my-project
-        specify init my-project --ai claude
-        specify init my-project --ai copilot --no-git
-        specify init --ignore-agent-tools my-project
-        specify init . --ai claude         # Initialize in current directory
-        specify init .                     # Initialize in current directory (interactive AI selection)
-        specify init --here --ai claude    # Alternative syntax for current directory
-        specify init --here --ai codex
-        specify init --here
-        specify init --here --force  # Skip confirmation when current directory not empty
+        specify-cn init my-project
+        specify-cn init my-project --ai claude
+        specify-cn init my-project --ai copilot --no-git
+        specify-cn init --ignore-agent-tools my-project
+        specify-cn init . --ai claude         # Initialize in current directory
+        specify-cn init .                     # Initialize in current directory (interactive AI selection)
+        specify-cn init --here --ai claude    # Alternative syntax for current directory
+        specify-cn init --here --ai codex
+        specify-cn init --here
+        specify-cn init --here --force  # Skip confirmation when current directory not empty
     """
 
     show_banner()
@@ -782,9 +864,9 @@ def init(
             if force:
                 console.print("[cyan]--force supplied: skipping confirmation and proceeding with merge[/cyan]")
             else:
-                response = typer.confirm("Do you want to continue?")
+                response = typer.confirm("是否要继续？")
                 if not response:
-                    console.print("[yellow]Operation cancelled[/yellow]")
+                    console.print("[yellow]操作已取消[/yellow]")
                     raise typer.Exit(0)
     else:
         project_path = Path(project_name).resolve()
@@ -803,7 +885,7 @@ def init(
     current_dir = Path.cwd()
 
     setup_lines = [
-        "[cyan]Specify Project Setup[/cyan]",
+        "[cyan]Spec Kit CN Project Setup[/cyan]",
         "",
         f"{'Project':<15} [green]{project_path.name}[/green]",
         f"{'Working Path':<15} [dim]{current_dir}[/dim]",
@@ -904,7 +986,7 @@ def init(
 
     # Download and set up project
     # New tree-based progress (no emojis); include earlier substeps
-    tracker = StepTracker("Initialize Specify Project")
+    tracker = StepTracker("Initialize Spec Kit CN Project")
     # Flag to allow suppressing legacy headings
     sys._specify_tracker_active = True
     # Pre steps recorded as completed before live rendering
@@ -927,6 +1009,9 @@ def init(
     ]:
         tracker.add(key, label)
 
+    # Track git error message outside Live context so it persists
+    git_error_message = None
+
     # Use transient so live tree is replaced by the final static render (avoids duplicate output)
     with Live(tracker.render(), console=console, refresh_per_second=8, transient=True) as live:
         tracker.attach_refresh(lambda: live.update(tracker.render()))
@@ -947,10 +1032,12 @@ def init(
                 if is_git_repo(project_path):
                     tracker.complete("git", "existing repo detected")
                 elif should_init_git:
-                    if init_git_repo(project_path, quiet=True):
+                    success, error_msg = init_git_repo(project_path, quiet=True)
+                    if success:
                         tracker.complete("git", "initialized")
                     else:
                         tracker.error("git", "init failed")
+                        git_error_message = error_msg
                 else:
                     tracker.skip("git", "git not available")
             else:
@@ -980,24 +1067,27 @@ def init(
     console.print(tracker.render())
     console.print("\n[bold green]Project ready.[/bold green]")
 
-    # Agent folder security notice
-    agent_folder_map = {
-        "claude": ".claude/",
-        "gemini": ".gemini/",
-        "cursor": ".cursor/",
-        "qwen": ".qwen/",
-        "opencode": ".opencode/",
-        "codex": ".codex/",
-        "windsurf": ".windsurf/",
-        "kilocode": ".kilocode/",
-        "auggie": ".augment/",
-        "copilot": ".github/",
-        "roo": ".roo/",
-        "q": ".amazonq/"
-    }
+    # Show git error details if initialization failed
+    if git_error_message:
+        console.print()
+        git_error_panel = Panel(
+            f"[yellow]Warning:[/yellow] Git repository initialization failed\n\n"
+            f"{git_error_message}\n\n"
+            f"[dim]You can initialize git manually later with:[/dim]\n"
+            f"[cyan]cd {project_path if not here else '.'}[/cyan]\n"
+            f"[cyan]git init[/cyan]\n"
+            f"[cyan]git add .[/cyan]\n"
+            f"[cyan]git commit -m \"Initial commit\"[/cyan]",
+            title="[red]Git Initialization Failed[/red]",
+            border_style="red",
+            padding=(1, 2)
+        )
+        console.print(git_error_panel)
 
-    if selected_ai in agent_folder_map:
-        agent_folder = agent_folder_map[selected_ai]
+    # Agent folder security notice
+    agent_config = AGENT_CONFIG.get(selected_ai)
+    if agent_config:
+        agent_folder = agent_config["folder"]
         security_notice = Panel(
             f"Some agents may store credentials, auth tokens, or other identifying and private artifacts in the agent folder within your project.\n"
             f"Consider adding [cyan]{agent_folder}[/cyan] (or parts of it) to [cyan].gitignore[/cyan] to prevent accidental credential leakage.",
@@ -1061,40 +1151,38 @@ def check():
     tracker = StepTracker("Check Available Tools")
 
     tracker.add("git", "Git version control")
-    tracker.add("claude", "Claude Code CLI")
-    tracker.add("gemini", "Gemini CLI")
-    tracker.add("qwen", "Qwen Code CLI")
+
+    # Add AI assistants from AGENT_CONFIG that require CLI tools
+    for agent_key, config in AGENT_CONFIG.items():
+        if config["requires_cli"]:
+            tracker.add(agent_key, config["name"])
+
+    # Also check IDEs
     tracker.add("code", "Visual Studio Code")
     tracker.add("code-insiders", "Visual Studio Code Insiders")
-    tracker.add("cursor-agent", "Cursor IDE agent")
-    tracker.add("windsurf", "Windsurf IDE")
-    tracker.add("kilocode", "Kilo Code IDE")
-    tracker.add("opencode", "opencode")
-    tracker.add("codex", "Codex CLI")
-    tracker.add("auggie", "Auggie CLI")
-    tracker.add("q", "Amazon Q Developer CLI")
 
     git_ok = check_tool_for_tracker("git", tracker)
-    claude_ok = check_tool_for_tracker("claude", tracker)  
-    gemini_ok = check_tool_for_tracker("gemini", tracker)
-    qwen_ok = check_tool_for_tracker("qwen", tracker)
+
+    # Check AI assistant tools automatically based on AGENT_CONFIG
+    ai_tool_results = {}
+    for agent_key, config in AGENT_CONFIG.items():
+        if config["requires_cli"]:
+            ai_tool_results[agent_key] = check_tool_for_tracker(agent_key, tracker)
+
+    # Check IDEs
     code_ok = check_tool_for_tracker("code", tracker)
     code_insiders_ok = check_tool_for_tracker("code-insiders", tracker)
-    cursor_ok = check_tool_for_tracker("cursor-agent", tracker)
-    windsurf_ok = check_tool_for_tracker("windsurf", tracker)
-    kilocode_ok = check_tool_for_tracker("kilocode", tracker)
-    opencode_ok = check_tool_for_tracker("opencode", tracker)
-    codex_ok = check_tool_for_tracker("codex", tracker)
-    auggie_ok = check_tool_for_tracker("auggie", tracker)
-    q_ok = check_tool_for_tracker("q", tracker)
 
     console.print(tracker.render())
 
-    console.print("\n[bold green]Specify CLI is ready to use![/bold green]")
+    console.print("\n[bold green]Spec Kit CN CLI is ready to use![/bold green]")
 
     if not git_ok:
         console.print("[dim]Tip: Install git for repository management[/dim]")
-    if not (claude_ok or gemini_ok or cursor_ok or qwen_ok or windsurf_ok or kilocode_ok or opencode_ok or codex_ok or auggie_ok or q_ok):
+
+    # Check if any AI assistant tools are available
+    ai_tools_available = any(ai_tool_results.values())
+    if not ai_tools_available:
         console.print("[dim]Tip: Install an AI assistant for the best experience[/dim]")
 
 def main():
