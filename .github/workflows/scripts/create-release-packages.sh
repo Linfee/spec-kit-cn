@@ -41,9 +41,13 @@ if [[ ! $NEW_VERSION =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
 
 fi
 
-echo "Building release packages for $NEW_VERSION"
+# Remove 'v' prefix for package naming
+PACKAGE_VERSION=${NEW_VERSION#v}
+
+echo "Building release packages for $NEW_VERSION (packages will use $PACKAGE_VERSION)"
 
 rm -rf sdd-package-base* sdd-*-package-* spec-kit-template-*-${NEW_VERSION}.zip || true
+rm -rf sdd-package-base* sdd-*-package-* spec-kit-template-*-${PACKAGE_VERSION}.zip || true
 
 rewrite_paths() {
   sed -E \
@@ -298,9 +302,9 @@ build_variant() {
 
   esac
 
-  ( cd "$base_dir" && zip -r "../spec-kit-template-${agent}-${script}-${NEW_VERSION}.zip" . )
+  ( cd "$base_dir" && zip -r "../spec-kit-template-${agent}-${script}-${PACKAGE_VERSION}.zip" . )
 
-  echo "Created spec-kit-template-${agent}-${script}-${NEW_VERSION}.zip"
+  echo "Created spec-kit-template-${agent}-${script}-${PACKAGE_VERSION}.zip"
 
 }
 
@@ -384,4 +388,4 @@ done
 
 echo "Archives:"
 
-ls -1 spec-kit-template-*-${NEW_VERSION}.zip
+ls -1 spec-kit-template-*-${PACKAGE_VERSION}.zip
