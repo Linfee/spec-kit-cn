@@ -3,7 +3,7 @@ name: Create Release
 on:
   push:
     tags:
-      - 'v*.*.*-cn'
+      - 'v*.*.*'
   workflow_dispatch:
 
 jobs:
@@ -52,19 +52,13 @@ jobs:
       if: steps.check_release.outputs.exists == 'false'
       id: release_notes
       run: |
-        # Get commits since last non-CN tag
-        LAST_CN_TAG=$(git describe --tags --match="v*.*.*-cn" --abbrev=0 HEAD~1 2>/dev/null || echo "")
-        if [ -z "$LAST_CN_TAG" ]; then
-          # Find the last regular tag to compare against
-          LAST_REGULAR_TAG=$(git describe --tags --match="v*.*.*" --exclude="*-*-cn" --abbrev=0 HEAD~1 2>/dev/null || echo "")
-          if [ -z "$LAST_REGULAR_TAG" ]; then
-            # If no previous tags, get last 20 commits
-            COMMITS=$(git log --oneline --pretty=format:"- %s" HEAD~20..HEAD)
-          else
-            COMMITS=$(git log --oneline --pretty=format:"- %s" $LAST_REGULAR_TAG..HEAD)
-          fi
+        # Get commits since last tag
+        LAST_TAG=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "")
+        if [ -z "$LAST_TAG" ]; then
+          # If no previous tags, get last 20 commits
+          COMMITS=$(git log --oneline --pretty=format:"- %s" HEAD~20..HEAD)
         else
-          COMMITS=$(git log --oneline --pretty=format:"- %s" $LAST_CN_TAG..HEAD)
+          COMMITS=$(git log --oneline --pretty=format:"- %s" $LAST_TAG..HEAD)
         fi
 
         # Create release notes
