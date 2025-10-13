@@ -16,7 +16,7 @@
 </p>
 
 > **💡 这是 [GitHub Spec Kit](https://github.com/github/spec-kit) 的官方中文复刻版本**
-> **🔄 对应原版提交**: [`89f4b0b`](https://github.com/github/spec-kit/commit/89f4b0b) (v0.0.58)
+> **🔄 对应原版版本**: [v0.0.62](https://github.com/github/spec-kit/releases/tag/v0.0.62)
 > **📦 包名**: `specify-cn-cli` | **🛠️ 命令**: `specify-cn`
 
 > **⚠️ 保持同步**: 本项目将定期与原版保持同步，确保中文用户能够享受最新的功能和改进。

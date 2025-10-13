@@ -240,6 +240,16 @@ specify-cn --help | grep -E "中文|Spec Kit CN"  # 验证中文输出
 
 ---
 
+## 打包发布
+
+**发布触发**：推送格式为 `v*.*.*` 的 tag 时自动触发 GitHub Actions，push 到 main 分支不会触发。
+
+**版本规则**：Tag 使用 `v0.0.62` 格式，生成的包名去掉 v 前缀为 `spec-kit-template-*-0.0.62.zip`。
+
+**发布命令**：`git tag v0.0.63 && git push origin v0.0.63` 即可自动创建包含 24 个包的完整 release。
+
+---
+
 ## 紧急情况处理
 
 ### 常见问题解决方案
