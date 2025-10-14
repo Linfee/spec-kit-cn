@@ -5,6 +5,46 @@
 格式基于[Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)，
 并且本项目遵循[语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [0.0.63] - 2025-10-14
+
+### 同步原版
+- 同步原版 [v0.0.63](https://github.com/github/spec-kit/releases/tag/v0.0.63)
+- 对应原版提交：`e7bb98de42ef10fc36f2b2f01f17a7c70b92d29a`
+
+### 核心功能修复
+- **🔧 CodeBuddy路径修复**：修复CodeBuddy AI助手的配置文件路径从 `.codebuddy/rules/specify-rules.md` 更改为根目录的 `CODEBUDDY.md`
+- **脚本同步更新**：同步 `scripts/bash/update-agent-context.sh` 和 `scripts/powershell/update-agent-context.ps1`
+- **Agent集成优化**：确保CodeBuddy助手能够正确找到和读取配置文件
+
+### 文档更新
+- **📚 README.md全面同步**：与原版v0.0.63保持完全一致
+- **版本信息更新**：对应原版版本从v0.0.62更新至v0.0.63
+- **新增升级命令**：添加 `uv tool install specify-cn-cli --force` 升级说明
+- **流程文档完善**：新增STEP 6详细说明 `/speckit.tasks` 任务分解流程
+- **命令结构优化**：斜杠命令重新分类为"核心命令"和"可选命令"
+- **步骤编号调整**：原STEP 6调整为STEP 7，插入新的任务分解步骤
+
+### 新增内容
+- **🆕 任务分解流程**：详细的 `/speckit.tasks` 命令说明，包含：
+  - 按用户故事组织的任务分解
+  - 依赖管理和并行执行标记
+  - 文件路径规范和TDD结构
+  - 检查点验证机制
+- **🆕 升级指导**：提供明确的工具升级命令和说明
+- **🆕 命令分类**：核心命令（5个）和可选命令（3个）的清晰分类
+
+### 技术同步
+- **脚本文件同步**：Bash和PowerShell脚本与原版完全同步
+- **路径配置修复**：CodeBuddy配置文件路径简化，提高可访问性
+- **CLI功能验证**：所有AI助手集成功能正常工作
+
+### Bug修复
+- **🐛 修复CodeBuddy集成问题**：解决因路径错误导致的CodeBuddy助手无法正常工作的问题
+- **🐛 文档一致性修复**：确保中文版文档与原版功能描述完全一致
+
+### 已知问题
+- 无重大已知问题，所有功能正常工作
+
 ## [0.0.62] - 2025-10-13
 
 ### 同步原版

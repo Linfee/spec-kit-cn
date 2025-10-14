@@ -17,7 +17,7 @@
 
 > **💡 这是 [GitHub Spec Kit](https://github.com/github/spec-kit) 的官方中文复刻版本**
 > 
-> **🔄 对应原版版本**: [v0.0.62](https://github.com/github/spec-kit/releases/tag/v0.0.62)
+> **🔄 对应原版版本**: [v0.0.63](https://github.com/github/spec-kit/releases/tag/v0.0.63)
 >
 > **❗ IMPORTANT**: 这个版本更新了翻译工作流，修复了大量问题，保持版本号和原版统一，推荐更新到最新
 > 
@@ -64,7 +64,8 @@
   - [**步骤 3：** 功能规范澄清（计划前必需）](#步骤3-功能规范澄清计划前必需)
   - [**步骤 4：** 生成计划](#步骤4-生成计划)
   - [**步骤 5：** 让 Claude Code 验证计划](#步骤5-让claude-code验证计划)
-  - [**步骤 6：** 实施](#步骤6-实施)
+  - [**步骤 6：** 使用 /speckit.tasks 生成任务分解](#步骤6-使用-speckittasks-生成任务分解)
+  - [**步骤 7：** 实施](#步骤7-实施)
 - [🔍 故障排除](#-故障排除)
   - [Linux 上的 Git 凭据管理器](#linux上的git凭据管理器)
 - [👥 维护者](#-维护者)
@@ -106,6 +107,12 @@ uv tool install specify-cn-cli --from git+https://github.com/linfee/spec-kit-cn.
 ```bash
 specify-cn init <PROJECT_NAME>
 specify-cn check
+```
+
+要升级 specify-cn，运行：
+
+```bash
+uv tool install specify-cn-cli --force --from git+https://github.com/linfee/spec-kit-cn.git
 ```
 
 #### 方式 2：一次性使用
@@ -260,16 +267,27 @@ specify-cn check
 
 运行 `specify-cn init` 后，您的AI编码代理将可以使用这些斜杠命令进行结构化开发：
 
-| 命令                  | 描述                                                                           |
-| --------------------- | ------------------------------------------------------------------------------ |
-| `/speckit.constitution`  | 创建或更新项目指导原则和开发指南                                               |
-| `/speckit.specify`       | 定义您想要构建的内容（需求和用户故事）                                         |
-| `/speckit.clarify`       | 澄清未充分说明的区域（必须在 `/speckit.plan` 之前运行；以前为 `/quizme`) |
-| `/speckit.plan`          | 使用您选择的技术栈创建技术实施计划                                             |
-| `/speckit.tasks`         | 为实施生成可操作的任务列表                                                     |
-| `/speckit.checklist`     | 生成自定义质量检查清单，验证需求的完整性、清晰性和一致性（类似"英文的单元测试"） |
-| `/speckit.analyze`       | 跨工件一致性和覆盖范围分析（在 /speckit.tasks 之后，/speckit.implement 之前运行）              |
-| `/speckit.implement`     | 执行所有任务以根据计划构建功能                                                 |
+#### 核心命令
+
+规范驱动开发工作流的基本命令：
+
+| 命令                  | 描述                                                           |
+| --------------------- | ------------------------------------------------------------- |
+| `/speckit.constitution`  | 创建或更新项目指导原则和开发指南                               |
+| `/speckit.specify`       | 定义您想要构建的内容（需求和用户故事）                         |
+| `/speckit.plan`          | 使用您选择的技术栈创建技术实施计划                             |
+| `/speckit.tasks`         | 为实施生成可操作的任务列表                                     |
+| `/speckit.implement`     | 执行所有任务以根据计划构建功能                                 |
+
+#### 可选命令
+
+用于增强质量和验证的附加命令：
+
+| 命令              | 描述                                                           |
+| ------------------ | ------------------------------------------------------------- |
+| `/speckit.clarify`   | 澄清未充分说明的区域（建议在 `/speckit.plan` 之前运行；以前为 `/quizme`) |
+| `/speckit.analyze`   | 跨工件一致性和覆盖范围分析（在 /speckit.tasks 之后，/speckit.implement 之前运行） |
+| `/speckit.checklist` | 生成自定义质量检查清单，验证需求的完整性、清晰性和一致性（类似"英文的单元测试"） |
 
 ### 环境变量
 
@@ -573,15 +591,34 @@ Blazor服务器与拖拽任务板、实时更新。应该创建一个REST API，
 >[!IMPORTANT]
 >Claude Code将执行本地CLI命令（如 `dotnet`）——确保您在机器上安装了它们。
 
-### **步骤6：** 实施
+### **步骤6：** 使用 /speckit.tasks 生成任务分解
 
-准备就绪后，使用 `/implement` 命令执行您的实施计划：
+实施计划验证通过后，您现在可以将计划分解为具体的、可执行的任务，这些任务可以按正确的顺序执行。使用 `/speckit.tasks` 命令从您的实施计划自动生成详细的任务分解：
 
 ```text
-/implement
+/speckit.tasks
 ```
 
-`/implement` 命令将：
+此步骤会在您的功能规范目录中创建一个 `tasks.md` 文件，其中包含：
+
+- **按用户故事组织的任务分解** - 每个用户故事成为一个独立的实施阶段，包含自己的任务集
+- **依赖管理** - 任务按依赖关系排序，尊重组件间的依赖（例如，模型在服务之前，服务在端点之前）
+- **并行执行标记** - 可以并行运行的任务用 `[P]` 标记，以优化开发工作流
+- **文件路径规范** - 每个任务包含实施应发生的确切文件路径
+- **测试驱动开发结构** - 如果要求测试，则包含测试任务并排序为在实施之前编写
+- **检查点验证** - 每个用户故事阶段包含检查点以验证独立功能
+
+生成的 tasks.md 为 `/speckit.implement` 命令提供了清晰的路线图，确保系统性实施，保持代码质量并允许用户故事的增量交付。
+
+### **步骤7：** 实施
+
+准备就绪后，使用 `/speckit.implement` 命令执行您的实施计划：
+
+```text
+/speckit.implement
+```
+
+`/speckit.implement` 命令将：
 - 验证所有先决条件都已就绪（章程、规范、计划和任务）
 - 解析 `tasks.md` 中的任务分解
 - 按正确顺序执行任务，尊重依赖关系和并行执行标记
