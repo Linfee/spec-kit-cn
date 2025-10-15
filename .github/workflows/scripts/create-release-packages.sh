@@ -244,11 +244,11 @@ build_variant() {
 
       generate_commands copilot prompt.md "\$ARGUMENTS" "$base_dir/.github/prompts" "$script" ;;
 
-    cursor)
+    cursor-agent)
 
       mkdir -p "$base_dir/.cursor/commands"
 
-      generate_commands cursor md "\$ARGUMENTS" "$base_dir/.cursor/commands" "$script" ;;
+      generate_commands cursor-agent md "\$ARGUMENTS" "$base_dir/.cursor/commands" "$script" ;;
 
     qwen)
 
@@ -316,7 +316,7 @@ build_variant() {
 
 # Determine agent list
 
-ALL_AGENTS=(claude gemini copilot cursor qwen opencode windsurf codex kilocode auggie roo q codebuddy)
+ALL_AGENTS=(claude gemini copilot cursor-agent qwen opencode windsurf codex kilocode auggie roo q codebuddy)
 
 ALL_SCRIPTS=(sh ps)
 

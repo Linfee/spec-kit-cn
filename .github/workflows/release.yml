@@ -78,8 +78,8 @@ jobs:
         - spec-kit-template-claude-ps-${{ steps.get_tag.outputs.package_version }}.zip
         - spec-kit-template-gemini-sh-${{ steps.get_tag.outputs.package_version }}.zip
         - spec-kit-template-gemini-ps-${{ steps.get_tag.outputs.package_version }}.zip
-        - spec-kit-template-cursor-sh-${{ steps.get_tag.outputs.package_version }}.zip
-        - spec-kit-template-cursor-ps-${{ steps.get_tag.outputs.package_version }}.zip
+        - spec-kit-template-cursor-agent-sh-${{ steps.get_tag.outputs.package_version }}.zip
+        - spec-kit-template-cursor-agent-ps-${{ steps.get_tag.outputs.package_version }}.zip
         - spec-kit-template-qwen-sh-${{ steps.get_tag.outputs.package_version }}.zip
         - spec-kit-template-qwen-ps-${{ steps.get_tag.outputs.package_version }}.zip
         - spec-kit-template-opencode-sh-${{ steps.get_tag.outputs.package_version }}.zip
@@ -114,8 +114,8 @@ jobs:
           spec-kit-template-claude-ps-${{ steps.get_tag.outputs.package_version }}.zip \
           spec-kit-template-gemini-sh-${{ steps.get_tag.outputs.package_version }}.zip \
           spec-kit-template-gemini-ps-${{ steps.get_tag.outputs.package_version }}.zip \
-          spec-kit-template-cursor-sh-${{ steps.get_tag.outputs.package_version }}.zip \
-          spec-kit-template-cursor-ps-${{ steps.get_tag.outputs.package_version }}.zip \
+          spec-kit-template-cursor-agent-sh-${{ steps.get_tag.outputs.package_version }}.zip \
+          spec-kit-template-cursor-agent-ps-${{ steps.get_tag.outputs.package_version }}.zip \
           spec-kit-template-qwen-sh-${{ steps.get_tag.outputs.package_version }}.zip \
           spec-kit-template-qwen-ps-${{ steps.get_tag.outputs.package_version }}.zip \
           spec-kit-template-opencode-sh-${{ steps.get_tag.outputs.package_version }}.zip \
