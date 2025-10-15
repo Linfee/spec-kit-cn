@@ -84,6 +84,8 @@ jobs:
         - spec-kit-template-qwen-ps-${{ steps.get_tag.outputs.package_version }}.zip
         - spec-kit-template-opencode-sh-${{ steps.get_tag.outputs.package_version }}.zip
         - spec-kit-template-opencode-ps-${{ steps.get_tag.outputs.package_version }}.zip
+        - spec-kit-template-q-sh-${{ steps.get_tag.outputs.package_version }}.zip
+        - spec-kit-template-q-ps-${{ steps.get_tag.outputs.package_version }}.zip
         - spec-kit-template-windsurf-sh-${{ steps.get_tag.outputs.package_version }}.zip
         - spec-kit-template-windsurf-ps-${{ steps.get_tag.outputs.package_version }}.zip
         - spec-kit-template-codex-sh-${{ steps.get_tag.outputs.package_version }}.zip
@@ -120,6 +122,8 @@ jobs:
           spec-kit-template-qwen-ps-${{ steps.get_tag.outputs.package_version }}.zip \
           spec-kit-template-opencode-sh-${{ steps.get_tag.outputs.package_version }}.zip \
           spec-kit-template-opencode-ps-${{ steps.get_tag.outputs.package_version }}.zip \
+          spec-kit-template-q-sh-${{ steps.get_tag.outputs.package_version }}.zip \
+          spec-kit-template-q-ps-${{ steps.get_tag.outputs.package_version }}.zip \
           spec-kit-template-windsurf-sh-${{ steps.get_tag.outputs.package_version }}.zip \
           spec-kit-template-windsurf-ps-${{ steps.get_tag.outputs.package_version }}.zip \
           spec-kit-template-codex-sh-${{ steps.get_tag.outputs.package_version }}.zip \
