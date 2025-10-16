@@ -1,14 +1,14 @@
 # Spec Kit CN 术语表
 
-本文档定义了Spec Kit CN项目中的标准术语翻译，确保翻译的一致性和准确性。
+本文档定义了Spec Kit CN项目中的标准术语翻译, 确保翻译的一致性和准确性.
 
 ## 核心原则
 
-1. **专业性**: 使用简洁、准确的技术中文, 避免过度口语化，保持专业性
-2. **技术术语保留**：对于国际通用的技术术语，保持英文原文
-3. **概念翻译**：对于描述性概念，使用准确的中文翻译
-4. **品牌一致性**：保持产品名称和品牌标识的一致性
-5. **用户体验**：确保翻译后的内容对中文用户友好且易于理解
+1. **专业性**: 使用简洁、准确的技术中文, 避免过度口语化, 保持专业性
+2. **技术术语保留**: 对于国际通用的技术术语, 保持英文原文
+3. **概念翻译**: 对于描述性概念, 使用准确的中文翻译
+4. **品牌一致性**: 保持产品名称和品牌标识的一致性
+5. **用户体验**: 确保翻译后的内容对中文用户友好且易于理解
 
 ---
 
@@ -16,24 +16,24 @@
 
 | 英文 | 中文 | 说明 |
 |------|------|------|
-| Spec Kit | Spec Kit | 不翻译，保持原品牌名称 |
+| Spec Kit | Spec Kit | 不翻译, 保持原品牌名称 |
 | Spec Kit CN | Spec Kit CN | 中文版项目名称 |
 | Specify CLI | Specify CLI | 原版CLI工具名称 |
 | specify-cn | specify-cn | 中文版CLI命令 |
-| GitHub | GitHub | 不翻译，平台名称 |
-| Claude Code | Claude Code | 不翻译，AI助手名称 |
-| Gemini CLI | Gemini CLI | 不翻译，AI助手名称 |
-| GitHub Copilot | GitHub Copilot | 不翻译，AI助手名称 |
-| Cursor | Cursor | 不翻译，AI助手名称 |
-| cursor-agent | cursor-agent | 不翻译，CLI工具名称 |
-| Qwen Code | Qwen Code | 不翻译，AI助手名称 |
-| opencode | opencode | 不翻译，AI助手名称 |
-| Codex CLI | Codex CLI | 不翻译，AI助手名称 |
-| Windsurf | Windsurf | 不翻译，AI助手名称 |
-| Kilo Code | Kilo Code | 不翻译，AI助手名称 |
-| Auggie CLI | Auggie CLI | 不翻译，AI助手名称 |
-| CodeBuddy | CodeBuddy | 不翻译，AI助手名称 |
-| Amazon Q Developer CLI | Amazon Q Developer CLI | 不翻译，AI助手名称 |
+| GitHub | GitHub | 不翻译, 平台名称 |
+| Claude Code | Claude Code | 不翻译, AI助手名称 |
+| Gemini CLI | Gemini CLI | 不翻译, AI助手名称 |
+| GitHub Copilot | GitHub Copilot | 不翻译, AI助手名称 |
+| Cursor | Cursor | 不翻译, AI助手名称 |
+| cursor-agent | cursor-agent | 不翻译, CLI工具名称 |
+| Qwen Code | Qwen Code | 不翻译, AI助手名称 |
+| opencode | opencode | 不翻译, AI助手名称 |
+| Codex CLI | Codex CLI | 不翻译, AI助手名称 |
+| Windsurf | Windsurf | 不翻译, AI助手名称 |
+| Kilo Code | Kilo Code | 不翻译, AI助手名称 |
+| Auggie CLI | Auggie CLI | 不翻译, AI助手名称 |
+| CodeBuddy | CodeBuddy | 不翻译, AI助手名称 |
+| Amazon Q Developer CLI | Amazon Q Developer CLI | 不翻译, AI助手名称 |
 
 ---
 
@@ -41,7 +41,7 @@
 
 | 英文 | 中文 | 说明 |
 |------|------|------|
-| Spec-Driven Development | 规范驱动开发 | 核心方法论，简称SDD |
+| Spec-Driven Development | 规范驱动开发 | 核心方法论, 简称SDD |
 | User Story | 用户故事 | 需求描述方式 |
 | Acceptance Criteria | 验收标准 | 功能完成条件 |
 | Implementation Plan | 实施计划 | 开发执行方案 |
@@ -69,12 +69,12 @@
 
 | 英文 | 中文 | 说明 |
 |------|------|------|
-| CLI | CLI | 不翻译，命令行界面 |
-| API | API | 不翻译，应用程序接口 |
-| JSON | JSON | 不翻译，数据格式 |
-| TOML | TOML | 不翻译，配置文件格式 |
-| YAML | YAML | 不翻译，数据格式 |
-| Git | Git | 不翻译，版本控制系统 |
+| CLI | CLI | 不翻译, 命令行界面 |
+| API | API | 不翻译, 应用程序接口 |
+| JSON | JSON | 不翻译, 数据格式 |
+| TOML | TOML | 不翻译, 配置文件格式 |
+| YAML | YAML | 不翻译, 数据格式 |
+| Git | Git | 不翻译, 版本控制系统 |
 | Repository | 仓库 | Git仓库 |
 | Commit | 提交 | Git提交 |
 | Branch | 分支 | Git分支 |
@@ -180,14 +180,14 @@
 
 | 英文 | 中文 | 说明 |
 |------|------|------|
-| HTTP | HTTP | 不翻译，网络协议 |
-| HTTPS | HTTPS | 不翻译，安全网络协议 |
-| URL | URL | 不翻译，统一资源定位符 |
+| HTTP | HTTP | 不翻译, 网络协议 |
+| HTTPS | HTTPS | 不翻译, 安全网络协议 |
+| URL | URL | 不翻译, 统一资源定位符 |
 | Endpoint | 端点 | API端点 |
 | Request | 请求 | 网络请求 |
 | Response | 响应 | 网络响应 |
 | Token | 令牌 | 认证令牌 |
-| SSL/TLS | SSL/TLS | 不翻译，安全协议 |
+| SSL/TLS | SSL/TLS | 不翻译, 安全协议 |
 | Certificate | 证书 | 安全证书 |
 | Encryption | 加密 | 数据加密 |
 | Authentication | 认证 | 身份认证 |
@@ -202,8 +202,8 @@
 | 英文 | 中文 | 说明 |
 |------|------|------|
 | Agile | 敏捷 | 敏捷开发 |
-| Scrum | Scrum | 不翻译，敏捷框架 |
-| Kanban | Kanban | 不翻译，看板方法 |
+| Scrum | Scrum | 不翻译, 敏捷框架 |
+| Kanban | Kanban | 不翻译, 看板方法 |
 | TDD | 测试驱动开发 | Test-Driven Development |
 | BDD | 行为驱动开发 | Behavior-Driven Development |
 | CI/CD | 持续集成/持续部署 | Continuous Integration/Continuous Deployment |
@@ -219,15 +219,15 @@
 ## 特殊规则和注意事项
 
 ### 1. 不翻译的英文术语
-以下术语在任何情况下都不翻译：
+以下术语在任何情况下都不翻译: 
 - **CLI, API, JSON, TOML, YAML, Git, GitHub**
-- **AI助手名称**：Claude Code, Gemini CLI, GitHub Copilot, Cursor, 等
-- **技术标准**：HTTP, HTTPS, SSL, TLS, URL
-- **编程语言**：Python, JavaScript, TypeScript, Java, Go, 等
-- **框架名称**：React, Vue, Angular, Django, Flask, 等
+- **AI助手名称**: Claude Code, Gemini CLI, GitHub Copilot, Cursor, 等
+- **技术标准**: HTTP, HTTPS, SSL, TLS, URL
+- **编程语言**: Python, JavaScript, TypeScript, Java, Go, 等
+- **框架名称**: React, Vue, Angular, Django, Flask, 等
 
 ### 2. 必须翻译的概念
-以下概念必须使用中文翻译：
+以下概念必须使用中文翻译: 
 - **Spec-Driven Development** → 规范驱动开发
 - **User Story** → 用户故事
 - **Acceptance Criteria** → 验收标准
@@ -235,29 +235,26 @@
 - **Feature Specification** → 功能规范
 
 ### 3. 品牌处理规则
-- **GitHub** → GitHub（不翻译）
-- **Spec Kit** → Spec Kit（不翻译）
-- **Spec Kit CN** → Spec Kit CN（中文版标识）
-- **specify** → specify（原版命令）
-- **specify-cn** → specify-cn（中文版命令）
+- **GitHub** → GitHub(不翻译)
+- **Spec Kit** → Spec Kit(不翻译)
+- **Spec Kit CN** → Spec Kit CN(中文版标识)
+- **specify** → specify(原版命令)
+- **specify-cn** → specify-cn(中文版命令)
 
 ### 4. 标点符号规则
-- **中文内容**：使用中文标点符号（，。：；！？）
-- **英文术语**：使用英文标点符号
-- **代码示例**：使用英文标点符号
-- **混合内容**：根据主要语言决定标点符号
+- **统一英文**: 统一使用英文标点(, . : ; ! ?)，如果标点后面还有内容，则添加一个空格.
 
 ### 5. 大小写规则
-- **专有名词**：保持原有大小写
-- **中文翻译**：使用中文大小写规则
-- **代码片段**：保持原样
-- **文件路径**：保持原样
+- **专有名词**: 保持原有大小写
+- **中文翻译**: 使用中文大小写规则
+- **代码片段**: 保持原样
+- **文件路径**: 保持原样
 
 ---
 
 ## 翻译质量检查清单
 
-在翻译完成后，请检查以下项目：
+在翻译完成后, 请检查以下项目: 
 
 ### 术语一致性
 - [ ] 所有术语都按照本术语表进行翻译
@@ -348,7 +345,7 @@
 ## 术语维护
 
 ### 添加新术语
-当遇到新的术语时：
+当遇到新的术语时: 
 1. 检查是否已有标准翻译
 2. 查找行业通用译法
 3. 考虑用户理解习惯
@@ -356,7 +353,7 @@
 5. 更新相关翻译文档
 
 ### 术语更新
-当需要更新现有术语时：
+当需要更新现有术语时: 
 1. 评估更新的必要性
 2. 考虑向后兼容性
 3. 更新所有相关文档
@@ -365,6 +362,6 @@
 
 ---
 
-*本术语表由Spec Kit CN项目维护，最后更新时间：2025-10-13（新增6个类别32个术语）*
+*本术语表由Spec Kit CN项目维护, 最后更新时间: 2025-10-13(新增6个类别32个术语)*
 
-*如有疑问或建议，请通过GitHub Issues反馈：https://github.com/linfee/spec-kit-cn/issues*
+*如有疑问或建议, 请通过GitHub Issues反馈: https://github.com/linfee/spec-kit-cn/issues*
