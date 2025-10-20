@@ -17,7 +17,7 @@
 
 > **💡 这是 [GitHub Spec Kit](https://github.com/github/spec-kit) 的官方中文复刻版本**
 > 
-> **🔄 对应原版版本**: [v0.0.69](https://github.com/github/spec-kit/releases/tag/v0.0.69)
+> **🔄 对应原版版本**: [v0.0.72](https://github.com/github/spec-kit/releases/tag/v0.0.72)
 > 
 > **📦 包名**: `specify-cn-cli`
 >
@@ -133,6 +133,8 @@ uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <PROJEC
 - 更简洁的 shell 配置
 
 ### 2. 建立项目原则
+
+在项目目录中启动您的 AI 助手。助手可使用 `/speckit.*` 命令。
 
 使用 **`/speckit.constitution`** 命令创建项目的指导原则和开发指南, 这将指导所有后续开发.
 

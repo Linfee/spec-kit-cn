@@ -5,6 +5,33 @@
 格式基于[Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/), 
 并且本项目遵循[语义化版本](https://semver.org/lang/zh-CN/).
 
+## [0.0.72] - 2025-10-19
+
+### 同步原版
+- 同步原版 [v0.0.72](https://github.com/github/spec-kit/releases/tag/v0.0.72)
+- 对应原版提交: `3e85f46 Merge pull request #910 from zidoshare/create-new-feature`
+
+### 🚀 重要功能增强
+- **VS Code Settings 智能合并**: `.vscode/settings.json` 现在采用智能合并而非覆盖
+  - 保留现有用户设置
+  - 新增 Spec Kit 设置项
+  - 嵌套对象递归合并
+  - 防止意外丢失自定义 VS Code 工作区配置
+
+- **IDE代理检查优化**: 优化 `check` 命令中的代理检测逻辑
+  - 区分 CLI 和 IDE 类型的 AI 助手
+  - IDE 助手跳过 CLI 检查，标记为可选
+  - 更准确的工具链检测结果
+
+### 📝 文档更新
+- **README.md**: 添加 AI 助手使用说明提示
+- **脚本修复**: 修复 `create-new-feature.sh` 参数解析问题
+- **Agent配置**: 同步最新的AI助手配置信息
+
+### 🔧 技术改进
+- **媒体文件优化**: 减小GIF和图片文件体积
+- **代码质量**: 添加类型提示和代码优化
+
 ## [0.0.69] - 2025-10-16
 
 ### 同步原版
