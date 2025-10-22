@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="./media/logo_small.webp"/>
+    <img src="./media/logo_small.webp" alt="Spec Kit Logo"/>
     <h1>🌱 Spec Kit CN</h1>
     <h3><em>更快地构建高质量软件. </em></h3>
 </div>
@@ -17,7 +17,7 @@
 
 > **💡 这是 [GitHub Spec Kit](https://github.com/github/spec-kit) 的官方中文复刻版本**
 > 
-> **🔄 对应原版版本**: [v0.0.72](https://github.com/github/spec-kit/releases/tag/v0.0.72)
+> **🔄 对应原版版本**: [v0.0.78](https://github.com/github/spec-kit/releases/tag/v0.0.78)
 > 
 > **📦 包名**: `specify-cn-cli`
 >
@@ -94,7 +94,7 @@
 
 ### 1. 安装 Specify CN
 
-选择您偏好的安装方式: 
+选择你偏好的安装方式: 
 
 #### 方式 1: 持久化安装(推荐)
 
@@ -125,7 +125,7 @@ uv tool install specify-cn-cli --force --from git+https://github.com/linfee/spec
 uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <PROJECT_NAME>
 ```
 
-**持久化安装的优势**: 
+**持久化安装的优势**:
 
 - 工具保持安装状态并在 PATH 中可用
 - 无需创建 shell 别名
@@ -134,7 +134,7 @@ uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <PROJEC
 
 ### 2. 建立项目原则
 
-在项目目录中启动您的 AI 助手。助手可使用 `/speckit.*` 命令。
+在项目目录中启动你的 AI 助手。助手可使用 `/speckit.*` 命令。
 
 使用 **`/speckit.constitution`** 命令创建项目的指导原则和开发指南, 这将指导所有后续开发.
 
@@ -144,7 +144,7 @@ uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <PROJEC
 
 ### 3. 创建规范
 
-使用 **`/speckit.specify`** 命令描述您想要构建的内容. 专注于**做什么**和**为什么**, 而不是技术栈.
+使用 **`/speckit.specify`** 命令描述你想要构建的内容. 专注于**做什么**和**为什么**, 而不是技术栈.
 
 ```bash
 /speckit.specify 构建一个可以帮助我将照片整理到不同相册中的应用程序. 相册按日期分组, 可以通过在主页上拖拽来重新组织. 相册不会嵌套在其他相册中. 在每个相册内, 照片以瓷砖界面预览.
@@ -152,7 +152,7 @@ uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <PROJEC
 
 ### 4. 创建技术实施计划
 
-使用 **`/speckit.plan`** 命令提供您的技术栈和架构选择.
+使用 **`/speckit.plan`** 命令提供你的技术栈和架构选择.
 
 ```bash
 /speckit.plan 应用程序使用 Vite 和最少数量的库. 尽可能使用纯 HTML、CSS 和 JavaScript. 图片不会上传到任何地方, 元数据存储在本地 SQLite 数据库中.
@@ -160,7 +160,7 @@ uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <PROJEC
 
 ### 5. 分解任务
 
-使用 **`/speckit.tasks`** 从您的实施计划创建可操作的任务列表.
+使用 **`/speckit.tasks`** 从你的实施计划创建可操作的任务列表.
 
 ```bash
 /speckit.tasks
@@ -168,7 +168,7 @@ uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <PROJEC
 
 ### 6. 执行实施
 
-使用 **`/speckit.implement`** 执行所有任务并根据计划构建您的功能.
+使用 **`/speckit.implement`** 执行所有任务并根据计划构建你的功能.
 
 ```bash
 /speckit.implement
@@ -199,6 +199,7 @@ uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <PROJEC
 | [CodeBuddy](https://www.codebuddy.ai/)                    | ✅    | CodeBuddy AI助手                                                                    |
 | [Codex CLI](https://github.com/openai/codex)              | ✅    | OpenAI Codex CLI助手                                                                |
 | [Amazon Q Developer CLI](https://aws.amazon.com/developer/learning/q-developer-cli/) | ⚠️ | Amazon Q Developer CLI [不支持](https://github.com/aws/amazon-q-developer-cli/issues/3064) 斜杠命令的自定义参数.  |
+| [Amp](https://ampcode.com/)                               | ✅    | Amp AI助手                                                                          |
 
 ## 🔧 Specify CN CLI 参考
 
@@ -216,7 +217,7 @@ uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <PROJEC
 | 参数/选项              | 类型 | 描述                                                                                                                             |
 | ---------------------- | ---- | -------------------------------------------------------------------------------------------------------------------------------- |
 | `<project-name>`       | 参数 | 新项目目录的名称(使用 `--here` 时可选, 或使用 `.` 表示当前目录)                                                                                         |
-| `--ai`                 | 选项 | 要使用的 AI 助手: `claude`, `gemini`, `copilot`, `cursor`, `qwen`, `opencode`, `codex`, `windsurf`, `kilocode`, `auggie`, `roo`, `codebuddy`, 或 `q` |
+| `--ai`                 | 选项 | 要使用的 AI 助手: `claude`, `gemini`, `copilot`, `cursor-agent`, `qwen`, `opencode`, `codex`, `windsurf`, `kilocode`, `auggie`, `roo`, `codebuddy`, `amp`, 或 `q` |
 | `--script`             | 选项 | 要使用的脚本变体: `sh` (bash/zsh) 或 `ps` (PowerShell)                                                                           |
 | `--ignore-agent-tools` | 标志 | 跳过 AI 代理工具的检查, 如 Claude Code                                                                                             |
 | `--no-git`             | 标志 | 跳过 git 仓库初始化                                                                                                              |
@@ -236,10 +237,13 @@ specify-cn init my-project
 specify-cn init my-project --ai claude
 
 # 使用 Cursor 支持初始化
-specify-cn init my-project --ai cursor
+specify-cn init my-project --ai cursor-agent
 
 # 使用 Windsurf 支持初始化
 specify-cn init my-project --ai windsurf
+
+# 使用 Amp 支持初始化
+specify-cn init my-project --ai amp
 
 # 使用 PowerShell 脚本初始化(Windows/跨平台)
 specify-cn init my-project --ai copilot --script ps
@@ -269,7 +273,7 @@ specify-cn check
 
 ### 可用的斜杠命令
 
-运行 `specify-cn init` 后, 您的AI编码代理将可以使用这些斜杠命令进行结构化开发: 
+运行 `specify-cn init` 后, 你的AI编码代理将可以使用这些斜杠命令进行结构化开发: 
 
 #### 核心命令
 
@@ -278,14 +282,14 @@ specify-cn check
 | 命令                  | 描述                                                           |
 | --------------------- | ------------------------------------------------------------- |
 | `/speckit.constitution`  | 创建或更新项目指导原则和开发指南                               |
-| `/speckit.specify`       | 定义您想要构建的内容(需求和用户故事)                         |
-| `/speckit.plan`          | 使用您选择的技术栈创建技术实施计划                             |
+| `/speckit.specify`       | 定义你想要构建的内容(需求和用户故事)                         |
+| `/speckit.plan`          | 使用你选择的技术栈创建技术实施计划                             |
 | `/speckit.tasks`         | 为实施生成可操作的任务列表                                     |
 | `/speckit.implement`     | 执行所有任务以根据计划构建功能                                 |
 
 #### 可选命令
 
-用于增强质量和验证的附加命令: 
+用于增强质量和验证的附加命令:
 
 | 命令              | 描述                                                           |
 | ------------------ | ------------------------------------------------------------- |
@@ -297,7 +301,7 @@ specify-cn check
 
 | 变量              | 描述                                                                                                                                                                                           |
 | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SPECIFY_FEATURE` | 为非 Git 仓库覆盖功能检测. 设置为功能目录名称(例如, `001-photo-albums`)以在不使用 Git 分支的情况下处理特定功能. <br/>**必须在您正在使用的代理上下文中设置, 然后才能使用 `/speckit.plan` 或后续命令.  |
+| `SPECIFY_FEATURE` | 为非 Git 仓库覆盖功能检测. 设置为功能目录名称(例如, `001-photo-albums`)以在不使用 Git 分支的情况下处理特定功能. <br/>**必须在你正在使用的代理上下文中设置, 然后才能使用 `/speckit.plan` 或后续命令.  |
 
 ## 📚 核心理念
 
@@ -345,12 +349,12 @@ specify-cn check
 ## 🔧 前置要求
 
 - **Linux/macOS**(或Windows上的WSL2)
-- AI编码代理: [Claude Code](https://www.anthropic.com/claude-code)、[GitHub Copilot](https://code.visualstudio.com/)、[Gemini CLI](https://github.com/google-gemini/gemini-cli)、[Cursor](https://cursor.sh/)、[Qwen CLI](https://github.com/QwenLM/qwen-code)、[opencode](https://opencode.ai/)、[Codex CLI](https://github.com/openai/codex)、[Windsurf](https://windsurf.com/) 或 [Amazon Q Developer CLI](https://aws.amazon.com/developer/learning/q-developer-cli/)
+- AI编码代理: [Claude Code](https://www.anthropic.com/claude-code)、[GitHub Copilot](https://code.visualstudio.com/)、[Gemini CLI](https://github.com/google-gemini/gemini-cli)、[Cursor](https://cursor.sh/)、[Qwen CLI](https://github.com/QwenLM/qwen-code)、[opencode](https://opencode.ai/)、[Codex CLI](https://github.com/openai/codex)、[Windsurf](https://windsurf.com/)、[Amp](https://ampcode.com/) 或 [Amazon Q Developer CLI](https://aws.amazon.com/developer/learning/q-developer-cli/)
 - [uv](https://docs.astral.sh/uv/) 用于包管理
 - [Python 3.11+](https://www.python.org/downloads/)
 - [Git](https://git-scm.com/downloads)
 
-如果您在使用代理时遇到问题, 请打开 issue 以便我们完善集成.
+如果你在使用代理时遇到问题, 请打开 issue 以便我们完善集成.
 
 ## 📖 了解更多
 
@@ -364,7 +368,7 @@ specify-cn check
 <details>
 <summary>点击展开详细的分步演练</summary>
 
-您可以使用Specify CN CLI来引导您的项目, 这将在您的环境中引入所需的工件. 运行: 
+你可以使用Specify CN CLI来引导你的项目, 这将在你的环境中引入所需的工件. 运行: 
 
 ```bash
 specify-cn init <project_name>
@@ -384,17 +388,18 @@ specify-cn init --here --force
 
 ![Specify CN CLI在终端中引导新项目](./media/specify_cli.gif)
 
-系统会提示您选择正在使用的AI代理. 您也可以直接在终端中主动指定: 
+系统会提示你选择正在使用的AI代理. 你也可以直接在终端中主动指定: 
 
 ```bash
 specify-cn init <project_name> --ai claude
 specify-cn init <project_name> --ai gemini
 specify-cn init <project_name> --ai copilot
-specify-cn init <project_name> --ai cursor
+specify-cn init <project_name> --ai cursor-agent
 specify-cn init <project_name> --ai qwen
 specify-cn init <project_name> --ai opencode
 specify-cn init <project_name> --ai codex
 specify-cn init <project_name> --ai windsurf
+specify-cn init <project_name> --ai amp
 specify-cn init <project_name> --ai kilocode
 specify-cn init <project_name> --ai auggie
 specify-cn init <project_name> --ai roo
@@ -405,7 +410,7 @@ specify-cn init --here --ai codex
 specify-cn init --here --force --ai claude
 ```
 
-CLI会检查您是否安装了Claude Code、Gemini CLI、Cursor CLI、Qwen CLI、opencode或Codex CLI. 如果您没有安装, 或者您希望在不检查正确工具的情况下获取模板, 请在命令中使用 `--ignore-agent-tools`: 
+CLI会检查你是否安装了Claude Code、Gemini CLI、Cursor CLI、Qwen CLI、opencode或Codex CLI. 如果你没有安装, 或者你希望在不检查正确工具的情况下获取模板, 请在命令中使用 `--ignore-agent-tools`: 
 
 ```bash
 specify-cn init <project_name> --ai claude --ignore-agent-tools
@@ -413,22 +418,22 @@ specify-cn init <project_name> --ai claude --ignore-agent-tools
 
 ### **步骤1: ** 建立项目原则
 
-转到项目文件夹并运行您的AI代理. 在我们的示例中, 我们使用 `claude`.
+转到项目文件夹并运行你的AI代理. 在我们的示例中, 我们使用 `claude`.
 
 ![引导Claude Code环境](./media/bootstrap-claude-code.gif)
 
-如果您看到 `/constitution`、`/speckit.specify`、`/speckit.plan`、`/speckit.tasks` 和 `/implement` 命令可用, 就说明配置正确.
+如果你看到 `/speckit.constitution`、`/speckit.specify`、`/speckit.plan`、`/speckit.tasks` 和 `/speckit.implement` 命令可用, 就说明配置正确.
 
-第一步应该是使用 `/constitution` 命令建立项目的指导原则. 这有助于确保在所有后续开发阶段中做出一致的决策: 
+第一步应该是使用 `/speckit.constitution` 命令建立项目的指导原则. 这有助于确保在所有后续开发阶段中做出一致的决策:
 
 ```text
-/constitution 创建专注于代码质量、测试标准、用户体验一致性和性能要求的原则. 包括这些原则应如何指导技术决策和实施选择的治理.
+/speckit.constitution 创建专注于代码质量、测试标准、用户体验一致性和性能要求的原则. 包括这些原则应如何指导技术决策和实施选择的治理.
 ```
 
 此步骤会创建或更新 `.specify/memory/constitution.md` 文件, 其中包含项目的基础指南, AI代理将在规范、规划和实施阶段参考这些指南.
 
 >[!IMPORTANT]
->尽可能明确地说明您要构建的_什么_和_为什么_. **此时不要关注技术栈**.
+>尽可能明确地说明你要构建的_什么_和_为什么_. **此时不要关注技术栈**.
 
 示例提示: 
 
@@ -440,24 +445,24 @@ specify-cn init <project_name> --ai claude --ignore-agent-tools
 不同的示例项目. 让我们为每个任务的状态使用标准的看板列, 如"待办"、
 "进行中"、"审核中"和"已完成". 此应用程序将没有登录, 因为这只是
 确保我们基本功能设置的第一次测试. 对于UI中的任务卡片, 
-您应该能够在看板工作板的不同列之间更改任务的当前状态.
-您应该能够为特定卡片留下无限数量的评论. 您应该能够从该任务
-卡片中分配一个有效用户. 当您首次启动Taskify时, 它会给您一个五个用户的列表供您选择.
-不需要密码. 当您点击用户时, 您进入主视图, 显示项目列表.
-当您点击项目时, 您会打开该项目的看板. 您将看到列.
-您将能够在不同列之间来回拖放卡片. 您将看到分配给您的任何卡片, 
-即当前登录用户, 与其他卡片颜色不同, 以便您快速看到您的卡片.
-您可以编辑您所做的任何评论, 但不能编辑其他人所做的评论. 您可以
-删除您所做的任何评论, 但不能删除其他人所做的评论.
+你应该能够在看板工作板的不同列之间更改任务的当前状态.
+你应该能够为特定卡片留下无限数量的评论. 你应该能够从该任务
+卡片中分配一个有效用户. 当你首次启动Taskify时, 它会给你一个五个用户的列表供你选择.
+不需要密码. 当你点击用户时, 你进入主视图, 显示项目列表.
+当你点击项目时, 你会打开该项目的看板. 你将看到列.
+你将能够在不同列之间来回拖放卡片. 你将看到分配给你的任何卡片, 
+即当前登录用户, 与其他卡片颜色不同, 以便你快速看到你的卡片.
+你可以编辑你所做的任何评论, 但不能编辑其他人所做的评论. 你可以
+删除你所做的任何评论, 但不能删除其他人所做的评论.
 ```
 
-输入此提示后, 您应该看到Claude Code启动规划和规范起草过程. Claude Code还将触发一些内置脚本来设置仓库.
+输入此提示后, 你应该看到Claude Code启动规划和规范起草过程. Claude Code还将触发一些内置脚本来设置仓库.
 
-完成此步骤后, 您应该有一个新创建的分支(例如, `001-create-taskify`), 以及 `specs/001-create-taskify` 目录中的新规范.
+完成此步骤后, 你应该有一个新创建的分支(例如, `001-create-taskify`), 以及 `specs/001-create-taskify` 目录中的新规范.
 
 生成的规范应包含一组用户故事和功能需求, 如模板中所定义.
 
-在此阶段, 您的项目文件夹内容应类似于以下内容: 
+在此阶段, 你的项目文件夹内容应类似于以下内容: 
 
 ```text
 └── .specify
@@ -481,14 +486,14 @@ specify-cn init <project_name> --ai claude --ignore-agent-tools
 
 ### **步骤2: ** 创建项目规范
 
-有了项目原则后, 您现在可以创建功能规范. 使用 `/speckit.specify` 命令, 然后为您想要开发的项目提供具体需求.
+有了项目原则后, 你现在可以创建功能规范. 使用 `/speckit.specify` 命令, 然后为你想要开发的项目提供具体需求.
 
 ```text
-对于您创建的每个示例项目或项目, 每个项目应该有5到15个之间的可变数量任务, 
+对于你创建的每个示例项目或项目, 每个项目应该有5到15个之间的可变数量任务, 
 随机分布到不同的完成状态. 确保每个完成阶段至少有一个任务.
 ```
 
-您还应该要求Claude Code验证**审核和验收清单**, 勾选验证/通过要求的项目, 未通过的项目保持未勾选状态. 可以使用以下提示: 
+你还应该要求Claude Code验证**审核和验收清单**, 勾选验证/通过要求的项目, 未通过的项目保持未勾选状态. 可以使用以下提示: 
 
 ```text
 阅读审核和验收清单, 如果功能规范符合标准, 请勾选清单中的每个项目. 如果不符合, 请留空.
@@ -498,17 +503,17 @@ specify-cn init <project_name> --ai claude --ignore-agent-tools
 
 ### **步骤3: ** 功能规范澄清(计划前必需)
 
-创建了基线规范后, 您可以继续澄清在第一次尝试中未正确捕获的任何需求.
+创建了基线规范后, 你可以继续澄清在第一次尝试中未正确捕获的任何需求.
 
-您应该在创建技术计划之前运行结构化澄清工作流程, 以减少下游的返工.
+你应该在创建技术计划之前运行结构化澄清工作流程, 以减少下游的返工.
 
-首选顺序: 
-1. 使用 `/clarify`(结构化)- 顺序的、基于覆盖率的提问, 将答案记录在澄清部分.
+首选顺序:
+1. 使用 `/speckit.clarify`(结构化)- 顺序的、基于覆盖率的提问, 将答案记录在澄清部分.
 2. 如果仍然感觉模糊, 可以选择性地进行临时自由形式细化.
 
-如果您想跳过澄清(例如, 技术验证或探索性原型), 请明确说明, 这样代理就不会因缺少澄清而阻塞.
+如果你想跳过澄清(例如, 技术验证或探索性原型), 请明确说明, 这样代理就不会因缺少澄清而阻塞.
 
-示例自由形式细化提示(如果需要, 在 `/clarify` 之后): 
+示例自由形式细化提示(如果需要, 在 `/speckit.clarify` 之后): 
 
 ```text
 我们将使用.NET Aspire生成这个, 使用Postgres作为数据库. 前端应该使用
@@ -516,7 +521,7 @@ Blazor服务器与拖拽任务板、实时更新. 应该创建一个REST API, �
 任务API和通知API.
 ```
 
-此步骤的输出将包括许多实施细节文档, 您的目录树类似于: 
+此步骤的输出将包括许多实施细节文档, 你的目录树类似于: 
 
 ```text
 .
@@ -546,64 +551,64 @@ Blazor服务器与拖拽任务板、实时更新. 应该创建一个REST API, �
     └── tasks-template.md
 ```
 
-检查 `research.md` 文档, 确保根据您的说明使用了正确的技术栈. 如果任何组件突出显示, 您可以要求Claude Code完善它, 甚至让它检查您想要使用的平台/框架的本地安装版本(例如, .NET).
+检查 `research.md` 文档, 确保根据你的说明使用了正确的技术栈. 如果任何组件突出显示, 你可以要求Claude Code完善它, 甚至让它检查你想要使用的平台/框架的本地安装版本(例如, .NET).
 
-此外, 如果您选择的技术栈是快速变化的(例如, .NET Aspire、JS框架), 您可能想要要求Claude Code研究有关所选技术栈的详细信息, 使用这样的提示: 
+此外, 如果你选择的技术栈是快速变化的(例如, .NET Aspire、JS框架), 你可能想要要求Claude Code研究有关所选技术栈的详细信息, 使用这样的提示: 
 
 ```text
-我希望您查看实施计划和实施细节, 寻找可能从额外研究中受益的领域, 
-因为.NET Aspire是一个快速变化的库. 对于您识别的需要进一步研究的那些领域, 
-我希望您使用有关我们将在Taskify应用程序中使用的特定版本的额外详细信息更新研究文档, 
+我希望你查看实施计划和实施细节, 寻找可能从额外研究中受益的领域, 
+因为.NET Aspire是一个快速变化的库. 对于你识别的需要进一步研究的那些领域, 
+我希望你使用有关我们将在Taskify应用程序中使用的特定版本的额外详细信息更新研究文档, 
 并启动并行研究任务, 使用网络研究澄清任何细节.
 ```
 
-在此过程中, 您可能会发现Claude Code卡在研究错误的内容——您可以使用这样的提示帮助它朝着正确的方向推进: 
+在此过程中, 你可能会发现Claude Code卡在研究错误的内容——你可以使用这样的提示帮助它朝着正确的方向推进: 
 
 ```text
-我认为我们需要将其分解为一系列步骤. 首先, 识别您在实施期间需要做的不确定
+我认为我们需要将其分解为一系列步骤. 首先, 识别你在实施期间需要做的不确定
 或从进一步研究中受益的任务列表. 写下这些任务的列表. 然后对于这些任务中的每一个, 
-我希望您启动一个单独的研究任务, 这样最终结果是我们并行研究所有这些非常具体的任务.
-我看到您所做的是看起来您在研究.NET Aspire一般情况, 我认为这对我们不会有太大帮助.
-那太没有针对性的研究了. 研究需要帮助您解决特定的针对性问题.
+我希望你启动一个单独的研究任务, 这样最终结果是我们并行研究所有这些非常具体的任务.
+我看到你所做的是看起来你在研究.NET Aspire一般情况, 我认为这对我们不会有太大帮助.
+那太没有针对性的研究了. 研究需要帮助你解决特定的针对性问题.
 ```
 
 >[!NOTE]
->Claude Code可能过于急切, 添加您没有要求的组件. 要求它澄清变更的理由和来源.
+>Claude Code可能过于急切, 添加你没有要求的组件. 要求它澄清变更的理由和来源.
 
 ### **步骤4: ** 生成计划
 
-您现在可以具体说明技术栈和其他技术要求. 您可以使用项目模板中内置的 `/speckit.plan` 命令, 使用这样的提示: 
+你现在可以具体说明技术栈和其他技术要求. 你可以使用项目模板中内置的 `/speckit.plan` 命令, 使用这样的提示: 
 
 ```text
-现在我希望您去审核实施计划和实施细节文件.
-带着确定是否存在从阅读中可以明显看出的您需要做的一系列任务的眼光来阅读.
+现在我希望你去审核实施计划和实施细节文件.
+带着确定是否存在从阅读中可以明显看出的你需要做的一系列任务的眼光来阅读.
 因为我不确定这里是否足够. 例如, 当我查看核心实施时, 参考实施细节中的适当位置
 会很有用, 以便在它执行核心实施或细化中的每个步骤时可以找到信息.
 ```
 
-这有助于完善实施计划, 并帮助您避免Claude Code在其规划周期中遗漏的潜在盲点. 一旦初始细化完成, 在您可以进入实施之前, 要求Claude Code再次检查清单.
+这有助于完善实施计划, 并帮助你避免Claude Code在其规划周期中遗漏的潜在盲点. 一旦初始细化完成, 在你可以进入实施之前, 要求Claude Code再次检查清单.
 
-您也可以要求Claude Code(如果您安装了[GitHub CLI](https://docs.github.com/en/github-cli/github-cli))继续从您当前的分支向 `main` 创建一个详细描述的pull request, 以确保工作得到正确跟踪.
+你也可以要求Claude Code(如果你安装了[GitHub CLI](https://docs.github.com/en/github-cli/github-cli))继续从你当前的分支向 `main` 创建一个详细描述的pull request, 以确保工作得到正确跟踪.
 
 >[!NOTE]
->在让代理实施之前, 还值得提示Claude Code交叉检查细节, 看看是否有任何过度设计的部分(记住——它可能过于急切). 如果存在过度设计的组件或决策, 您可以要求Claude Code解决它们. 确保Claude Code遵循[项目章程](base/memory/constitution.md)作为建立计划时必须遵守的基础.
+>在让代理实施之前, 还值得提示Claude Code交叉检查细节, 看看是否有任何过度设计的部分(记住——它可能过于急切). 如果存在过度设计的组件或决策, 你可以要求Claude Code解决它们. 确保Claude Code遵循[项目章程](.specify/memory/constitution.md)作为建立计划时必须遵守的基础.
 
 ### **步骤5: ** 让Claude Code验证计划
 
-有了计划后, 您应该让Claude Code检查它, 确保没有遗漏的部分. 您可以使用这样的提示: 
+有了计划后, 你应该让Claude Code检查它, 确保没有遗漏的部分. 你可以使用这样的提示: 
 
 >[!IMPORTANT]
->Claude Code将执行本地CLI命令(如 `dotnet`)——确保您在机器上安装了它们.
+>Claude Code将执行本地CLI命令(如 `dotnet`)——确保你在机器上安装了它们.
 
 ### **步骤6: ** 使用 /speckit.tasks 生成任务分解
 
-实施计划验证通过后, 您现在可以将计划分解为具体的、可执行的任务, 这些任务可以按正确的顺序执行. 使用 `/speckit.tasks` 命令从您的实施计划自动生成详细的任务分解: 
+实施计划验证通过后, 你现在可以将计划分解为具体的、可执行的任务, 这些任务可以按正确的顺序执行. 使用 `/speckit.tasks` 命令从你的实施计划自动生成详细的任务分解:
 
 ```text
 /speckit.tasks
 ```
 
-此步骤会在您的功能规范目录中创建一个 `tasks.md` 文件, 其中包含: 
+此步骤会在你的功能规范目录中创建一个 `tasks.md` 文件, 其中包含: 
 
 - **按用户故事组织的任务分解** - 每个用户故事成为一个独立的实施阶段, 包含自己的任务集
 - **依赖管理** - 任务按依赖关系排序, 尊重组件间的依赖(例如, 模型在服务之前, 服务在端点之前)
@@ -616,7 +621,7 @@ Blazor服务器与拖拽任务板、实时更新. 应该创建一个REST API, �
 
 ### **步骤7: ** 实施
 
-准备就绪后, 使用 `/speckit.implement` 命令执行您的实施计划: 
+准备就绪后, 使用 `/speckit.implement` 命令执行你的实施计划:
 
 ```text
 /speckit.implement
@@ -630,9 +635,9 @@ Blazor服务器与拖拽任务板、实时更新. 应该创建一个REST API, �
 - 提供进度更新并适当处理错误
 
 >[!IMPORTANT]
->AI代理将执行本地CLI命令(如 `dotnet`、`npm` 等)- 确保您在机器上安装了所需的工具.
+>AI代理将执行本地CLI命令(如 `dotnet`、`npm` 等)- 确保你在机器上安装了所需的工具.
 
-实施完成后, 测试应用程序并解决任何在CLI日志中可能不可见的运行时错误(例如, 浏览器控制台错误). 您可以将此类错误复制粘贴回AI代理以进行解决.
+实施完成后, 测试应用程序并解决任何在CLI日志中可能不可见的运行时错误(例如, 浏览器控制台错误). 你可以将此类错误复制粘贴回AI代理以进行解决.
 
 </details>
 
@@ -642,7 +647,7 @@ Blazor服务器与拖拽任务板、实时更新. 应该创建一个REST API, �
 
 ### Linux上的Git凭据管理器
 
-如果您在Linux上遇到Git身份验证问题, 可以安装Git凭据管理器: 
+如果你在Linux上遇到Git身份验证问题, 可以安装Git凭据管理器: 
 
 ```bash
 #!/usr/bin/env bash

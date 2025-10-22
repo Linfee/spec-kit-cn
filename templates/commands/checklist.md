@@ -1,5 +1,5 @@
 ---
-description: Generate a custom checklist for the current feature based on user requirements.
+description: 基于用户需求为当前功能生成自定义检查清单.
 scripts:
   sh: scripts/bash/check-prerequisites.sh --json
   ps: scripts/powershell/check-prerequisites.ps1 -Json
@@ -204,7 +204,7 @@ $ARGUMENTS
    - ✅ "Are [edge cases/scenarios] addressed in requirements?"
    - ✅ "Does the spec define [missing aspect]?"
 
-6. **结构参考**: 按照 `templates/checklist-template.md` 中的规范模板生成清单, 包括标题、元部分、类别标题和 ID 格式. 如果模板不可用, 使用: H1 标题、purpose/created 元行、包含 `- [ ] CHK### <requirement item>` 行的 `##` 类别部分, ID 从 CHK001 开始全局递增.
+6. **结构参考**: 按照 `.specify/templates/checklist-template.md` 中的规范模板生成清单, 包括标题、元部分、类别标题和 ID 格式. 如果模板不可用, 使用: H1 标题、purpose/created 元行、包含 `- [ ] CHK### <requirement item>` 行的 `##` 类别部分, ID 从 CHK001 开始全局递增.
 
 7. **报告**: 输出创建清单的完整路径、项目数量, 并提醒用户每次运行都会创建新文件. 总结: 
    - 选择的焦点区域

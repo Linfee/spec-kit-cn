@@ -3,7 +3,7 @@ name: translation-review
 description: "Review and fix translation quality between spec-kit original and Chinese localized version"
 ---
 
-用户输入可以直接由代理提供或作为命令参数提供给您 - 您**必须**考虑它(如果不为空).
+用户输入可以直接由代理提供或作为命令参数提供给你 - 你**必须**考虑它(如果不为空).
 
 用户输入: 
 
@@ -20,6 +20,7 @@ $ARGUMENTS
    - 确认docs目录结构和spec-kit/docs保持一致
    - 确认src目录结构和spec-kit/src保持一致
    - 确认scripts目录结构和spec-kit/scripts保持一致(需完全同步)
+   - 确认.devcontainer目录结构和spec-kit/.devcontainer保持一致(需完全同步)
    - 确认media目录结构和spec-kit/media保持一致(需完全同步)
    - 确认AGENTS.md文件存在且与spec-kit/AGENTS.md一致(需完全同步)
    - 确认pyproject.toml配置文件与原版结构一致
@@ -51,9 +52,6 @@ $ARGUMENTS
 - 必须对比原版spec-kit中的对应文件
 - 使用Task工具并行对比
 - 所有文件翻译后, 必须确保和原版表达是一样的语义, 不能新增或减少内容
-- 所有的路径, 不需要翻译, 都以原版为准
-  - 特别原文中包含`.specify`开头的路径, 绝对不要做额外处理
-  - 唯一的例外, 原文中如果提到命令specify需要替换为specify-cn
 - 确保修复后的功能与原版完全一致
 - 翻译标准参考 @TRANSLATION_STANDARDS.md, 术语表参考 @TERMINOLOGY.md
 - 输出详细的修复报告, 按照错误分类进行优先级排序

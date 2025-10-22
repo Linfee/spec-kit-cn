@@ -11,13 +11,13 @@ scripts:
 $ARGUMENTS
 ```
 
-在继续之前, 您**必须**考虑用户输入(如果不为空).
+在继续之前, 你**必须**考虑用户输入(如果不为空).
 
 ## 概述
 
 目标: 检测并减少活跃功能规范中的模糊性或缺失的决策点, 并将澄清内容直接记录在规范文件中.
 
-注意: 此澄清工作流应在调用 `/speckit.plan` 之前运行(并完成). 如果用户明确表示他们跳过澄清(例如, 探索性原型), 您可以继续, 但必须警告下游返工风险增加.
+注意: 此澄清工作流应在调用 `/speckit.plan` 之前运行(并完成). 如果用户明确表示他们跳过澄清(例如, 探索性原型), 你可以继续, 但必须警告下游返工风险增加.
 
 执行步骤: 
 
@@ -103,7 +103,7 @@ $ARGUMENTS
           - 类似实现中的常见模式
           - 风险降低(安全性、性能、可维护性)
           - 与规范中可见的任何明确项目目标或约束的一致性
-       * 在顶部突出显示您的**推荐选项**并附上清晰推理(1-2句话解释为什么这是最佳选择).
+       * 在顶部突出显示你的**推荐选项**并附上清晰推理(1-2句话解释为什么这是最佳选择).
        * 格式为: `**Recommended:** Option [X] - <reasoning>`
        * 然后将所有选项渲染为 Markdown 表格: 
 
@@ -115,18 +115,18 @@ $ARGUMENTS
           | Short | Provide a different short answer (<=5 words) | (仅在自由形式替代方案合适时包含)
        * 表格后添加: `You can reply with the option letter (e.g., "A"), accept the recommendation by saying "yes" or "recommended", or provide your own short answer.`
     - 对于简答题风格(没有有意义的不同选项): 
-       * 基于最佳实践和上下文提供您的**建议答案**.
+       * 基于最佳实践和上下文提供你的**建议答案**.
        * 格式为: `**Suggested:** <your proposed answer> - <brief reasoning>`
        * 然后输出: `Format: Short answer (<=5 words). You can accept the suggestion by saying "yes" or "suggested", or provide your own answer.`
     - 用户回答后: 
-       * 如果用户回复 "yes"、"recommended" 或 "suggested", 使用您之前陈述的推荐 / 建议作为答案.
+       * 如果用户回复 "yes"、"recommended" 或 "suggested", 使用你之前陈述的推荐 / 建议作为答案.
        * 否则, 验证答案映射到一个选项或符合 <=5 个词的约束.
        * 如果模糊, 要求快速消除歧义(计数仍属于同一问题; 不前进).
        * 一旦满意, 将其记录在工作内存中(尚未写入磁盘)并移动到下一个排队的问题.
     - 在以下情况时停止进一步提问: 
        * 所有关键模糊性早期解决(剩余排队项目变得不必要), 或
        * 用户发出完成信号("done"、"good"、"no more"), 或
-       * 您达到5个已问问题.
+       * 你达到5个已问问题.
     - 永远不要提前揭示未来的排队问题.
     - 如果开始时没有有效问题, 立即报告没有关键模糊性.
 

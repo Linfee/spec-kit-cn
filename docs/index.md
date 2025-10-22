@@ -55,8 +55,8 @@
 
 ## 贡献
 
-请参阅我们的[贡献指南](CONTRIBUTING.md)了解如何为这个项目做出贡献.
+请参阅我们的[贡献指南](https://github.com/linfee/spec-kit-cn/blob/main/CONTRIBUTING.md)了解如何为这个项目做出贡献.
 
 ## 支持
 
-如需支持, 请查看我们的[支持指南](SUPPORT.md)或在 GitHub 上提出问题.
+如需支持, 请查看我们的[支持指南](https://github.com/linfee/spec-kit-cn/blob/main/SUPPORT.md)或在 GitHub 上提出问题.

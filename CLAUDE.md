@@ -18,12 +18,13 @@
 3. **同步优先**: 定期与原版同步, 保持技术更新
 
 ### 关键差异
-| 项目 | 原版          | 中文版       |
-| ---- | ------------- | ------------ |
-| 包名 | `specify-cli` | `specify-cn-cli` |
-| 命令 | `specify`     | `specify-cn` |
-| 文档 | 英文          | 中文         |
-| 功能 | 持续开发      | 仅做本地化   |
+| 项目     | 原版            | 中文版           |
+| -------- | --------------- | ---------------- |
+| 包名     | `specify-cli`   | `specify-cn-cli` |
+| 命令     | `specify`       | `specify-cn`     |
+| 文档     | 英文            | 中文             |
+| 功能     | 持续开发        | 仅做本地化       |
+| 斜杠命令 | `/speckit.plan` | 保持一致         |
 
 ---
 
@@ -64,6 +65,7 @@ specify-cn --help | grep -E "中文|Spec Kit CN"  # 验证中文输出
 ├── src/specify_cli/           # 核心代码(必须同步)
 ├── templates/                 # 模板文件(需要本地化)
 ├── scripts/                   # 构建脚本(完全同步, 不翻译)
+├── .devcontainer/             # 开发容器配置(完全同步, 不翻译)
 ├── .github/                   # CI配置(谨慎同步, 不翻译)
 ├── docs/                     # 项目文档(需要本地化)
 ├── memory/                    # 项目章程(需要本地化)
@@ -76,16 +78,17 @@ specify-cn --help | grep -E "中文|Spec Kit CN"  # 验证中文输出
 ```
 
 ### 文件分类与处理策略
-| 类别     | 目录/文件                     | 同步策略 | 本地化策略          |
-| -------- | ----------------------------- | -------- | ------------------- |
-| 核心代码 | `src/specify_cli/`            | 必须同步 | CLI输出信息需要中文 |
-| 模板系统 | `templates/`                  | 结构同步 | 完全中文翻译        |
-| 构建脚本 | `scripts/`                    | 完全同步 | 不翻译              |
-| CI配置   | `.github/`                    | 谨慎同步 | 不翻译              |
-| 项目文档 | `docs/`, `README.md`          | 结构参考 | 完全中文翻译        |
-| 项目章程 | `memory/constitution.md`      | 结构同步 | 完全中文翻译        |
-| 原版追踪 | `spec-kit/`                   | 不提交   | 不适用              |
-| 项目描述 | `AGENTS.md`                   | 完全同步 | 不翻译              |
+| 类别       | 目录/文件                     | 同步策略 | 本地化策略          |
+| ---------- | ----------------------------- | -------- | ------------------- |
+| 核心代码   | `src/specify_cli/`            | 必须同步 | CLI输出信息需要中文 |
+| 模板系统   | `templates/`                  | 结构同步 | 完全中文翻译        |
+| 构建脚本   | `scripts/`                    | 完全同步 | 不翻译              |
+| 开发环境   | `.devcontainer/`              | 完全同步 | 不翻译              |
+| CI配置     | `.github/`                    | 谨慎同步 | 不翻译              |
+| 项目文档   | `docs/`, `README.md`          | 结构参考 | 完全中文翻译        |
+| 项目章程   | `memory/constitution.md`      | 结构同步 | 完全中文翻译        |
+| 原版追踪   | `spec-kit/`                   | 不提交   | 不适用              |
+| 项目描述   | `AGENTS.md`                   | 完全同步 | 不翻译              |
 
 ---
 
@@ -143,6 +146,49 @@ specify-cn --help | grep -E "中文|Spec Kit CN"  # 验证中文输出
 
 ---
 
+## 开发环境配置 (.devcontainer/)
+
+### Devcontainer 概述
+`.devcontainer/` 目录是 v0.0.78 新增的开发容器配置，提供完整的开发环境自动化设置。
+
+### 配置文件结构
+```
+.devcontainer/
+├── devcontainer.json     # 主配置文件，定义容器环境和工具
+└── post-create.sh       # 容器创建后自动执行脚本
+```
+
+### 核心功能
+- **预配置开发环境**: Python 3.13 + uv 包管理器
+- **AI助手自动安装**: 自动安装所有支持的AI编码助手
+- **VS Code集成**: 预装必要的扩展和设置
+- **多语言支持**: Node.js, .NET, Git 等开发工具
+- **端口转发**: 8080端口用于文档站点预览
+
+### 包含的AI助手
+- GitHub Copilot CLI
+- Claude Code CLI
+- Codex CLI
+- Gemini CLI
+- Auggie CLI
+- Qwen Code CLI
+- OpenCode CLI
+- Amazon Q Developer CLI
+- CodeBuddy CLI
+
+### 使用方式
+1. 在 VS Code 中打开项目
+2. 提示"在容器中重新打开"时选择确定
+3. 等待容器构建和脚本执行完成
+4. 所有AI助手将自动安装并可用
+
+### 同步策略
+- **完全同步**: 与原版保持100%一致
+- **不翻译**: 所有配置文件保持英文
+- **自动更新**: 随原版版本同步更新
+
+---
+
 ## 维护工作流程
 
 ### 自动化翻译工作流
@@ -180,13 +226,14 @@ specify-cn --help | grep -E "中文|Spec Kit CN"  # 验证中文输出
 └── ...                   # 本项目文件
 ```
 
-**同步工作流程**: 
+**同步工作流程**:
 1. 检查当前版本对应的原版 tag/commit
 2. 在 `spec-kit/` 目录检出对应原版版本
 3. 完全同步scripts: `rsync -avp spec-kit/scripts/ scripts/`
 4. **关键步骤**: 同步AGENTS.md: `cp spec-kit/AGENTS.md AGENTS.md`
-5. 执行自动化翻译: `/translation-sync`
-6. 更新 CHANGELOG.md 记录同步信息
+5. 同步开发环境配置: `rsync -avp spec-kit/.devcontainer/ .devcontainer/`
+6. 执行自动化翻译: `/translation-sync`
+7. 更新 CHANGELOG.md 记录同步信息
 
 #### AGENTS.md 比对的重要性
 - 原版 `AGENTS.md` 包含最新的 AI 助手支持信息和技术细节
@@ -225,8 +272,9 @@ specify-cn --help | grep -E "中文|Spec Kit CN"  # 验证中文输出
 - 项目章程: `memory/constitution.md`(包括占位符和说明文本)
 - CLI 界面: `src/specify_cli/` 中的输出信息、帮助文本、错误消息
 
-**保持英文不翻译的内容**: 
+**保持英文不翻译的内容**:
 - 构建脚本: `scripts/` 目录(完全同步原版)
+- 开发环境: `.devcontainer/` 目录(完全同步原版)
 - 媒体资源: `media/` 目录(完全同步原版)
 - CI配置: `.github/` 目录(谨慎同步, 不翻译)
 - 代码层面: 变量名、函数名、类名等标识符

@@ -144,6 +144,12 @@ AGENT_CONFIG = {
         "install_url": "https://aws.amazon.com/developer/learning/q-developer-cli/",
         "requires_cli": True,
     },
+    "amp": {
+        "name": "Amp",
+        "folder": ".agents/",
+        "install_url": "https://ampcode.com/manual#install",
+        "requires_cli": True,
+    },
 }
 
 SCRIPT_TYPE_CHOICES = {"sh": "POSIX Shell (bash/zsh)", "ps": "PowerShell"}

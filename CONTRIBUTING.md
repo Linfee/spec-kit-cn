@@ -13,6 +13,23 @@
 1. 安装 [Git](https://git-scm.com/downloads)
 1. 准备一个可用的 [AI 编码代理](README.md#-supported-ai-agents)
 
+<details>
+<summary><b>💡 如果你使用 <code>VSCode</code> 或 <code>GitHub Codespaces</code> 作为 IDE 的提示</b></summary>
+
+<br>
+
+只要你的机器上安装了 [Docker](https://docker.com)，你就可以通过这个 [VSCode 扩展](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) 利用 [Dev Containers](https://containers.dev)，轻松设置你的开发环境。由于项目根目录中的 `.devcontainer/devcontainer.json` 文件，上述工具已经预先安装和配置。
+
+为此，只需：
+
+- 检出仓库
+- 使用 VSCode 打开
+- 打开 [命令面板](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette) 并选择 "Dev Containers: Open Folder in Container..."
+
+在 [GitHub Codespaces](https://github.com/features/codespaces) 上更简单，因为它在打开 codespace 时自动利用 `.devcontainer/devcontainer.json`。
+
+</details>
+
 ## 提交拉取请求
 
 >[!NOTE]
@@ -38,12 +55,34 @@
 
 ## 开发工作流
 
-在处理 spec-kit 时: 
+在处理 spec-kit 时:
 
 1. 在你选择的编码代理中使用 `specify-cn` CLI 命令(`/speckit.specify`、`/speckit.plan`、`/speckit.tasks`)测试更改
 2. 验证 `templates/` 目录中的模板是否正常工作
 3. 测试 `scripts/` 目录中的脚本功能
 4. 如果进行了重大的流程更改, 确保更新内存文件(`memory/constitution.md`)
+
+### 本地测试模板和命令更改
+
+运行 `uv run specify-cn init` 会拉取已发布的包，这些包不包括你的本地更改。
+要在本地测试你的模板、命令和其他更改，请按照以下步骤操作：
+
+1. **创建发布包**
+
+   运行以下命令生成本地包：
+   ```
+   ./.github/workflows/scripts/create-release-packages.sh v1.0.0
+   ```
+
+2. **将相关包复制到你的测试项目**
+
+   ```
+   cp -r .genreleases/sdd-copilot-package-sh/. <path-to-test-project>/
+   ```
+
+3. **打开并测试代理**
+
+   导航到你的测试项目文件夹并打开代理来验证你的实现。
 
 ## Spec Kit 中的 AI 贡献
 

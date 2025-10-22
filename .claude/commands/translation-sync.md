@@ -22,7 +22,7 @@ $ARGUMENTS
    - 生成变更影响报告
 
 3. 变更内容分类
-   - **必须同步**: scripts/, AGENTS.md, 核心代码逻辑
+   - **必须同步**: scripts/, .devcontainer/, AGENTS.md, 核心代码逻辑
    - **需要翻译**: templates/, docs/, memory/, 根目录文档
    - **谨慎处理**: .github/, 配置文件
    - **无需处理**: 媒体文件, 纯技术文件

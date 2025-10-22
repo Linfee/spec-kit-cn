@@ -8,17 +8,17 @@ description: 从交互式或提供的原则输入创建或更新项目章程, �
 $ARGUMENTS
 ```
 
-在继续之前, 您**必须**考虑用户输入(如果不为空).
+在继续之前, 你**必须**考虑用户输入(如果不为空).
 
 ## 概述
 
-您正在更新位于 `/memory/constitution.md` 的项目章程. 该文件是一个包含方括号占位符标记的模板(例如 `[PROJECT_NAME]`、`[PRINCIPLE_1_NAME]`). 您的工作是(a)收集/推导具体值, (b)精确填充模板, 以及(c)将任何修改传播到相关依赖项中.
+你正在更新位于 `.specify/memory/constitution.md` 的项目章程. 该文件是一个包含方括号占位符标记的模板(例如 `[PROJECT_NAME]`、`[PRINCIPLE_1_NAME]`). 你的工作是(a)收集/推导具体值, (b)精确填充模板, 以及(c)将任何修改传播到相关依赖项中.
 
 遵循此执行流程: 
 
-1. 加载位于 `/memory/constitution.md` 的现有章程模板.
+1. 加载位于 `.specify/memory/constitution.md` 的现有章程模板.
    - 识别每个 `[ALL_CAPS_IDENTIFIER]` 形式的占位符标记.
-   **重要提示**: 用户可能需要比模板中使用的原则更少或更多. 如果指定了数字, 请遵循该数字 - 遵循通用模板. 您将相应地更新文档.
+   **重要提示**: 用户可能需要比模板中使用的原则更少或更多. 如果指定了数字, 请遵循该数字 - 遵循通用模板. 你将相应地更新文档.
 
 2. 为占位符收集/推导值: 
    - 如果用户输入(对话)提供了值, 则使用它.
@@ -37,10 +37,10 @@ $ARGUMENTS
    - 确保治理部分列出修改程序、版本控制策略和合规审查期望.
 
 4. 一致性传播检查清单(将先前的检查清单转换为主动验证): 
-   - 读取 `/templates/plan-template.md` 并确保任何"章程检查"或规则与更新的原则保持一致.
-   - 读取 `/templates/spec-template.md` 进行范围/需求对齐——如果章程添加/删除强制部分或约束, 则更新.
-   - 读取 `/templates/tasks-template.md` 并确保任务分类反映新的或删除的原则驱动的任务类型(例如, 可观测性、版本控制、测试纪律).
-   - 读取 `/templates/commands/*.md` 中的每个命令文件(包括此文件)以验证在需要通用指导时没有过时的引用(如仅限 CLAUDE 的代理特定名称).
+   - 读取 `.specify/templates/plan-template.md` 并确保任何"章程检查"或规则与更新的原则保持一致.
+   - 读取 `.specify/templates/spec-template.md` 进行范围/需求对齐——如果章程添加/删除强制部分或约束, 则更新.
+   - 读取 `.specify/templates/tasks-template.md` 并确保任务分类反映新的或删除的原则驱动的任务类型(例如, 可观测性、版本控制、测试纪律).
+   - 读取 `.specify/templates/commands/*.md` 中的每个命令文件(包括此文件)以验证在需要通用指导时没有过时的引用(如仅限 CLAUDE 的代理特定名称).
    - 读取任何运行时指导文档(例如 `README.md`、`docs/quickstart.md` 或代理特定指导文件(如果存在)). 更新对已更改原则的引用.
 
 5. 生成同步影响报告(在更新后作为 HTML 注释前置到章程文件顶部): 
@@ -57,7 +57,7 @@ $ARGUMENTS
    - 日期采用 ISO 格式 YYYY-MM-DD.
    - 原则是声明性的、可测试的, 并且没有模糊语言("should" → 在适当的地方用 MUST/SHOULD 理由替换).
 
-7. 将完成的章程写回 `/memory/constitution.md`(覆盖).
+7. 将完成的章程写回 `.specify/memory/constitution.md`(覆盖).
 
 8. 向用户输出最终摘要, 包括: 
    - 新版本和递增理由.
@@ -74,4 +74,4 @@ $ARGUMENTS
 
 如果缺少关键信息(例如, 批准日期确实未知), 请插入 `TODO(<FIELD_NAME>): explanation` 并包含在同步影响报告中的延迟项下.
 
-不要创建新模板; 始终操作现有的 `/memory/constitution.md` 文件.
+不要创建新模板; 始终操作现有的 `.specify/memory/constitution.md` 文件.

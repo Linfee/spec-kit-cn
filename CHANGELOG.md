@@ -2,8 +2,67 @@
 
 本项目的重要变更将记录在此文件中.
 
-格式基于[Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/), 
+格式基于[Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/),
 并且本项目遵循[语义化版本](https://semver.org/lang/zh-CN/).
+
+## [0.0.78] - 2025-10-22
+
+### 同步原版
+- 同步原版 [v0.0.78](https://github.com/github/spec-kit/releases/tag/v0.0.78)
+- 对应原版范围: v0.0.72 → v0.0.78
+- 主要同步提交: `926836e Merge pull request #1001` 等
+
+### 🤖 AI助手支持新增
+- **Amp CLI 支持**: 新增对 Amp AI助手的支持
+  - 更新 AGENTS.md 添加 Amp CLI 配置
+  - 集成到初始化流程: `specify-cn init <project> --ai amp`
+  - 更新术语表添加 Amp 条目
+  - 完善前置要求和文档说明
+
+### 🛠️ 开发环境增强
+- **PowerShell 原生支持**: 新增完整的 Windows 支持
+  - 新增 `--script ps` 参数支持
+  - 自动脚本类型检测（Windows 默认 ps，其他系统默认 sh）
+  - 完整的 PowerShell 脚本集成
+- **Devcontainer 支持**: 完整的开发容器配置
+  - VS Code Devcontainer 配置同步
+  - GitHub Codespaces 支持优化
+  - 预配置的开发环境设置
+
+### 📚 文档和流程改进
+- **本地测试工作流**: 新增详细的本地测试流程
+  - 创建发布包的完整步骤
+  - 本地项目验证和测试方法
+  - 三步验证流程标准化
+- **代码质量保证**: 集成 markdownlint-cli2
+  - 新增代码质量检查工具
+  - 统一的 Markdown 格式规范
+  - 自动化质量检查流程
+
+### 🔧 核心模板更新
+- **技术栈支持扩展**: implement.md 新增多种技术栈
+  - Ruby、PHP、Rust、Kotlin、C++、C、Swift、R 支持
+  - Kubernetes/k8s 相关工具模式
+  - 更全面的技术栈覆盖
+- **功能增强**: specify.md 新增简短名称生成
+  - 2-4词简短名称自动生成
+  - 完整的生成流程和示例
+  - 步骤编号和流程优化
+
+### 📖 文档翻译完善
+- **项目级文档**: 全面更新项目文档
+  - CONTRIBUTING.md: Devcontainer 和本地测试内容
+  - SECURITY.md: 格式标准化和内容优化
+  - SUPPORT.md: 仓库链接和引用修正
+- **安装文档**: 更新安装和快速开始指南
+  - PowerShell 支持说明
+  - 新增AI助手的安装指导
+  - 命令和链接的同步更新
+
+### 🌐 中文本地化优化
+- **术语一致性**: 确保所有新功能术语统一
+- **链接修正**: 所有GitHub链接指向中文版仓库
+- **用户体验**: 保持中文用户友好的界面和文档
 
 ## [0.0.72] - 2025-10-19
 

@@ -34,6 +34,7 @@
 | Auggie CLI | Auggie CLI | 不翻译, AI助手名称 |
 | CodeBuddy | CodeBuddy | 不翻译, AI助手名称 |
 | Amazon Q Developer CLI | Amazon Q Developer CLI | 不翻译, AI助手名称 |
+| Amp | Amp | 不翻译, AI助手名称 |
 
 ---
 
