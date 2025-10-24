@@ -42,7 +42,7 @@ $ARGUMENTS
    - 你必须且只能运行此脚本一次
    - JSON 输出会显示在终端中 - 请始终参考该输出来获取你要查找的实际内容
 
-3. 加载 `.specify/templates/spec-template.md` 以了解必需的章节.
+3. 加载 `templates/spec-template.md` 以了解必需的章节.
 
 4. 遵循此执行流程:
 

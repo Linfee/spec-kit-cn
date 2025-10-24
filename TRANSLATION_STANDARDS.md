@@ -50,50 +50,44 @@
 - 包名 `specify-cli` → `specify-cn-cli`
 - 路径中的 `.specify` 开头保持不变
 
-### 路径和斜杠命令同步和翻译准则
+### 路径和斜杠命令处理准则
 
-**优先准则**: 由于原版文件中存在部分错误，本准则具有最高优先级，所有路径和斜杠命令都必须按照以下准则处理。
+**重要说明**: 路径处理由发布脚本 `create-release-packages.sh` 中的 `rewrite_paths` 函数统一处理，翻译时不应修改原版路径格式。
 
-#### 斜杠命令处理准则
-- **标准化模式**: 所有的斜杠命令都应该符合 `/speckit.plan` 模式
-- **格式规则**: `/speckit.` + `templates/commands` 下的md文件的文件名
-- **前缀添加**: 如果原文中没有 `/speckit.` 前缀，翻译时必须加上
-- **示例**:
-  - 原文中的 `/plan` → 翻译为 `/speckit.plan`
-  - 原文中的 `/analyze` → 翻译为 `/speckit.analyze`
-  - 原文中的 `/checklist` → 翻译为 `/speckit.checklist`
+#### 发布时的路径转换
+发布脚本会自动将以下路径转换为 `.specify/` 前缀格式：
+- `memory/` → `.specify/memory/`
+- `scripts/` → `.specify/scripts/`
+- `templates/` → `.specify/templates/`
 
-#### templates 路径处理准则
-- **统一前缀**: 所有指向 `templates` 下的文件路径，不论是否以 `/` 开头
-- **标准格式**: `.specify/templates` + 剩余部分
-- **示例**:
-  - `templates/commands/specify.md` → `.specify/templates/commands/specify.md`
-  - `/templates/analyze.md` → `.specify/templates/analyze.md`
-  - `./templates/implement.md` → `.specify/templates/implement.md`
+#### 翻译时的处理原则
+- **保持原样**: 翻译时保持原版路径格式不变
+- **不添加前缀**: 不要在翻译时手动添加 `.specify/` 前缀
+- **避免重复**: 防止发布时出现 `.specify.specify/` 的重复前缀问题
 
-#### memory 路径处理准则
-- **统一前缀**: 所有指向 `memory` 下的文件路径，不论是否以 `/` 开头
-- **标准格式**: `.specify/memory` + 剩余部分
-- **示例**:
-  - `memory/constitution.md` → `.specify/memory/constitution.md`
-  - `/memory/constitution.md` → `.specify/memory/constitution.md`
-  - `./memory/constitution.md` → `.specify/memory/constitution.md`
+#### 正确示例
+```markdown
+✅ 翻译时保持原样:
+- 读取 `memory/constitution.md` 中的项目章程
+- 参考 `templates/plan-template.md` 模板
+- 执行 `scripts/setup.sh` 脚本
 
-#### spec 路径处理准则
-- 原文中有一些`specs/`开头的路径，注意这是路径, 翻译时候需要保留和原版一致
+❌ 翻译时错误添加前缀:
+- 读取 `.specify/memory/constitution.md` 中的项目章程
+- 参考 `.specify/templates/plan-template.md` 模板
+- 执行 `.specify/scripts/setup.sh` 脚本
+```
 
-#### 冲突处理原则
-- **优先级**: 本准则优先于其他所有路径和命令处理规则
-- **覆盖范围**: 如果本准则与其他准则冲突，以本准则为准
-- **错误修正**: 原版文件中的路径错误必须按本准则修正
-- **一致性**: 所有markdown文件中的路径和斜杠命令必须统一处理
+#### 斜杠命令处理
+- **保持原版格式**: 斜杠命令格式与原版保持一致
+- **不添加前缀**: 不要在翻译时添加 `/speckit.` 前缀
+- **发布时处理**: 斜杠命令的前缀由发布脚本统一处理
 
 #### 验证清单
-- [ ] 所有斜杠命令都包含 `/speckit.` 前缀
-- [ ] 所有 templates 路径都以 `.specify/templates` 开头
-- [ ] 所有 memory 路径都以 `.specify/memory` 开头
-- [ ] 原版中的路径错误已按准则修正
-- [ ] 路径格式在整个文档中保持一致
+- [ ] 翻译文件中的路径保持原版格式，未添加 `.specify/` 前缀
+- [ ] 斜杠命令保持原版格式，未添加 `/speckit.` 前缀
+- [ ] 确保发布时不会产生重复的 `.specify.specify/` 路径
+- [ ] 所有内部引用与原版保持一致
 
 ## 质量检查清单
 
@@ -119,9 +113,9 @@
 - [ ] 模板文件占位符保持正确格式
 
 ### 路径和链接检查
-- [ ] 所有路径和斜杠命令遵循路径和斜杠命令同步和翻译准则
-- [ ] `.specify/templates` 和 `.specify/memory` 路径格式正确
-- [ ] 斜杠命令包含 `/speckit.` 前缀
+- [ ] 所有路径和斜杠命令遵循路径和斜杠命令处理准则
+- [ ] 翻译文件中的路径保持原版格式，未手动添加 `.specify/` 前缀
+- [ ] 斜杠命令保持原版格式，未手动添加 `/speckit.` 前缀
 - [ ] 内部链接指向正确
 - [ ] 外部链接可访问
 

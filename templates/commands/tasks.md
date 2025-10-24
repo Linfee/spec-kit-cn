@@ -47,7 +47,7 @@ $ARGUMENTS
    - 为每个用户故事创建并行执行示例
    - 验证任务完整性(每个用户故事都有所有必需任务, 可独立测试)
 
-4. **生成 tasks.md**: 使用 `.specify/templates/tasks-template.md` 作为结构, 填充: 
+4. **生成 tasks.md**: 使用 `templates/tasks-template.md` 作为结构, 填充: 
    - 来自 plan.md 的正确功能名称
    - 阶段 1: 设置任务(项目初始化)
    - 阶段 2: 基础任务(所有用户故事的阻塞先决条件)
