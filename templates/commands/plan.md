@@ -23,7 +23,7 @@ $ARGUMENTS
 2. **加载上下文**: 读取 FEATURE_SPEC 和 `/memory/constitution.md`. 加载 IMPL_PLAN 模板(已复制).
 
 3. **执行计划工作流**: 按照 IMPL_PLAN 模板中的结构: 
-   - 填充技术上下文(将未知项标记为"NEEDS CLARIFICATION")
+   - 填充技术上下文(将未知项标记为 NEEDS CLARIFICATION)
    - 从章程文档填充章程检查部分
    - 评估关卡(如果违规无正当理由则报错)
    - 阶段 0: 生成 research.md(解决所有 NEEDS CLARIFICATION)

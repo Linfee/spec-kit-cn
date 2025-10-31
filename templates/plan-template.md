@@ -16,15 +16,15 @@
   此处的结构以咨询性质呈现, 用于指导迭代过程.
 -->
 
-**语言/版本**: [例如: Python 3.11、Swift 5.9、Rust 1.75 或 需要澄清]
-**主要依赖**: [例如: FastAPI、UIKit、LLVM 或 需要澄清]
-**存储**: [如适用, 例如: PostgreSQL、CoreData、文件 或 不适用]
-**测试**: [例如: pytest、XCTest、cargo test 或 需要澄清]
-**目标平台**: [例如: Linux 服务器、iOS 15+、WASM 或 需要澄清]
+**语言/版本**: [例如: Python 3.11、Swift 5.9、Rust 1.75 或 NEEDS CLARIFICATION]
+**主要依赖**: [例如: FastAPI、UIKit、LLVM 或 NEEDS CLARIFICATION]
+**存储**: [如适用, 例如: PostgreSQL、CoreData、文件 或 N/A]
+**测试**: [例如: pytest、XCTest、cargo test 或 NEEDS CLARIFICATION]
+**目标平台**: [例如: Linux 服务器、iOS 15+、WASM 或 NEEDS CLARIFICATION]
 **项目类型**: [单一/网页/移动 - 决定源代码结构]
-**性能目标**: [领域特定, 例如: 1000 请求/秒、10k 行/秒、60 fps 或 需要澄清]
-**约束条件**: [领域特定, 例如: <200ms p95、<100MB 内存、离线可用 或 需要澄清]
-**规模/范围**: [领域特定, 例如: 10k 用户、1M 行代码、50 个屏幕 或 需要澄清]
+**性能目标**: [领域特定, 例如: 1000 请求/秒、10k 行/秒、60 fps 或 NEEDS CLARIFICATION]
+**约束条件**: [领域特定, 例如: <200ms p95、<100MB 内存、离线可用 或 NEEDS CLARIFICATION]
+**规模/范围**: [领域特定, 例如: 10k 用户、1M 行代码、50 个屏幕 或 NEEDS CLARIFICATION]
 
 ## 章程检查
 
