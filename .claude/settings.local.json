@@ -3,7 +3,8 @@
     "allow": [
       "mcp__sequential-thinking__sequentialthinking",
       "mcp__context7__get-library-docs",
-      "Bash(git describe:*)"
+      "Bash(git describe:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []

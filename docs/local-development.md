@@ -110,7 +110,7 @@ python -c "import specify_cli; print('Import OK')"
 uv build
 ls dist/
 ```
-如果需要, 将构建的工件安装到新的临时环境中.
+如果需要, 将构建的制品安装到新的临时环境中.
 
 ## 8. 使用临时工作区
 
@@ -145,7 +145,7 @@ specify-cn init demo --skip-tls --ai gemini --ignore-agent-tools --script ps
 
 ## 11. 清理
 
-快速删除构建工件 / 虚拟环境: 
+快速删除构建制品 / 虚拟环境: 
 ```bash
 rm -rf .venv dist build *.egg-info
 ```
