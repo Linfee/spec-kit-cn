@@ -7,7 +7,8 @@
       "Bash(git add:*)",
       "Bash(uv run specify-cn check)",
       "Bash(uv run specify-cn --version)",
-      "Bash(uv run specify-cn version:*)"
+      "Bash(uv run specify-cn version:*)",
+      "Bash(uv run specify-cn:*)"
     ],
     "deny": [],
     "ask": []

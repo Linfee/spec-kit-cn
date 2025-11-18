@@ -1,3 +1,5 @@
+test-project/
+spec-kit/
 # Python
 __pycache__/
 *.py[cod]
