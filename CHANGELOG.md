@@ -5,6 +5,49 @@
 格式基于[Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/),
 并且本项目遵循[语义化版本](https://semver.org/lang/zh-CN/).
 
+## [0.0.85] - 2025-11-18
+
+### 同步原版
+- 同步原版 [v0.0.85](https://github.com/github/spec-kit/releases/tag/v0.0.85)
+- 对应原版范围: v0.0.78 → v0.0.85
+- 主要同步提交: `e77d99a Support for version command` 等
+
+### 🚀 新增功能
+- **版本命令支持**: 新增 `specify-cn version` 命令
+  - 显示CLI版本和系统信息
+  - 获取最新模板版本信息
+  - 显示Python版本和平台信息
+- **Handoffs 功能**: 模板间智能跳转支持
+  - 在 clarify、constitution、plan、specify、tasks 命令中添加 handoffs 配置
+  - 支持工作流自动化和步骤间跳转
+  - 中文本地化标签和提示
+
+### 🆕 新增文档和模板
+- **升级指南**: 新增完整的升级文档 docs/upgrade.md
+  - CLI工具升级步骤
+  - 项目文件更新指南
+  - 常见问题和解决方案
+  - 版本兼容性说明
+- **任务转议题**: 新增 templates/commands/taskstoissues.md
+  - 将任务转换为GitHub议题
+  - 支持GitHub MCP服务器集成
+  - 完整的操作流程和警告说明
+
+### 🛠️ 技术增强
+- **GitHub API 限制处理**: 增强API限流处理
+  - 新增限流头信息解析功能
+  - 用户友好的限流错误提示
+  - 自动重试和等待机制
+- **脚本更新**: 所有构建脚本同步更新
+  - 支持新的 handoffs 功能
+  - 改进错误处理和日志
+  - PowerShell 脚本增强
+
+### 🔄 版本管理
+- 版本号更新至 0.0.85
+- 与原版 v0.0.85 完全同步
+- 保持功能对等性
+
 ## [0.0.78] - 2025-10-22
 
 ### 同步原版

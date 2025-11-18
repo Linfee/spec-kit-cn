@@ -1,7 +1,7 @@
 [project]
 name = "specify-cn-cli"
-version = "0.0.78"
-description = "Specify CN CLI, part of GitHub Spec Kit CN. A tool to bootstrap your projects for Spec-Driven Development (SDD). Corresponds to upstream spec-kit v0.0.78."
+version = "0.0.85"
+description = "Specify CN CLI, part of GitHub Spec Kit CN. A tool to bootstrap your projects for Spec-Driven Development (SDD). Corresponds to upstream spec-kit v0.0.85."
 requires-python = ">=3.11"
 dependencies = [
     "typer",
@@ -13,7 +13,7 @@ dependencies = [
 ]
 
 [project.scripts]
-specify-cn = "specify_cli:main"
+specify = "specify_cli:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -21,3 +21,4 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/specify_cli"]
+

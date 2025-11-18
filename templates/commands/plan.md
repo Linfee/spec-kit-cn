@@ -1,5 +1,14 @@
 ---
 description: 执行实施规划工作流, 使用计划模板生成设计制品.
+handoffs:
+  - label: 创建任务
+    agent: speckit.tasks
+    prompt: 将计划分解为任务
+    send: true
+  - label: 创建检查清单
+    agent: speckit.checklist
+    prompt: 为需求创建质量检查清单
+    send: true
 scripts:
   sh: scripts/bash/setup-plan.sh --json
   ps: scripts/powershell/setup-plan.ps1 -Json

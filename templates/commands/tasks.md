@@ -1,5 +1,14 @@
 ---
 description: 基于可用的设计文档, 为功能特性生成可执行的、按依赖关系排序的 tasks.md 文件.
+handoffs:
+  - label: 分析一致性
+    agent: speckit.analyze
+    prompt: 运行项目一致性分析
+    send: true
+  - label: 实施项目
+    agent: speckit.implement
+    prompt: 实施项目
+    send: true
 scripts:
   sh: scripts/bash/check-prerequisites.sh --json
   ps: scripts/powershell/check-prerequisites.ps1 -Json

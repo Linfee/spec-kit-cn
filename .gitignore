@@ -1,5 +1,3 @@
-test-project/
-spec-kit/
 # Python
 __pycache__/
 *.py[cod]
@@ -34,9 +32,15 @@ env/
 *.swp
 *.swo
 .DS_Store
+*.tmp
 
 # Project specific
 *.log
 .env
 .env.local
 *.lock
+
+# Spec Kit-specific files
+.genreleases/
+*.zip
+sdd-*/
