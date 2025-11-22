@@ -423,7 +423,7 @@ class BannerGroup(TyperGroup):
 
 app = typer.Typer(
     name="specify-cn",
-    help="设置工具，用于规范驱动开发项目",
+    help="Spec Kit CN 规范驱动开发项目设置工具",
     add_completion=False,
     invoke_without_command=True,
     cls=BannerGroup,
@@ -448,7 +448,7 @@ def callback(ctx: typer.Context):
     """Show banner when no subcommand is provided."""
     if ctx.invoked_subcommand is None and "--help" not in sys.argv and "-h" not in sys.argv:
         show_banner()
-        console.print(Align.center("[dim]运行 'specify-cn --help' 获取使用信息[/dim]"))
+        console.print(Align.center("[dim]运行 'specify-cn --help' 查看使用说明[/dim]"))
         console.print()
 
 def run_command(cmd: list[str], check_return: bool = True, capture: bool = False, shell: bool = False) -> Optional[str]:
@@ -537,7 +537,7 @@ def init_git_repo(project_path: Path, quiet: bool = False) -> Tuple[bool, Option
             console.print("[cyan]Initializing git repository...[/cyan]")
         subprocess.run(["git", "init"], check=True, capture_output=True, text=True)
         subprocess.run(["git", "add", "."], check=True, capture_output=True, text=True)
-        subprocess.run(["git", "commit", "-m", "Initial commit from Specify template"], check=True, capture_output=True, text=True)
+        subprocess.run(["git", "commit", "-m", "Initial commit from Spec Kit CN template"], check=True, capture_output=True, text=True)
         if not quiet:
             console.print("[green]✓[/green] Git repository initialized")
         return True, None
