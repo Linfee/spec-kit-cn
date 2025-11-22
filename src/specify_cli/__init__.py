@@ -18,7 +18,7 @@ Usage:
     uvx specify-cn-cli.py init --here
 
 Or install globally:
-    uv tool install --from specify-cn-cli.py specify-cn-cli
+    uv tool install --from specify-cn-cli.py specify-cn
     specify-cn init <project-name>
     specify-cn init .
     specify-cn init --here
@@ -887,7 +887,7 @@ def download_and_extract_template(project_path: Path, ai_assistant: str, script_
 
 
 def ensure_executable_scripts(project_path: Path, tracker: StepTracker | None = None) -> None:
-    """Ensure POSIX .sh scripts under .specify/scripts (recursively) have execute bits (no-op on Windows)."""
+    """确保 POSIX .sh 脚本在 .specify/scripts 下（递归）具有执行位（Windows 上无操作）。"""
     if os.name == "nt":
         return  # Windows: skip silently
     scripts_root = project_path / ".specify" / "scripts"
@@ -955,17 +955,17 @@ def init(
     6. Optionally set up AI assistant commands
     
     Examples:
-        specify init my-project
-        specify init my-project --ai claude
-        specify init my-project --ai copilot --no-git
-        specify init --ignore-agent-tools my-project
-        specify init . --ai claude         # Initialize in current directory
-        specify init .                     # Initialize in current directory (interactive AI selection)
-        specify init --here --ai claude    # Alternative syntax for current directory
-        specify init --here --ai codex
-        specify init --here --ai codebuddy
-        specify init --here
-        specify init --here --force  # Skip confirmation when current directory not empty
+        specify-cn init my-project
+        specify-cn init my-project --ai claude
+        specify-cn init my-project --ai copilot --no-git
+        specify-cn init --ignore-agent-tools my-project
+        specify-cn init . --ai claude         # Initialize in current directory
+        specify-cn init .                     # Initialize in current directory (interactive AI selection)
+        specify-cn init --here --ai claude    # Alternative syntax for current directory
+        specify-cn init --here --ai codex
+        specify-cn init --here --ai codebuddy
+        specify-cn init --here
+        specify-cn init --here --force  # Skip confirmation when current directory not empty
     """
 
     show_banner()
@@ -975,11 +975,11 @@ def init(
         project_name = None  # Clear project_name to use existing validation logic
 
     if here and project_name:
-        console.print("[red]Error:[/red] Cannot specify both project name and --here flag")
+        console.print("[red]错误:[/red] 不能同时指定项目名称和 --here 标志")
         raise typer.Exit(1)
 
     if not here and not project_name:
-        console.print("[red]Error:[/red] Must specify either a project name, use '.' for current directory, or use --here flag")
+        console.print("[red]错误:[/red] 必须指定项目名称、使用 '.' 表示当前目录，或使用 --here 标志")
         raise typer.Exit(1)
 
     if here:
@@ -1054,7 +1054,7 @@ def init(
                     f"[cyan]{selected_ai}[/cyan] not found\n"
                     f"Install from: [cyan]{install_url}[/cyan]\n"
                     f"{agent_config['name']} is required to continue with this project type.\n\n"
-                    "Tip: Use [cyan]--ignore-agent-tools[/cyan] to skip this check",
+                    "提示：使用 [cyan]--ignore-agent-tools[/cyan] 跳过此检查",
                     title="[red]Agent Detection Error[/red]",
                     border_style="red",
                     padding=(1, 2)
@@ -1207,32 +1207,32 @@ def init(
 
     steps_lines.append(f"{step_num}. Start using slash commands with your AI agent:")
 
-    steps_lines.append("   2.1 [cyan]/speckit.constitution[/] - Establish project principles")
-    steps_lines.append("   2.2 [cyan]/speckit.specify[/] - Create baseline specification")
-    steps_lines.append("   2.3 [cyan]/speckit.plan[/] - Create implementation plan")
-    steps_lines.append("   2.4 [cyan]/speckit.tasks[/] - Generate actionable tasks")
-    steps_lines.append("   2.5 [cyan]/speckit.implement[/] - Execute implementation")
+    steps_lines.append("   2.1 [cyan]/speckit.constitution[/] - 建立项目原则")
+    steps_lines.append("   2.2 [cyan]/speckit.specify[/] - 创建基线规范")
+    steps_lines.append("   2.3 [cyan]/speckit.plan[/] - 创建实施计划")
+    steps_lines.append("   2.4 [cyan]/speckit.tasks[/] - 生成可执行任务")
+    steps_lines.append("   2.5 [cyan]/speckit.implement[/] - 执行实施")
 
     steps_panel = Panel("\n".join(steps_lines), title="Next Steps", border_style="cyan", padding=(1,2))
     console.print()
     console.print(steps_panel)
 
     enhancement_lines = [
-        "Optional commands that you can use for your specs [bright_black](improve quality & confidence)[/bright_black]",
+        "可用于规范的可选命令 [bright_black](提高质量和信心)[/bright_black]",
         "",
-        f"○ [cyan]/speckit.clarify[/] [bright_black](optional)[/bright_black] - Ask structured questions to de-risk ambiguous areas before planning (run before [cyan]/speckit.plan[/] if used)",
-        f"○ [cyan]/speckit.analyze[/] [bright_black](optional)[/bright_black] - Cross-artifact consistency & alignment report (after [cyan]/speckit.tasks[/], before [cyan]/speckit.implement[/])",
-        f"○ [cyan]/speckit.checklist[/] [bright_black](optional)[/bright_black] - Generate quality checklists to validate requirements completeness, clarity, and consistency (after [cyan]/speckit.plan[/])"
+        f"○ [cyan]/speckit.clarify[/] [bright_black](可选)[/bright_black] - 在规划前询问结构化问题以降低模糊区域的风险 (如果使用，在 [cyan]/speckit.plan[/] 前运行)",
+        f"○ [cyan]/speckit.analyze[/] [bright_black](可选)[/bright_black] - 交叉制品一致性和对齐报告 (在 [cyan]/speckit.tasks[/] 后，[cyan]/speckit.implement[/] 前)",
+        f"○ [cyan]/speckit.checklist[/] [bright_black](可选)[/bright_black] - 生成质量检查清单以验证需求的完整性、清晰度和一致性 (在 [cyan]/speckit.plan[/] 后)"
     ]
-    enhancements_panel = Panel("\n".join(enhancement_lines), title="Enhancement Commands", border_style="cyan", padding=(1,2))
+    enhancements_panel = Panel("\n".join(enhancement_lines), title="增强命令", border_style="cyan", padding=(1,2))
     console.print()
     console.print(enhancements_panel)
 
 @app.command()
 def check():
-    """Check that all required tools are installed."""
+    """检查所有必需工具是否已安装。"""
     show_banner()
-    console.print("[bold]Checking for installed tools...[/bold]\n")
+    console.print("[bold]正在检查已安装的工具...[/bold]\n")
 
     tracker = StepTracker("Check Available Tools")
 
@@ -1262,17 +1262,17 @@ def check():
 
     console.print(tracker.render())
 
-    console.print("\n[bold green]Specify CLI is ready to use![/bold green]")
+    console.print("\n[bold green]Specify CN CLI 已准备就绪![/bold green]")
 
     if not git_ok:
-        console.print("[dim]Tip: Install git for repository management[/dim]")
+        console.print("[dim]提示: 安装 git 用于仓库管理[/dim]")
 
     if not any(agent_results.values()):
-        console.print("[dim]Tip: Install an AI assistant for the best experience[/dim]")
+        console.print("[dim]提示: 安装 AI 助手以获得最佳体验[/dim]")
 
 @app.command()
 def version():
-    """Display version and system information."""
+    """显示版本和系统信息。"""
     import platform
     import importlib.metadata
     
@@ -1295,8 +1295,8 @@ def version():
             pass
     
     # Fetch latest template release version
-    repo_owner = "github"
-    repo_name = "spec-kit"
+    repo_owner = "linfee"
+    repo_name = "spec-kit-cn"
     api_url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/releases/latest"
     
     template_version = "unknown"
