@@ -416,7 +416,7 @@ CLI会检查你是否安装了Claude Code、Gemini CLI、Cursor CLI、Qwen CLI�
 specify-cn init <project_name> --ai claude --ignore-agent-tools
 ```
 
-### **步骤1: ** 建立项目原则
+### 步骤1:  建立项目原则
 
 转到项目文件夹并运行你的AI代理. 在我们的示例中, 我们使用 `claude`.
 
@@ -432,8 +432,12 @@ specify-cn init <project_name> --ai claude --ignore-agent-tools
 
 此步骤会创建或更新 `.specify/memory/constitution.md` 文件, 其中包含项目的基础指南, AI代理将在规范、规划和实施阶段参考这些指南.
 
+### 步骤2:  创建项目规范
+
+有了项目原则后, 你现在可以创建功能规范. 使用 `/speckit.specify` 命令, 然后为你想要开发的项目提供具体需求.
+
 >[!IMPORTANT]
->尽可能明确地说明你要构建的_什么_和_为什么_. **此时不要关注技术栈**.
+>尽可能明确地说明你要构建的*什么*和*为什么*. **此时不要关注技术栈**.
 
 示例提示: 
 
@@ -473,20 +477,29 @@ specify-cn init <project_name> --ai claude --ignore-agent-tools
     │	 ├── common.sh
     │	 ├── create-new-feature.sh
     │	 ├── setup-plan.sh
-    │	 └── update-agent-context.sh
+    │	 └── update-cluade-md.sh
     ├── specs
     │	 └── 001-create-taskify
     │	     └── spec.md
     └── templates
-        ├── CLAUDE-template.md
         ├── plan-template.md
         ├── spec-template.md
         └── tasks-template.md
 ```
 
-### **步骤2: ** 创建项目规范
+### 步骤3:  功能规范澄清(计划前必需)
 
-有了项目原则后, 你现在可以创建功能规范. 使用 `/speckit.specify` 命令, 然后为你想要开发的项目提供具体需求.
+创建了基线规范后, 你可以继续澄清在第一次尝试中未正确捕获的任何需求.
+
+你应该在创建技术计划之前运行结构化澄清工作流程, 以减少下游的返工.
+
+首选顺序:
+1. 使用 `/speckit.clarify`(结构化)- 顺序的、基于覆盖率的提问, 将答案记录在澄清部分.
+2. 如果仍然感觉模糊, 可以选择性地进行临时自由形式细化.
+
+如果你有意跳过细节澄清环节(例如，进行概念验证或探索性原型设计), 请明确说明, 这样智能体就不会因缺少澄清信息而停滞不前.
+
+一个自由形式的优化提示示例(在 `/speckit.clarify` 之后如果仍然需要): 
 
 ```text
 对于你创建的每个示例项目或项目, 每个项目应该有5到15个之间的可变数量任务, 
@@ -501,19 +514,9 @@ specify-cn init <project_name> --ai claude --ignore-agent-tools
 
 重要的是, 要将与Claude Code的互动作为澄清和围绕规范提问的机会——**不要将其第一次尝试视为最终版本**.
 
-### **步骤3: ** 功能规范澄清(计划前必需)
+### 步骤4:  生成计划
 
-创建了基线规范后, 你可以继续澄清在第一次尝试中未正确捕获的任何需求.
-
-你应该在创建技术计划之前运行结构化澄清工作流程, 以减少下游的返工.
-
-首选顺序:
-1. 使用 `/speckit.clarify`(结构化)- 顺序的、基于覆盖率的提问, 将答案记录在澄清部分.
-2. 如果仍然感觉模糊, 可以选择性地进行临时自由形式细化.
-
-如果你想跳过澄清(例如, 技术验证或探索性原型), 请明确说明, 这样代理就不会因缺少澄清而阻塞.
-
-示例自由形式细化提示(如果需要, 在 `/speckit.clarify` 之后): 
+你现在可以具体说明技术栈和其他技术要求. 你可以使用项目模板中内置的 `/speckit.plan` 命令, 使用这样的提示: 
 
 ```text
 我们将使用.NET Aspire生成这个, 使用Postgres作为数据库. 前端应该使用
@@ -533,7 +536,7 @@ Blazor服务器与拖拽任务板、实时更新. 应该创建一个REST API, �
 │	 ├── common.sh
 │	 ├── create-new-feature.sh
 │	 ├── setup-plan.sh
-│	 └── update-agent-context.sh
+│	 └── update-cluade-md.sh
 ├── specs
 │	 └── 001-create-taskify
 │	     ├── contracts
@@ -575,9 +578,9 @@ Blazor服务器与拖拽任务板、实时更新. 应该创建一个REST API, �
 >[!NOTE]
 >Claude Code可能过于急切, 添加你没有要求的组件. 要求它澄清变更的理由和来源.
 
-### **步骤4: ** 生成计划
+### 步骤5:  让Claude Code验证计划
 
-你现在可以具体说明技术栈和其他技术要求. 你可以使用项目模板中内置的 `/speckit.plan` 命令, 使用这样的提示: 
+有了计划后, 你应该让Claude Code检查它, 确保没有遗漏的部分. 你可以使用这样的提示: 
 
 ```text
 现在我希望你去审核实施计划和实施细节文件.
@@ -593,14 +596,7 @@ Blazor服务器与拖拽任务板、实时更新. 应该创建一个REST API, �
 >[!NOTE]
 >在让代理实施之前, 还值得提示Claude Code交叉检查细节, 看看是否有任何过度设计的部分(记住——它可能过于急切). 如果存在过度设计的组件或决策, 你可以要求Claude Code解决它们. 确保Claude Code遵循[项目章程](.specify/memory/constitution.md)作为建立计划时必须遵守的基础.
 
-### **步骤5: ** 让Claude Code验证计划
-
-有了计划后, 你应该让Claude Code检查它, 确保没有遗漏的部分. 你可以使用这样的提示: 
-
->[!IMPORTANT]
->Claude Code将执行本地CLI命令(如 `dotnet`)——确保你在机器上安装了它们.
-
-### **步骤6: ** 使用 /speckit.tasks 生成任务分解
+### 步骤6:  使用 /speckit.tasks 生成任务分解
 
 实施计划验证通过后, 你现在可以将计划分解为具体的、可执行的任务, 这些任务可以按正确的顺序执行. 使用 `/speckit.tasks` 命令从你的实施计划自动生成详细的任务分解:
 
@@ -619,7 +615,7 @@ Blazor服务器与拖拽任务板、实时更新. 应该创建一个REST API, �
 
 生成的 tasks.md 为 `/speckit.implement` 命令提供了清晰的路线图, 确保系统性实施, 保持代码质量并允许用户故事的增量交付.
 
-### **步骤7: ** 实施
+### 步骤7:  实施
 
 准备就绪后, 使用 `/speckit.implement` 命令执行你的实施计划:
 
