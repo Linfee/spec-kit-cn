@@ -386,9 +386,9 @@ build_variant() {
 
   esac
 
-  ( cd "$base_dir" && zip -r "../spec-kit-template-${agent}-${script}-${NEW_VERSION}.zip" . )
+  ( cd "$base_dir" && zip -r "../spec-kit-template-${agent}-${script}-${PACKAGE_VERSION}.zip" . )
 
-  echo "Created $GENRELEASES_DIR/spec-kit-template-${agent}-${script}-${NEW_VERSION}.zip"
+  echo "Created $GENRELEASES_DIR/spec-kit-template-${agent}-${script}-${PACKAGE_VERSION}.zip"
 
 }
 
@@ -474,11 +474,11 @@ done
 
 echo "Archives in $GENRELEASES_DIR:"
 
-ls -1 "$GENRELEASES_DIR"/spec-kit-template-*-"${NEW_VERSION}".zip
+ls -1 "$GENRELEASES_DIR"/spec-kit-template-*-"${PACKAGE_VERSION}".zip
 
 # Move all generated zip files to the root directory for GitHub Actions
 echo "Moving archives to root directory..."
-mv "$GENRELEASES_DIR"/spec-kit-template-*-"${NEW_VERSION}".zip ./
+mv "$GENRELEASES_DIR"/spec-kit-template-*-"${PACKAGE_VERSION}".zip ./
 
 echo "Archives moved to root directory:"
-ls -1 spec-kit-template-*-"${NEW_VERSION}".zip
+ls -1 spec-kit-template-*-"${PACKAGE_VERSION}".zip
