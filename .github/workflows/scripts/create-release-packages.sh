@@ -372,12 +372,6 @@ build_variant() {
 
       generate_commands shai md "\$ARGUMENTS" "$base_dir/.shai/commands" "$script" ;;
 
-    q)
-
-      mkdir -p "$base_dir/.amazonq/prompts"
-
-      generate_commands q md "\$ARGUMENTS" "$base_dir/.amazonq/prompts" "$script" ;;
-
     bob)
 
       mkdir -p "$base_dir/.bob/commands"

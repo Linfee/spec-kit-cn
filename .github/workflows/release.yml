@@ -102,8 +102,6 @@ jobs:
         - spec-kit-template-amp-ps-${{ steps.get_tag.outputs.package_version }}.zip
         - spec-kit-template-shai-sh-${{ steps.get_tag.outputs.package_version }}.zip
         - spec-kit-template-shai-ps-${{ steps.get_tag.outputs.package_version }}.zip
-        - spec-kit-template-q-sh-${{ steps.get_tag.outputs.package_version }}.zip
-        - spec-kit-template-q-ps-${{ steps.get_tag.outputs.package_version }}.zip
         - spec-kit-template-bob-sh-${{ steps.get_tag.outputs.package_version }}.zip
         - spec-kit-template-bob-ps-${{ steps.get_tag.outputs.package_version }}.zip
         EOF
@@ -148,8 +146,6 @@ jobs:
           spec-kit-template-amp-ps-${{ steps.get_tag.outputs.package_version }}.zip \
           spec-kit-template-shai-sh-${{ steps.get_tag.outputs.package_version }}.zip \
           spec-kit-template-shai-ps-${{ steps.get_tag.outputs.package_version }}.zip \
-          spec-kit-template-q-sh-${{ steps.get_tag.outputs.package_version }}.zip \
-          spec-kit-template-q-ps-${{ steps.get_tag.outputs.package_version }}.zip \
           spec-kit-template-bob-sh-${{ steps.get_tag.outputs.package_version }}.zip \
           spec-kit-template-bob-ps-${{ steps.get_tag.outputs.package_version }}.zip \
           --title "Spec Kit CN 中文模板 - $VERSION_NO_V" \
