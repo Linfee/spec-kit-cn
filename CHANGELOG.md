@@ -5,7 +5,39 @@
 格式基于[Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/),
 并且本项目遵循[语义化版本](https://semver.org/lang/zh-CN/).
 
-## [0.0.85] - 2025-11-18
+## [0.0.86] - 2025-11-29
+
+### 同步原版
+- 同步原版 [v0.0.86](https://github.com/github/spec-kit/releases/tag/v0.0.86)
+- 对应原版范围: v0.0.78 → v0.0.86
+
+### 🚀 新增功能
+
+#### IBM Bob IDE 支持
+- **CLI 集成**: 新增 IBM Bob 配置到 `AGENT_CONFIG`
+- **帮助文档**: 更新 `--ai` 参数帮助信息，包含 IBM Bob 选项
+- **代理文档**: 在 `AGENTS.md` 中添加 IBM Bob 条目
+- **术语表**: 在 `TERMINOLOGY.md` 中添加 IBM Bob 和 SHAI 术语
+
+#### 文件同步
+- **src/specify_cli/__init__.py**: 同步 IBM Bob 配置和 CLI 帮助信息
+- **AGENTS.md**: 完整翻译并添加 IBM Bob 支持
+- **TERMINOLOGY.md**: 添加 IBM Bob 和 SHAI 术语条目
+- **pyproject.toml**: 版本号更新至 v0.0.86
+- **README.md**: 验证已包含最新 AI 助手列表
+
+### 🔧 技术更新
+- **构建脚本**: 同步原版发布和上下文更新脚本
+- **版本管理**: 遵循语义化版本规范
+
+### 📋 质量保证
+- **翻译标准**: 遵循 TRANSLATION_STANDARDS.md 规范
+- **术语一致性**: 确保所有新术语符合 TERMINOLOGY.md
+- **功能验证**: 验证 IBM Bob 在 CLI 中正常工作
+
+---
+
+*本次同步主要完成 IBM Bob IDE 的支持集成，确保中文版与原版 v0.0.86 保持功能对等。*
 
 ### 同步原版
 - 同步原版 [v0.0.85](https://github.com/github/spec-kit/releases/tag/v0.0.85)

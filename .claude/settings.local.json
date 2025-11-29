@@ -8,7 +8,9 @@
       "Bash(uv run specify-cn check)",
       "Bash(uv run specify-cn --version)",
       "Bash(uv run specify-cn version:*)",
-      "Bash(uv run specify-cn:*)"
+      "Bash(uv run specify-cn:*)",
+      "Bash(echo:*)",
+      "Bash([API][^ ].*[a-zA-Z] \" README.md)"
     ],
     "deny": [],
     "ask": []

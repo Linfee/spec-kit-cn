@@ -24,6 +24,7 @@
 - 构建脚本: scripts/ 目录(完全同步原版)
 - 开发环境: .devcontainer/ 目录(完全同步原版)
 - 媒体资源: media/ 目录(完全同步原版)
+- Agent说明文件: AGENTS.md 文件(完全同步原版)
 - CI配置: .github/ 目录(谨慎同步, 不翻译)
 - 代码层面: 变量名、函数名、类名等标识符
 - 章程占位符: 如 [PROJECT_NAME]、[PRINCIPLE_1_NAME] 等(保持原格式)
