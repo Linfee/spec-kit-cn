@@ -475,3 +475,10 @@ done
 echo "Archives in $GENRELEASES_DIR:"
 
 ls -1 "$GENRELEASES_DIR"/spec-kit-template-*-"${NEW_VERSION}".zip
+
+# Move all generated zip files to the root directory for GitHub Actions
+echo "Moving archives to root directory..."
+mv "$GENRELEASES_DIR"/spec-kit-template-*-"${NEW_VERSION}".zip ./
+
+echo "Archives moved to root directory:"
+ls -1 spec-kit-template-*-"${NEW_VERSION}".zip
