@@ -1,16 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "mcp__sequential-thinking__sequentialthinking",
-      "mcp__context7__get-library-docs",
-      "Bash(git describe:*)",
-      "Bash(git add:*)",
-      "Bash(uv run specify-cn check)",
-      "Bash(uv run specify-cn --version)",
-      "Bash(uv run specify-cn version:*)",
-      "Bash(uv run specify-cn:*)",
-      "Bash(echo:*)",
-      "Bash([API][^ ].*[a-zA-Z] \" README.md)"
+      "mcp__sequential-thinking__sequentialthinking"
     ],
     "deny": [],
     "ask": []

@@ -2,7 +2,7 @@
 description: 通过提出最多 5 个高度针对性的澄清问题, 识别当前功能规范中未充分说明的领域, 并将答案编码回规范中.
 handoffs:
   - label: 构建技术计划
-    agent: speckit.plan
+    agent: /speckit.plan
     prompt: 为规范创建计划。我正在构建...
 scripts:
    sh: scripts/bash/check-prerequisites.sh --json --paths-only

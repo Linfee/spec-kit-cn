@@ -5,6 +5,52 @@
 格式基于[Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/),
 并且本项目遵循[语义化版本](https://semver.org/lang/zh-CN/).
 
+## [0.0.90] - 2025-12-05
+
+### 同步原版
+- 同步原版 [v0.0.90](https://github.com/github/spec-kit/releases/tag/v0.0.90)
+- 对应原版范围: v0.0.86 → v0.0.90
+
+### 🚀 新增功能
+
+#### 新增 AI 助手支持
+- **Qoder CLI**: 新增 Qoder 配置到 `AGENT_CONFIG`
+- **Jules**: 新增 Jules 配置（IDE-based）
+- **SHAI**: 新增 SHAI (OVHcloud) 配置
+- **帮助文档**: 更新 `--ai` 参数帮助信息，包含所有新助手
+- **代理文档**: 在 `AGENTS.md` 中添加所有新助手条目
+
+#### 文档结构优化
+- **快速开始指南**: 从 4 步流程更新为 6 步流程
+  - 新增 Step 2: Define Your Constitution
+  - 新增 Step 4: Refine Spec
+  - 新增 Step 6 中的验证步骤（analyze、implement）
+- **模板更新**: 同步分支检查逻辑，防止分支编号冲突
+
+#### 文件同步
+- **src/specify_cli/__init__.py**: 同步所有新增 AI 助手配置
+- **docs/quickstart.md**: 恢复完整的 6 步流程
+- **templates/commands/specify.md**: 同步分支检查逻辑
+- **templates/commands/tasks.md**: 更新任务生成工作流
+- **README.md**: 更新版本信息和 AI 助手列表
+- **spec-driven.md**: 同步最新内容
+- **CONTRIBUTING.md**: 更新贡献指南
+- **CODE_OF_CONDUCT.md**: 更新行为准则
+- **pyproject.toml**: 版本号更新至 v0.0.90
+
+### 🔧 技术更新
+- **分支管理**: 优化分支编号逻辑，防止冲突
+- **错误处理**: 改进错误消息和用户提示
+- **代码质量**: 统一代码注释和文档字符串语言
+
+### 📋 质量保证
+- **翻译标准**: 严格遵循 TRANSLATION_STANDARDS.md 规范
+- **术语一致性**: 确保所有术语符合 TERMINOLOGY.md
+- **格式规范**: 修复斜杠命令格式和中英文混排问题
+- **功能验证**: 验证所有新增 AI 助手在 CLI 中正常工作
+
+---
+
 ## [0.0.86] - 2025-11-29
 
 ### 同步原版
