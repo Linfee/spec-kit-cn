@@ -2,10 +2,10 @@
 description: 从自然语言功能描述创建或更新功能规范.
 handoffs:
   - label: 构建技术计划
-    agent: speckit.plan
+    agent: /speckit.plan
     prompt: 为规范创建计划。我正在构建...
   - label: 澄清规范需求
-    agent: speckit.clarify
+    agent: /speckit.clarify
     prompt: 分析规范的完整性和清晰度
     send: true
 scripts:
@@ -39,16 +39,37 @@ $ARGUMENTS
      - "Create a dashboard for analytics" → "analytics-dashboard"
      - "Fix payment processing timeout bug" → "fix-payment-timeout"
 
-2. 从仓库根目录运行脚本 `{SCRIPT}` **使用简短名称参数**并解析其 JSON 输出以获取 BRANCH_NAME 和 SPEC_FILE. 所有文件路径必须是绝对路径.
+2. **在创建新分支之前检查现有分支**:
+
+   a. 首先, 获取所有远程分支以确保我们有最新信息:
+
+      ```bash
+      git fetch --all --prune
+      ```
+
+   b. 查找所有来源中简短名称的最高功能编号:
+      - 远程分支: `git ls-remote --heads origin | grep -E 'refs/heads/[0-9]+-<short-name>$'`
+      - 本地分支: `git branch | grep -E '^[* ]*[0-9]+-<short-name>$'`
+      - 规范目录: 检查匹配 `specs/[0-9]+-<short-name>` 的目录
+
+   c. 确定下一个可用编号:
+      - 从所有三个来源提取所有编号
+      - 找到最高编号 N
+      - 对新分支编号使用 N+1
+
+   d. 使用计算出的编号和简短名称运行脚本 `{SCRIPT}`:
+      - 传递 `--number N+1` 和 `--short-name "your-short-name"` 以及功能描述
+      - Bash 示例: `{SCRIPT} --json --number 5 --short-name "user-auth" "添加用户认证"`
+      - PowerShell 示例: `{SCRIPT} -Json -Number 5 -ShortName "user-auth" "添加用户认证"`
 
    **重要说明**:
-
-   - 将第1步创建的2-4词简短名称作为参数附加到 `{SCRIPT}` 命令, 功能描述作为最终参数.
-   - Bash 示例: `--short-name "your-generated-short-name" "功能描述内容"`
-   - PowerShell 示例: `-ShortName "your-generated-short-name" "功能描述内容"`
-   - 对于参数中包含单引号的情况(如 "I'm Groot"), 使用转义语法: 例如 'I'\''m Groot'(或优先使用双引号: "I'm Groot")
+   - 检查所有三个来源(远程分支、本地分支、规范目录)以找到最高编号
+   - 仅匹配具有精确简短名称模式的分支/目录
+   - 如果没有找到具有此简短名称的现有分支/目录, 从编号 1 开始
    - 你必须且只能运行此脚本一次
-   - JSON 输出会显示在终端中 - 请始终参考该输出来获取你要查找的实际内容
+   - JSON 在终端中作为输出提供 - 请始终参考它以获取你要查找的实际内容
+   - JSON 输出将包含 BRANCH_NAME 和 SPEC_FILE 路径
+   - 对于参数中的单引号(如 "I'm Groot"), 使用转义语法: 例如 'I'\''m Groot'(或尽可能使用双引号: "I'm Groot")
 
 3. 加载 `templates/spec-template.md` 以了解必需的章节.
 

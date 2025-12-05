@@ -220,6 +220,12 @@ AGENT_CONFIG = {
         "install_url": None,  # IDE-based
         "requires_cli": False,
     },
+    "jules": {
+        "name": "Jules",
+        "folder": ".jules/",
+        "install_url": None,  # IDE-based
+        "requires_cli": False,
+    },
 }
 
 SCRIPT_TYPE_CHOICES = {"sh": "POSIX Shell (bash/zsh)", "ps": "PowerShell"}
@@ -939,7 +945,7 @@ def ensure_executable_scripts(project_path: Path, tracker: StepTracker | None = 
 @app.command()
 def init(
     project_name: str = typer.Argument(None, help="Name for your new project directory (optional if using --here, or use '.' for current directory)"),
-    ai_assistant: str = typer.Option(None, "--ai", help="AI assistant to use: claude, gemini, copilot, cursor-agent, qwen, opencode, codex, windsurf, kilocode, auggie, codebuddy, amp, shai, q, or bob"),
+    ai_assistant: str = typer.Option(None, "--ai", help="AI assistant to use: claude, gemini, copilot, cursor-agent, qwen, opencode, codex, windsurf, kilocode, auggie, codebuddy, amp, shai, q, bob, or jules"),
     script_type: str = typer.Option(None, "--script", help="Script type to use: sh or ps"),
     ignore_agent_tools: bool = typer.Option(False, "--ignore-agent-tools", help="Skip checks for AI agent tools like Claude Code"),
     no_git: bool = typer.Option(False, "--no-git", help="Skip git repository initialization"),
@@ -981,11 +987,11 @@ def init(
         project_name = None  # Clear project_name to use existing validation logic
 
     if here and project_name:
-        console.print("[red]错误:[/red] 不能同时指定项目名称和 --here 标志")
+        console.print("[red]Error:[/red] Cannot specify both project name and --here flag")
         raise typer.Exit(1)
 
     if not here and not project_name:
-        console.print("[red]错误:[/red] 必须指定项目名称、使用 '.' 表示当前目录，或使用 --here 标志")
+        console.print("[red]Error:[/red] Must specify project name, use '.' for current directory, or use --here flag")
         raise typer.Exit(1)
 
     if here:
@@ -1236,9 +1242,9 @@ def init(
 
 @app.command()
 def check():
-    """检查所有必需工具是否已安装。"""
+    """Check if all required tools are installed."""
     show_banner()
-    console.print("[bold]正在检查已安装的工具...[/bold]\n")
+    console.print("[bold]Checking installed tools...[/bold]\n")
 
     tracker = StepTracker("Check Available Tools")
 
@@ -1268,17 +1274,17 @@ def check():
 
     console.print(tracker.render())
 
-    console.print("\n[bold green]Specify CN CLI 已准备就绪![/bold green]")
+    console.print("\n[bold green]Specify CN CLI is ready![/bold green]")
 
     if not git_ok:
-        console.print("[dim]提示: 安装 git 用于仓库管理[/dim]")
+        console.print("[dim]提示：安装 git 用于仓库管理[/dim]")
 
     if not any(agent_results.values()):
-        console.print("[dim]提示: 安装 AI 助手以获得最佳体验[/dim]")
+        console.print("[dim]提示：安装 AI 助手以获得最佳体验[/dim]")
 
 @app.command()
 def version():
-    """显示版本和系统信息。"""
+    """Display version and system information."""
     import platform
     import importlib.metadata
     
