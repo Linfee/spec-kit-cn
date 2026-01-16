@@ -17,7 +17,7 @@
 
 > **💡 这是 [GitHub Spec Kit](https://github.com/github/spec-kit) 的官方中文复刻版本**
 > 
-> **🔄 对应原版版本**: [v0.0.86](https://github.com/github/spec-kit/releases/tag/v0.0.86)
+> **🔄 对应原版版本**: [v0.0.90](https://github.com/github/spec-kit/releases/tag/v0.0.90)
 > 
 > **📦 包名**: `specify-cn-cli`
 >

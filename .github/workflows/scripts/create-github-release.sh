@@ -38,7 +38,17 @@ gh release create "$VERSION" \
   .genreleases/spec-kit-template-auggie-ps-"$VERSION".zip \
   .genreleases/spec-kit-template-roo-sh-"$VERSION".zip \
   .genreleases/spec-kit-template-roo-ps-"$VERSION".zip \
+  .genreleases/spec-kit-template-codebuddy-sh-"$VERSION".zip \
+  .genreleases/spec-kit-template-codebuddy-ps-"$VERSION".zip \
+  .genreleases/spec-kit-template-qoder-sh-"$VERSION".zip \
+  .genreleases/spec-kit-template-qoder-ps-"$VERSION".zip \
+  .genreleases/spec-kit-template-amp-sh-"$VERSION".zip \
+  .genreleases/spec-kit-template-amp-ps-"$VERSION".zip \
+  .genreleases/spec-kit-template-shai-sh-"$VERSION".zip \
+  .genreleases/spec-kit-template-shai-ps-"$VERSION".zip \
   .genreleases/spec-kit-template-q-sh-"$VERSION".zip \
   .genreleases/spec-kit-template-q-ps-"$VERSION".zip \
+  .genreleases/spec-kit-template-bob-sh-"$VERSION".zip \
+  .genreleases/spec-kit-template-bob-ps-"$VERSION".zip \
   --title "Spec Kit Templates - $VERSION_NO_V" \
   --notes-file release_notes.md

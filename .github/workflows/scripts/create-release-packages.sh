@@ -360,6 +360,12 @@ build_variant() {
 
       generate_commands codebuddy md "\$ARGUMENTS" "$base_dir/.codebuddy/commands" "$script" ;;
 
+    qoder)
+
+      mkdir -p "$base_dir/.qoder/commands"
+
+      generate_commands qoder md "\$ARGUMENTS" "$base_dir/.qoder/commands" "$script" ;;
+
     amp)
 
       mkdir -p "$base_dir/.agents/commands"
@@ -388,7 +394,7 @@ build_variant() {
 
 # Determine agent list
 
-ALL_AGENTS=(claude gemini copilot cursor-agent qwen opencode windsurf codex kilocode auggie roo codebuddy amp shai q bob)
+ALL_AGENTS=(claude gemini copilot cursor-agent qwen opencode windsurf codex kilocode auggie roo codebuddy qoder amp shai q bob)
 
 ALL_SCRIPTS=(sh ps)
 
