@@ -55,7 +55,8 @@ rewrite_paths() {
   sed -E \
     -e 's@(/?)memory/@.specify/memory/@g' \
     -e 's@(/?)scripts/@.specify/scripts/@g' \
-    -e 's@(/?)templates/@.specify/templates/@g'
+    -e 's@(/?)templates/@.specify/templates/@g' \
+    -e 's@\.specify\.specify/@.specify/@g'
 }
 
 generate_commands() {
@@ -360,11 +361,23 @@ build_variant() {
 
       generate_commands codebuddy md "\$ARGUMENTS" "$base_dir/.codebuddy/commands" "$script" ;;
 
-    qoder)
+    qodercli)
 
       mkdir -p "$base_dir/.qoder/commands"
 
-      generate_commands qoder md "\$ARGUMENTS" "$base_dir/.qoder/commands" "$script" ;;
+      generate_commands qodercli md "\$ARGUMENTS" "$base_dir/.qoder/commands" "$script" ;;
+
+    agy)
+
+      mkdir -p "$base_dir/.agent/workflows"
+
+      generate_commands agy md "\$ARGUMENTS" "$base_dir/.agent/workflows" "$script" ;;
+
+    generic)
+
+      mkdir -p "$base_dir/.speckit/commands"
+
+      generate_commands generic md "\$ARGUMENTS" "$base_dir/.speckit/commands" "$script" ;;
 
     amp)
 
@@ -394,7 +407,7 @@ build_variant() {
 
 # Determine agent list
 
-ALL_AGENTS=(claude gemini copilot cursor-agent qwen opencode windsurf codex kilocode auggie roo codebuddy qoder amp shai q bob)
+ALL_AGENTS=(claude gemini copilot cursor-agent qwen opencode windsurf codex kilocode auggie roo codebuddy qodercli amp shai q agy bob generic)
 
 ALL_SCRIPTS=(sh ps)
 

@@ -3,7 +3,7 @@
 **分支**: `[###-feature-name]` | **日期**: [DATE] | **规范**: [link]
 **输入**: 来自 `/specs/[###-feature-name]/spec.md` 的功能规范
 
-**注意**: 此模板由 `/speckit.plan` 命令填充. 执行工作流程请参见 `.specify/templates/commands/plan.md`.
+**注意**: 此模板由 `/speckit.plan` 命令填充. 执行工作流程请参见 `.specify/templates/plan-template.md`.
 
 ## 摘要
 
@@ -16,15 +16,15 @@
   此处的结构以咨询性质呈现, 用于指导迭代过程.
 -->
 
-**语言/版本**: [例如: Python 3.11、Swift 5.9、Rust 1.75 或 NEEDS CLARIFICATION]
-**主要依赖**: [例如: FastAPI、UIKit、LLVM 或 NEEDS CLARIFICATION]
-**存储**: [如适用, 例如: PostgreSQL、CoreData、文件 或 N/A]
-**测试**: [例如: pytest、XCTest、cargo test 或 NEEDS CLARIFICATION]
-**目标平台**: [例如: Linux 服务器、iOS 15+、WASM 或 NEEDS CLARIFICATION]
-**项目类型**: [单一/网页/移动 - 决定源代码结构]
-**性能目标**: [领域特定, 例如: 1000 请求/秒、10k 行/秒、60 fps 或 NEEDS CLARIFICATION]
-**约束条件**: [领域特定, 例如: <200ms p95、<100MB 内存、离线可用 或 NEEDS CLARIFICATION]
-**规模/范围**: [领域特定, 例如: 10k 用户、1M 行代码、50 个屏幕 或 NEEDS CLARIFICATION]
+**语言/版本**: [例如: Python 3.11, Swift 5.9, Rust 1.75 或 NEEDS CLARIFICATION]
+**主要依赖**: [例如: FastAPI, UIKit, LLVM 或 NEEDS CLARIFICATION]
+**存储**: [如适用, 例如: PostgreSQL, CoreData, 文件 或 N/A]
+**测试**: [例如: pytest, XCTest, cargo test 或 NEEDS CLARIFICATION]
+**目标平台**: [例如: Linux 服务器, iOS 15+, WASM 或 NEEDS CLARIFICATION]
+**项目类型**: [例如: 库/cli/web 服务/移动应用/编译器/桌面应用 或 NEEDS CLARIFICATION]
+**性能目标**: [领域特定, 例如: 1000 请求/秒, 10k 行/秒, 60 fps 或 NEEDS CLARIFICATION]
+**约束条件**: [领域特定, 例如: <200ms p95, <100MB 内存, 离线可用 或 NEEDS CLARIFICATION]
+**规模/范围**: [领域特定, 例如: 10k 用户, 1M 行代码, 50 个屏幕 或 NEEDS CLARIFICATION]
 
 ## 章程检查
 
@@ -49,7 +49,7 @@ specs/[###-feature]/
 ### 源代码(仓库根目录)
 <!--
   需要操作: 将下面的占位符树结构替换为此功能的具体布局.
-  删除未使用的选项, 并使用真实路径(例如: apps/admin、packages/something)扩展所选结构.
+  删除未使用的选项, 并使用真实路径(例如: apps/admin, packages/something)扩展所选结构.
   交付的计划不得包含选项标签.
 -->
 
@@ -86,14 +86,14 @@ api/
 └── [同上后端结构]
 
 ios/ 或 android/
-└── [平台特定结构: 功能模块、UI 流程、平台测试]
+└── [平台特定结构: 功能模块, UI 流程, 平台测试]
 ```
 
 **结构决策**: [记录所选结构并引用上面捕获的真实目录]
 
 ## 复杂度跟踪
 
-*仅在章程检查有必须证明的违规时填写*
+> **仅在章程检查有必须证明的违规时填写**
 
 | 违规 | 为什么需要 | 拒绝更简单替代方案的原因 |
 |-----------|------------|-------------------------------------|

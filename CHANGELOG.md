@@ -5,6 +5,19 @@
 格式基于[Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/),
 并且本项目遵循[语义化版本](https://semver.org/lang/zh-CN/).
 
+## [Unreleased]
+
+### 变更
+- **AGENTS.md 用途变更**: 从原版同步文件改为独立维护的 Agent 入口文件
+  - 内容改为引用 `@CLAUDE.md`, 让所有 AI Code Agent 共用同一份项目指南
+  - 无需与原版同步, 独立维护
+- **新增 `/punctuation-fix` 命令**: 批量规范化 Markdown 文件中的标点符号
+
+### 文档更新
+- 更新 `CLAUDE.md` 中关于 AGENTS.md 的说明
+- 更新 `TRANSLATION_STANDARDS.md` 中的翻译范围说明
+- 更新 `/translation-review` 和 `/translation-sync` 命令中的相关检查逻辑
+
 ## [0.0.90] - 2025-12-05
 
 ### 同步原版
@@ -17,15 +30,15 @@
 - **Qoder CLI**: 新增 Qoder 配置到 `AGENT_CONFIG`
 - **Jules**: 新增 Jules 配置（IDE-based）
 - **SHAI**: 新增 SHAI (OVHcloud) 配置
-- **帮助文档**: 更新 `--ai` 参数帮助信息，包含所有新助手
+- **帮助文档**: 更新 `--ai` 参数帮助信息, 包含所有新助手
 - **代理文档**: 在 `AGENTS.md` 中添加所有新助手条目
 
 #### 文档结构优化
 - **快速开始指南**: 从 4 步流程更新为 6 步流程
   - 新增 Step 2: Define Your Constitution
   - 新增 Step 4: Refine Spec
-  - 新增 Step 6 中的验证步骤（analyze、implement）
-- **模板更新**: 同步分支检查逻辑，防止分支编号冲突
+  - 新增 Step 6 中的验证步骤（analyze, implement）
+- **模板更新**: 同步分支检查逻辑, 防止分支编号冲突
 
 #### 文件同步
 - **src/specify_cli/__init__.py**: 同步所有新增 AI 助手配置
@@ -39,7 +52,7 @@
 - **pyproject.toml**: 版本号更新至 v0.0.90
 
 ### 🔧 技术更新
-- **分支管理**: 优化分支编号逻辑，防止冲突
+- **分支管理**: 优化分支编号逻辑, 防止冲突
 - **错误处理**: 改进错误消息和用户提示
 - **代码质量**: 统一代码注释和文档字符串语言
 
@@ -61,7 +74,7 @@
 
 #### IBM Bob IDE 支持
 - **CLI 集成**: 新增 IBM Bob 配置到 `AGENT_CONFIG`
-- **帮助文档**: 更新 `--ai` 参数帮助信息，包含 IBM Bob 选项
+- **帮助文档**: 更新 `--ai` 参数帮助信息, 包含 IBM Bob 选项
 - **代理文档**: 在 `AGENTS.md` 中添加 IBM Bob 条目
 - **术语表**: 在 `TERMINOLOGY.md` 中添加 IBM Bob 和 SHAI 术语
 
@@ -83,7 +96,7 @@
 
 ---
 
-*本次同步主要完成 IBM Bob IDE 的支持集成，确保中文版与原版 v0.0.86 保持功能对等。*
+*本次同步主要完成 IBM Bob IDE 的支持集成, 确保中文版与原版 v0.0.86 保持功能对等. *
 
 ### 同步原版
 - 同步原版 [v0.0.85](https://github.com/github/spec-kit/releases/tag/v0.0.85)
@@ -96,7 +109,7 @@
   - 获取最新模板版本信息
   - 显示Python版本和平台信息
 - **Handoffs 功能**: 模板间智能跳转支持
-  - 在 clarify、constitution、plan、specify、tasks 命令中添加 handoffs 配置
+  - 在 clarify, constitution, plan, specify, tasks 命令中添加 handoffs 配置
   - 支持工作流自动化和步骤间跳转
   - 中文本地化标签和提示
 
@@ -143,7 +156,7 @@
 ### 🛠️ 开发环境增强
 - **PowerShell 原生支持**: 新增完整的 Windows 支持
   - 新增 `--script ps` 参数支持
-  - 自动脚本类型检测（Windows 默认 ps，其他系统默认 sh）
+  - 自动脚本类型检测（Windows 默认 ps, 其他系统默认 sh）
   - 完整的 PowerShell 脚本集成
 - **Devcontainer 支持**: 完整的开发容器配置
   - VS Code Devcontainer 配置同步
@@ -162,7 +175,7 @@
 
 ### 🔧 核心模板更新
 - **技术栈支持扩展**: implement.md 新增多种技术栈
-  - Ruby、PHP、Rust、Kotlin、C++、C、Swift、R 支持
+  - Ruby, PHP, Rust, Kotlin, C++, C, Swift, R 支持
   - Kubernetes/k8s 相关工具模式
   - 更全面的技术栈覆盖
 - **功能增强**: specify.md 新增简短名称生成
@@ -200,7 +213,7 @@
 
 - **IDE代理检查优化**: 优化 `check` 命令中的代理检测逻辑
   - 区分 CLI 和 IDE 类型的 AI 助手
-  - IDE 助手跳过 CLI 检查，标记为可选
+  - IDE 助手跳过 CLI 检查, 标记为可选
   - 更准确的工具链检测结果
 
 ### 📝 文档更新
@@ -297,7 +310,7 @@
 - **TOML输出转义修复**: 修复Gemini CLI中反斜杠转义问题, 确保配置文件格式正确
 
 ### 中文本地化更新
-- **CLI输出完全中文化**: 所有错误消息、状态提示、交互界面均保持中文显示
+- **CLI输出完全中文化**: 所有错误消息, 状态提示, 交互界面均保持中文显示
 - **模板文件中文翻译**: implement.md新增的忽略文件验证功能完全中文化
 - **AGENTS.md文档更新**: 同步最新的代理集成指南, 保持技术准确性的同时提供中文说明
 - **品牌标识一致性**: 保持中文版特有的品牌标识和命令名称(specify-cn)
@@ -309,7 +322,7 @@
 
 ### Bug修复
 - **🐛 修复speckit.前缀缺失问题**: 修复了`.github/workflows/scripts/create-release-packages.sh`中命令文件生成时缺少`speckit.`前缀的关键问题, 确保所有AI助手的命令文件正确生成(如`speckit.analyze.md`而非`analyze.md`)
-- **命令兼容性恢复**: 修复后用户可以正常使用`/speckit.constitution`、`/speckit.specify`等命令, 与CLI显示的命令提示完全匹配
+- **命令兼容性恢复**: 修复后用户可以正常使用`/speckit.constitution`, `/speckit.specify`等命令, 与CLI显示的命令提示完全匹配
 
 ### 已知问题
 - 无重大已知问题, 所有功能正常工作
@@ -370,24 +383,12 @@
 ### 已知问题
 - 无
 
-## [未发布]
-
-### 新增
-- 初始中文版本发布
-
-### 变更
-- 将所有文档从英文翻译为中文
-- 更新命令引用从`specify`改为`specify-cn`
-
-### 修复
-- 修复文档中的链接引用
-
 ## [1.0.0] - 2024-09-16
 
 ### 新增
 - 初始版本发布
 
-## [1.0.54] - 2025-09-28
+## [0.0.54] - 2025-09-28
 
 ### 同步原版
 - 同步原版 [v0.0.54](https://github.com/github/spec-kit/releases/tag/v0.0.54)
@@ -397,18 +398,14 @@
 - 更新 README.md 中的版本信息和原版对应关系
 - 更新 `src/specify_cli/__init__.py` 文件, 从原版 spec-kit 项目复制并完全本地化
 - 品牌标识更新: 包名 `specify-cn-cli`, 命令名 `specify-cn`, GitHub 仓库 `Linfee/spec-kit-cn`
-- 用户界面完全中文化: 所有错误消息、状态提示、帮助文档、操作指导均已翻译为中文
+- 用户界面完全中文化: 所有错误消息, 状态提示, 帮助文档, 操作指导均已翻译为中文
 - 功能完整性验证: 核心 CLI 功能与原版完全对等, 11 种 AI 助手支持完全一致
 
 ### 技术架构同步
-- 核心代码架构: 所有类和函数名称、方法签名、算法逻辑与原版保持一致
-- 依赖管理: typer、rich、httpx 等依赖库版本与原版同步
+- 核心代码架构: 所有类和函数名称, 方法签名, 算法逻辑与原版保持一致
+- 依赖管理: typer, rich, httpx 等依赖库版本与原版同步
 - 构建配置: hatchling 构建系统配置保持同步
-- AI 助手支持: Claude Code、Gemini CLI、GitHub Copilot、Cursor、Qwen Code 等 11 种助手完全支持
+- AI 助手支持: Claude Code, Gemini CLI, GitHub Copilot, Cursor, Qwen Code 等 11 种助手完全支持
 
 ### 已知问题
 - 无
-- Spec-Driven Development方法论完整实现
-- CLI工具支持
-- 模板系统
-- 文档生成功能

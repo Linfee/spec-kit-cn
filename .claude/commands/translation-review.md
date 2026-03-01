@@ -9,7 +9,7 @@ description: "Review and fix translation quality between spec-kit original and C
 
 $ARGUMENTS
 
-目标: 系统性地review原项目spec-kit与中文版之间的翻译质量, 识别并修复所有翻译错误、术语不一致和功能逻辑问题.
+目标: 系统性地review原项目spec-kit与中文版之间的翻译质量, 识别并修复所有翻译错误, 术语不一致和功能逻辑问题.
 
 执行步骤: 
 
@@ -22,7 +22,7 @@ $ARGUMENTS
    - 确认scripts目录结构和spec-kit/scripts保持一致(需完全同步)
    - 确认.devcontainer目录结构和spec-kit/.devcontainer保持一致(需完全同步)
    - 确认media目录结构和spec-kit/media保持一致(需完全同步)
-   - 确认AGENTS.md文件存在且与spec-kit/AGENTS.md一致(需完全同步)
+   - 确认AGENTS.md文件存在且正确引用CLAUDE.md
    - 确认pyproject.toml配置文件与原版结构一致
    
 2. review核心md文件翻译质量
@@ -45,8 +45,13 @@ $ARGUMENTS
    - 不强制要求同步, 仅提供信息供用户决策
 
 6. 输出结构化报告等待人类审核: 
-   - 报告应包含执行摘要、详细问题列表、术语一致性检查、功能验证结果和修复建议
+   - 报告应包含执行摘要, 详细问题列表, 术语一致性检查, 功能验证结果和修复建议
    - 参考 @TRANSLATION_STANDARDS.md 中的输出报告结构要求
+
+7. 运行发布前自动化验证并记录结果:
+   - 执行 `./tests/e2e/validate-release.sh`
+   - 验证项必须包含: ruff, pytest, CLI冒烟, init端到端(多agent), wheel安装冒烟
+   - 验证失败时不得建议发布, 必须先修复并复跑
 
 行为规则: 
 - 必须对比原版spec-kit中的对应文件
@@ -56,3 +61,4 @@ $ARGUMENTS
 - 翻译标准参考 @TRANSLATION_STANDARDS.md, 术语表参考 @TERMINOLOGY.md
 - 输出详细的修复报告, 按照错误分类进行优先级排序
 - 所有没有问题, 请直接告诉用户
+- 不要将本项目自定义测试脚本放到 `scripts/` 目录(该目录会在同步时被 `rsync --delete` 覆盖), 统一放到 `tests/e2e/`

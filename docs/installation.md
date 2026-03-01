@@ -63,6 +63,7 @@ uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <projec
 ## 验证
 
 初始化后, 你应该在 AI 助手中看到以下可用命令: 
+
 - `/speckit.specify` - 创建规范
 - `/speckit.plan` - 生成实施计划
 - `/speckit.tasks` - 分解为可执行任务
@@ -78,12 +79,12 @@ uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <projec
 ```bash
 #!/usr/bin/env bash
 set -e
-echo "正在下载Git凭据管理器v2.6.1..."
+echo "Downloading Git Credential Manager v2.6.1..."
 wget https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.6.1/gcm-linux_amd64.2.6.1.deb
-echo "正在安装Git凭据管理器..."
+echo "Installing Git Credential Manager..."
 sudo dpkg -i gcm-linux_amd64.2.6.1.deb
-echo "正在配置Git使用GCM..."
+echo "Configuring Git to use GCM..."
 git config --global credential.helper manager
-echo "正在清理..."
+echo "Cleaning up..."
 rm gcm-linux_amd64.2.6.1.deb
 ```

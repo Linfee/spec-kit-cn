@@ -13,12 +13,12 @@ $ARGUMENTS
 1. 完整性检查
    - 文件完整性: 确保所有需要翻译的文件都已处理
    - 内容完整性: 对比原版确保没有遗漏内容
-   - 格式完整性: 检查Markdown格式、链接、图片引用
-   - 结构完整性: 验证目录结构、标题层级、列表格式
+   - 格式完整性: 检查Markdown格式, 链接, 图片引用
+   - 结构完整性: 验证目录结构, 标题层级, 列表格式
 
 2. 翻译质量检查
    - 术语一致性: 对照术语表检查术语使用
-   - 语言质量: 检查语法、表达、流畅度
+   - 语言质量: 检查语法, 表达, 流畅度
    - 技术准确性: 验证技术概念翻译的准确性
    - 上下文一致性: 检查相关文件间的翻译一致性
 
@@ -36,6 +36,7 @@ $ARGUMENTS
    - 格式渲染测试
    - CLI帮助文本测试
    - 模板文件可用性测试
+   - 发布前E2E自动化: `./tests/e2e/validate-release.sh`
 
 5. 质量评分和报告
    - 为每个文件生成质量评分
@@ -85,7 +86,7 @@ grep -n "specify-cn init" src/specify_cli/__init__.py | wc -l
 ### C. 用户界面翻译检查 (必须通过)
 ```bash
 # 检查关键中文翻译
-grep -n "已准备就绪\|正在检查\|提示：" src/specify_cli/__init__.py
+grep -n "已准备就绪\|正在检查\|提示 : " src/specify_cli/__init__.py
 # 期望结果: 找到对应的中文翻译
 
 # 检查是否还有未翻译的英文界面
@@ -98,7 +99,7 @@ grep -n -E "(Tip:|Checking for|ready to use|Display version)" src/specify_cli/__
 ```bash
 # 检查包名使用规范
 grep -n "specify-cn-cli" src/specify_cli/__init__.py
-# 期望结果: 只在文档字符串中出现，不在代码逻辑中
+# 期望结果: 只在文档字符串中出现, 不在代码逻辑中
 ```
 **重要性**: 🟡 **重要** - 确保项目命名规范
 
@@ -113,7 +114,7 @@ grep -n "_specify_tracker_active" src/specify_cli/__init__.py
 grep -n "scripts_root.*specify" src/specify_cli/__init__.py
 # 期望结果: scripts_root = project_path / ".specify" / "scripts" (保持 .specify 不变)
 ```
-**重要性**: 🔴 **严重** - 技术变量名不能翻译，会影响功能
+**重要性**: 🔴 **严重** - 技术变量名不能翻译, 会影响功能
 
 ### F. 斜杠命令格式检查 (必须通过)
 ```bash
@@ -191,7 +192,7 @@ else
     echo "❌ 检查信息需要翻译"
 fi
 
-if grep -q "提示：" src/specify_cli/__init__.py; then
+if grep -q "提示 : " src/specify_cli/__init__.py; then
     echo "✅ 提示信息已翻译"
 else
     echo "❌ 提示信息需要翻译"
@@ -215,7 +216,7 @@ passed_checks=$(
     [ "$specify_cn_count" -gt 5 ] && echo 1 ||
     grep -q '已准备就绪' src/specify_cli/__init__.py && echo 1 ||
     grep -q '正在检查' src/specify_cli/__init__.py && echo 1 ||
-    grep -q '提示：' src/specify_cli/__init__.py && echo 1 ||
+    grep -q '提示 : ' src/specify_cli/__init__.py && echo 1 ||
     [ "$unfixed_english" -eq 0 ] && echo 1 ||
     grep -q '_specify_tracker_active' src/specify_cli/__init__.py && echo 1 ||
     grep -q 'scripts_root.*specify' src/specify_cli/__init__.py && echo 1 ||
@@ -227,12 +228,24 @@ if [ "$passed_checks" -eq "$total_checks" ]; then
     echo "🎉 所有关键修复点验证通过!"
     exit 0
 else
-    echo "⚠️  发现问题，需要修复"
+    echo "⚠️  发现问题, 需要修复"
     exit 1
 fi
 ```
 
+## ✅ 发布前验证基线
+
+执行以下命令并确保通过:
+
+```bash
+./tests/e2e/validate-release.sh
+```
+
+说明:
+- 自定义测试脚本必须放在 `tests/e2e/`, 不得放到 `scripts/`(会被上游同步覆盖).
+- E2E 必须覆盖: ruff、pytest、CLI 冒烟、init 产物校验、wheel 安装冒烟、临时文件清理.
+
 ### 📝 检查结果解读
-- **10/10 通过**: 所有关键修复点正确，可以进行发布
-- **8-9/10 通过**: 存在重要问题，必须修复
-- **<8/10 通过**: 存在严重问题，不建议发布
+- **10/10 通过**: 所有关键修复点正确, 可以进行发布
+- **8-9/10 通过**: 存在重要问题, 必须修复
+- **<8/10 通过**: 存在严重问题, 不建议发布

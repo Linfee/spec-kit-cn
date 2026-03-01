@@ -88,7 +88,7 @@ specify-cn --help | grep -E "中文|Spec Kit CN"  # 验证中文输出
 | 项目文档   | `docs/`, `README.md`          | 结构参考 | 完全中文翻译        |
 | 项目章程   | `memory/constitution.md`      | 结构同步 | 完全中文翻译        |
 | 原版追踪   | `spec-kit/`                   | 不提交   | 不适用              |
-| 项目描述   | `AGENTS.md`                   | 完全同步 | 不翻译              |
+| Agent入口  | `AGENTS.md`                   | 独立维护 | 引用CLAUDE.md       |
 
 ---
 
@@ -118,16 +118,16 @@ specify-cn --help | grep -E "中文|Spec Kit CN"  # 验证中文输出
 #### 必须同步的内容
 - ✅ **所有类和函数名称**
 - ✅ **方法签名和参数**: 完全与原版一致, 确保功能对等
-- ✅ **核心算法逻辑**: 模板下载、解压、Git初始化等核心流程
-- ✅ **依赖库和版本**: typer、rich、httpx 等依赖保持同步
+- ✅ **核心算法逻辑**: 模板下载, 解压, Git初始化等核心流程
+- ✅ **依赖库和版本**: typer, rich, httpx 等依赖保持同步
 - ✅ **AI助手支持**: 所有AI助手的支持逻辑完全一致
 - ✅ **构建配置**: hatchling 构建系统保持同步
 
 #### 需要本地化的内容
-- 📝 **品牌标识**: 包名、命令名、GitHub仓库、横幅标语
-- 📝 **用户界面文本**: 错误消息、状态提示、交互界面
-- 📝 **帮助文档**: 使用说明、操作指导、调试信息
-- 📝 **输出信息**: CLI 输出、进度显示、工具检查结果
+- 📝 **品牌标识**: 包名, 命令名, GitHub仓库, 横幅标语
+- 📝 **用户界面文本**: 错误消息, 状态提示, 交互界面
+- 📝 **帮助文档**: 使用说明, 操作指导, 调试信息
+- 📝 **输出信息**: CLI 输出, 进度显示, 工具检查结果
 
 ### AI 助手支持
 | 助手           | CLI 工具       | 目录格式               | 命令格式 | 类型   |
@@ -149,12 +149,12 @@ specify-cn --help | grep -E "中文|Spec Kit CN"  # 验证中文输出
 ## 开发环境配置 (.devcontainer/)
 
 ### Devcontainer 概述
-`.devcontainer/` 目录是 v0.0.78 新增的开发容器配置，提供完整的开发环境自动化设置。
+`.devcontainer/` 目录是 v0.0.78 新增的开发容器配置, 提供完整的开发环境自动化设置.
 
 ### 配置文件结构
 ```
 .devcontainer/
-├── devcontainer.json     # 主配置文件，定义容器环境和工具
+├── devcontainer.json     # 主配置文件, 定义容器环境和工具
 └── post-create.sh       # 容器创建后自动执行脚本
 ```
 
@@ -204,7 +204,7 @@ specify-cn --help | grep -E "中文|Spec Kit CN"  # 验证中文输出
 - **智能检测**: 自动识别翻译需求和质量问题
 - **增量更新**: 仅处理变更内容, 保持现有翻译稳定
 - **质量保证**: 多层检查确保翻译质量
-- **安全机制**: 分支操作、自动备份、渐进式发布
+- **安全机制**: 分支操作, 自动备份, 渐进式发布
 
 ### 版本同步策略
 
@@ -230,15 +230,14 @@ specify-cn --help | grep -E "中文|Spec Kit CN"  # 验证中文输出
 1. 检查当前版本对应的原版 tag/commit
 2. 在 `spec-kit/` 目录检出对应原版版本
 3. 完全同步scripts: `rsync -avp spec-kit/scripts/ scripts/`
-4. **关键步骤**: 同步AGENTS.md: `cp spec-kit/AGENTS.md AGENTS.md`
-5. 同步开发环境配置: `rsync -avp spec-kit/.devcontainer/ .devcontainer/`
-6. 执行自动化翻译: `/translation-sync`
-7. 更新 CHANGELOG.md 记录同步信息
+4. 同步开发环境配置: `rsync -avp spec-kit/.devcontainer/ .devcontainer/`
+5. 执行自动化翻译: `/translation-sync`
+6. 更新 CHANGELOG.md 记录同步信息
 
-#### AGENTS.md 比对的重要性
-- 原版 `AGENTS.md` 包含最新的 AI 助手支持信息和技术细节
-- 每次同步时必须比对, 确保项目记忆的准确性
-- 重点关注: 新助手支持、版本管理要求、集成步骤变化
+#### AGENTS.md 用途
+- `AGENTS.md` 是其他 AI Code Agent 的入口文件
+- 内容引用 `@CLAUDE.md`, 让所有 Agent 共用同一份项目指南
+- 无需与原版同步, 独立维护
 
 ### 版本管理要求
 - **重要**: 任何对 `src/specify_cli/__init__.py` 的修改都需要: 
@@ -267,18 +266,18 @@ specify-cn --help | grep -E "中文|Spec Kit CN"  # 验证中文输出
 
 ### 本地化范围
 **需要完全中文本地化的内容**: 
-- 用户文档: `README.md`、`spec-driven.md`、`docs/` 目录
+- 用户文档: `README.md`, `spec-driven.md`, `docs/` 目录
 - 模板系统: `templates/` 和 `templates/commands/` 目录下的所有文件
 - 项目章程: `memory/constitution.md`(包括占位符和说明文本)
-- CLI 界面: `src/specify_cli/` 中的输出信息、帮助文本、错误消息
+- CLI 界面: `src/specify_cli/` 中的输出信息, 帮助文本, 错误消息
 
 **保持英文不翻译的内容**:
 - 构建脚本: `scripts/` 目录(完全同步原版)
 - 开发环境: `.devcontainer/` 目录(完全同步原版)
 - 媒体资源: `media/` 目录(完全同步原版)
 - CI配置: `.github/` 目录(谨慎同步, 不翻译)
-- 代码层面: 变量名、函数名、类名等标识符
-- 章程占位符: 如 `[PROJECT_NAME]`、`[PRINCIPLE_1_NAME]` 等(保持原格式)
+- 代码层面: 变量名, 函数名, 类名等标识符
+- 章程占位符: 如 `[PROJECT_NAME]`, `[PRINCIPLE_1_NAME]` 等(保持原格式)
 
 ### 质量保证机制
 - **自动化检查**: `/translation-qa` 进行全面质量检查
@@ -312,7 +311,6 @@ specify-cn --help | grep -E "中文|Spec Kit CN"  # 验证中文输出
 
 - **原版项目**: [github/spec-kit](https://github.com/github/spec-kit)
 - **原版文档**: [spec-kit/docs](https://github.com/github/spec-kit/tree/main/docs)
-- **原版项目标书**: [spec-kit/AGENTS.md](https://github.com/github/spec-kit/blob/main/AGENTS.md)
 - **GitHub Releases**: [spec-kit/releases](https://github.com/github/spec-kit/releases)
 - **中文版仓库**: [linfee/spec-kit-cn](https://github.com/linfee/spec-kit-cn)
 - **翻译标准**: @TRANSLATION_STANDARDS.md
