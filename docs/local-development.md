@@ -36,7 +36,7 @@ python src/specify_cli/__init__.py init demo-project --script ps
 ```bash
 # 创建并激活虚拟环境(uv 自动管理 .venv)
 uv venv
-source .venv/bin/activate  # 或在 Windows 上: .venv\\Scripts\\activate
+source .venv/bin/activate  # 或在 Windows PowerShell 上: .venv\Scripts\Activate.ps1
 
 # 以可编辑模式安装项目
 uv pip install -e .
@@ -68,19 +68,19 @@ uvx --from git+https://github.com/linfee/spec-kit-cn.git@your-feature-branch spe
 如果你在其他目录中, 使用绝对路径代替 `.`: 
 
 ```bash
-uvx --from /path/to/spec-kit-cn specify-cn --help
-uvx --from /path/to/spec-kit-cn specify-cn init demo-anywhere --ai copilot --ignore-agent-tools --script sh
+uvx --from /mnt/c/GitHub/spec-kit-cn specify-cn --help
+uvx --from /mnt/c/GitHub/spec-kit-cn specify-cn init demo-anywhere --ai copilot --ignore-agent-tools --script sh
 ```
 
 为方便起见, 设置环境变量: 
 ```bash
-export SPEC_KIT_CN_SRC=/path/to/spec-kit-cn
+export SPEC_KIT_CN_SRC=/mnt/c/GitHub/spec-kit-cn
 uvx --from "$SPEC_KIT_CN_SRC" specify-cn init demo-env --ai copilot --ignore-agent-tools --script ps
 ```
 
 (可选)定义 shell 函数: 
 ```bash
-specify-cn-dev() { uvx --from /path/to/spec-kit-cn specify-cn "$@"; }
+specify-cn-dev() { uvx --from /mnt/c/GitHub/spec-kit-cn specify-cn "$@"; }
 # 然后
 specify-cn-dev --help
 ```
@@ -139,18 +139,35 @@ specify-cn init demo --skip-tls --ai gemini --ignore-agent-tools --script ps
 | 直接运行 CLI | `python -m src.specify_cli --help` |
 | 可编辑安装 | `uv pip install -e .` 然后 `specify-cn ...` |
 | 本地 uvx 运行(仓库根目录) | `uvx --from . specify-cn ...` |
-| 本地 uvx 运行(绝对路径) | `uvx --from /path/to/spec-kit-cn specify-cn ...` |
+| 本地 uvx 运行(绝对路径) | `uvx --from /mnt/c/GitHub/spec-kit-cn specify-cn ...` |
 | Git 分支 uvx | `uvx --from git+URL@branch specify-cn ...` |
 | 构建 wheel | `uv build` |
 
-## 11. 清理
+## 11. 运行发布前 E2E 自动化
+
+项目提供统一的发布前验证脚本(位于 `tests/e2e/`, 避免被 `scripts/` 同步覆盖):
+
+```bash
+./tests/e2e/validate-release.sh
+```
+
+该流程会自动执行:
+
+- `ruff` 静态检查
+- `pytest` 测试套件
+- CLI 冒烟(`--help`/`check --help`)
+- `init` 端到端验证(覆盖所有 agent 的 `sh` 模板, 并验证 `claude/copilot/q` 的 `ps` 模板)
+- 构建 wheel 并在全新虚拟环境安装后再次冒烟
+- 清理临时目录与本次新增的 `dist/` 制品
+
+## 12. 清理
 
 快速删除构建制品 / 虚拟环境: 
 ```bash
 rm -rf .venv dist build *.egg-info
 ```
 
-## 12. 常见问题
+## 13. 常见问题
 
 | 症状 | 修复方法 |
 |------|----------|
@@ -160,7 +177,7 @@ rm -rf .venv dist build *.egg-info
 | 下载了错误的脚本类型 | 明确传递 `--script sh` 或 `--script ps` |
 | 企业网络上的 TLS 错误 | 尝试 `--skip-tls`(不用于生产环境) |
 
-## 13. 下一步
+## 14. 下一步
 
 - 更新文档并使用你修改后的 CLI 运行快速入门
 - 满意后打开 PR

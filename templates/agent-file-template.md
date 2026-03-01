@@ -19,5 +19,5 @@
 ## 最近变更
 [LAST 3 FEATURES AND WHAT THEY ADDED]
 
-<!-- 手动添加内容开始 -->
-<!-- 手动添加内容结束 -->
+<!-- MANUAL ADDITIONS START -->
+<!-- MANUAL ADDITIONS END -->

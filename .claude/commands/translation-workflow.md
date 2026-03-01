@@ -50,6 +50,7 @@ translation-review    # 人工审核(已存在)
 /translation-qa        # 全面质量检查
 /translation-fix       # 修复关键问题
 /translation-review    # 最终人工审核
+./tests/e2e/validate-release.sh  # 发布前自动化验证(必跑)
 ```
 
 ## 最佳实践指南
@@ -70,6 +71,7 @@ translation-review    # 人工审核(已存在)
 1. **分支操作**: 所有翻译操作都在分支进行, 确保主分支稳定
 2. **渐进式发布**: 分阶段发布翻译更新, 降低风险
 3. **回滚准备**: 保持回滚能力, 快速响应问题
+4. **测试脚本位置约束**: 自定义验证脚本放在 `tests/e2e/`, 不要放在 `scripts/`(同步会被 `rsync --delete` 覆盖)
 
 ## 常见场景处理
 

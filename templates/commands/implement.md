@@ -35,12 +35,12 @@ $ARGUMENTS
      * **PASS**: 所有清单都有 0 个未完成项目
      * **FAIL**: 一个或多个清单有未完成项目
 
-   - **如果任何清单未完成**: 
+   - **如果任何清单未完成**:
      * 显示包含未完成项目数的表格
-     * **停止**并询问: "Some checklists are incomplete. Do you want to proceed with implementation anyway? (yes/no)"
+     * **停止**并询问: "某些检查清单未完成. 是否仍要继续实施? (是/否)"
      * 在继续之前等待用户响应
-     * 如果用户说 "no" 或 "wait" 或 "stop", 停止执行
-     * 如果用户说 "yes" 或 "proceed" 或 "continue", 继续到步骤 3
+     * 如果用户说 "否" 或 "等待" 或 "停止", 停止执行
+     * 如果用户说 "是" 或 "继续" 或 "执行", 继续到步骤 3
 
    - **如果所有清单都已完成**: 
      * 显示显示所有清单通过的表格
@@ -48,7 +48,7 @@ $ARGUMENTS
 
 3. 加载和分析实施上下文: 
    - **必需**: 读取 tasks.md 获取完整任务列表和执行计划
-   - **必需**: 读取 plan.md 获取技术栈、架构和文件结构
+   - **必需**: 读取 plan.md 获取技术栈, 架构和文件结构
    - **如果存在**: 读取 data-model.md 获取实体和关系
    - **如果存在**: 读取 contracts/ 获取 API 规范和测试要求
    - **如果存在**: 读取 research.md 获取技术决策和约束
@@ -64,7 +64,8 @@ $ARGUMENTS
      git rev-parse --git-dir 2>/dev/null
      ```
    - 检查 Dockerfile* 是否存在或 plan.md 中是否提到 Docker → 创建/验证 .dockerignore
-   - 检查 .eslintrc* 或 eslint.config.* 是否存在 → 创建/验证 .eslintignore
+   - 检查 .eslintrc* 是否存在 → 创建/验证 .eslintignore
+   - 检查 eslint.config.* 是否存在 → 确保配置的 `ignores` 条目覆盖所需模式
    - 检查 .prettierrc* 是否存在 → 创建/验证 .prettierignore
    - 检查 .npmrc 或 package.json 是否存在 → 创建/验证 .npmignore(如果发布)
    - 检查 terraform 文件(*.tf)是否存在 → 创建/验证 .terraformignore
@@ -74,7 +75,7 @@ $ARGUMENTS
    **如果忽略文件缺失**: 为检测到的技术创建完整模式集
 
    **按技术的通用模式**(来自 plan.md 技术栈):
-   - **Node.js/JavaScript**: `node_modules/`, `dist/`, `build/`, `*.log`, `.env*`
+   - **Node.js/JavaScript/TypeScript**: `node_modules/`, `dist/`, `build/`, `*.log`, `.env*`
    - **Python**: `__pycache__/`, `*.pyc`, `.venv/`, `venv/`, `dist/`, `*.egg-info/`
    - **Java**: `target/`, `*.class`, `*.jar`, `.gradle/`, `build/`
    - **C#/.NET**: `bin/`, `obj/`, `*.user`, `*.suo`, `packages/`
@@ -97,9 +98,9 @@ $ARGUMENTS
    - **Kubernetes/k8s**: `*.secret.yaml`, `secrets/`, `.kube/`, `kubeconfig*`, `*.key`, `*.crt`
 
 5. 解析 tasks.md 结构并提取: 
-   - **任务阶段**: 设置、测试、核心、集成、完善
+   - **任务阶段**: 设置, 测试, 核心, 集成, 完善
    - **任务依赖**: 顺序执行与并行执行规则
-   - **任务详情**: ID、描述、文件路径、并行标记 [P]
+   - **任务详情**: ID, 描述, 文件路径, 并行标记 [P]
    - **执行流程**: 顺序和依赖要求
 
 6. 按照任务计划执行实施: 
@@ -110,11 +111,11 @@ $ARGUMENTS
    - **验证检查点**: 在继续之前验证每个阶段的完成
 
 7. 实施执行规则: 
-   - **首先设置**: 初始化项目结构、依赖、配置
-   - **代码前测试**: 如果需要为合约、实体和集成场景编写测试
-   - **核心开发**: 实施模型、服务、CLI 命令、端点
-   - **集成工作**: 数据库连接、中间件、日志、外部服务
-   - **完善和验证**: 单元测试、性能优化、文档
+   - **首先设置**: 初始化项目结构, 依赖, 配置
+   - **代码前测试**: 如果需要为合约, 实体和集成场景编写测试
+   - **核心开发**: 实施模型, 服务, CLI 命令, 端点
+   - **集成工作**: 数据库连接, 中间件, 日志, 外部服务
+   - **完善和验证**: 单元测试, 性能优化, 文档
 
 8. 进度跟踪和错误处理: 
    - 在每个完成的任务后报告进度
@@ -131,4 +132,4 @@ $ARGUMENTS
    - 确认实施遵循技术计划
    - 报告最终状态并附上已完成工作的摘要
 
-注意: 此命令假设 tasks.md 中存在完整的任务分解. 如果任务不完整或缺失, 建议首先运行 `/tasks` 重新生成任务列表.
+注意: 此命令假设 tasks.md 中存在完整的任务分解. 如果任务不完整或缺失, 建议首先运行 `/speckit.tasks` 重新生成任务列表.

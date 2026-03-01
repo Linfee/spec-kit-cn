@@ -5,7 +5,7 @@ description: "功能实现任务列表模板"
 # 任务: [FEATURE NAME]
 
 **输入**: 来自 `/specs/[###-feature-name]/` 的设计文档
-**前置条件**: plan.md(必需)、spec.md(用户故事必需)、research.md、data-model.md、contracts/
+**前置条件**: plan.md(必需), spec.md(用户故事必需), research.md, data-model.md, contracts/
 
 **测试**: 以下示例包含测试任务. 测试是可选的 - 仅在功能规范中明确要求时才包含.
 
@@ -13,13 +13,13 @@ description: "功能实现任务列表模板"
 
 ## 格式: `[ID] [P?] [Story] 描述`
 - **[P]**: 可以并行运行(不同文件, 无依赖关系)
-- **[Story]**: 此任务属于哪个用户故事(例如: US1、US2、US3)
+- **[Story]**: 此任务属于哪个用户故事(例如: US1, US2, US3)
 - 在描述中包含确切的文件路径
 
 ## 路径约定
-- **单一项目**: 仓库根目录下的 `src/`、`tests/`
-- **Web 应用**: `backend/src/`、`frontend/src/`
-- **移动应用**: `api/src/`、`ios/src/` 或 `android/src/`
+- **单一项目**: 仓库根目录下的 `src/`, `tests/`
+- **Web 应用**: `backend/src/`, `frontend/src/`
+- **移动应用**: `api/src/`, `ios/src/` 或 `android/src/`
 - 以下显示的路径假设为单一项目 - 根据 plan.md 结构进行调整
 
 <!--
@@ -27,7 +27,7 @@ description: "功能实现任务列表模板"
   重要说明: 以下任务仅为说明目的的示例任务.
 
   /speckit.tasks 命令必须根据以下内容替换为实际任务: 
-  - 来自 spec.md 的用户故事(及其优先级 P1、P2、P3...)
+  - 来自 spec.md 的用户故事(及其优先级 P1, P2, P3...)
   - 来自 plan.md 的功能需求
   - 来自 data-model.md 的实体
   - 来自 contracts/ 的端点
@@ -78,7 +78,7 @@ description: "功能实现任务列表模板"
 
 ### 用户故事 1 的测试(可选 - 仅在要求测试时)⚠️
 
-**注意: 先编写这些测试, 确保在实施前它们失败**
+> **注意: 先编写这些测试, 确保在实施前它们失败**
 
 - [ ] T010 [P] [US1] 在 tests/contract/test_[name].py 中为 [endpoint] 编写合约测试
 - [ ] T011 [P] [US1] 在 tests/integration/test_[name].py 中为 [user journey] 编写集成测试
@@ -87,7 +87,7 @@ description: "功能实现任务列表模板"
 
 - [ ] T012 [P] [US1] 在 src/models/[entity1].py 中创建 [Entity1] 模型
 - [ ] T013 [P] [US1] 在 src/models/[entity2].py 中创建 [Entity2] 模型
-- [ ] T014 [US1] 在 src/services/[service].py 中实施 [Service](依赖于 T012、T013)
+- [ ] T014 [US1] 在 src/services/[service].py 中实施 [Service](依赖于 T012, T013)
 - [ ] T015 [US1] 在 src/[location]/[file].py 中实施 [endpoint/feature]
 - [ ] T016 [US1] 添加验证和错误处理
 - [ ] T017 [US1] 为用户故事 1 操作添加日志记录
@@ -245,5 +245,5 @@ description: "功能实现任务列表模板"
 - 在实施前验证测试失败
 - 在每个任务或逻辑组后提交
 - 在任何检查点停止以独立验证故事
-- 避免: 模糊任务、相同文件冲突、破坏独立性的跨故事依赖
+- 避免: 模糊任务, 相同文件冲突, 破坏独立性的跨故事依赖
 
