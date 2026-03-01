@@ -98,8 +98,12 @@ jobs:
         - spec-kit-template-roo-ps-${{ steps.get_tag.outputs.package_version }}.zip
         - spec-kit-template-codebuddy-sh-${{ steps.get_tag.outputs.package_version }}.zip
         - spec-kit-template-codebuddy-ps-${{ steps.get_tag.outputs.package_version }}.zip
-        - spec-kit-template-qoder-sh-${{ steps.get_tag.outputs.package_version }}.zip
-        - spec-kit-template-qoder-ps-${{ steps.get_tag.outputs.package_version }}.zip
+        - spec-kit-template-qodercli-sh-${{ steps.get_tag.outputs.package_version }}.zip
+        - spec-kit-template-qodercli-ps-${{ steps.get_tag.outputs.package_version }}.zip
+        - spec-kit-template-agy-sh-${{ steps.get_tag.outputs.package_version }}.zip
+        - spec-kit-template-agy-ps-${{ steps.get_tag.outputs.package_version }}.zip
+        - spec-kit-template-generic-sh-${{ steps.get_tag.outputs.package_version }}.zip
+        - spec-kit-template-generic-ps-${{ steps.get_tag.outputs.package_version }}.zip
         - spec-kit-template-amp-sh-${{ steps.get_tag.outputs.package_version }}.zip
         - spec-kit-template-amp-ps-${{ steps.get_tag.outputs.package_version }}.zip
         - spec-kit-template-shai-sh-${{ steps.get_tag.outputs.package_version }}.zip
@@ -144,8 +148,12 @@ jobs:
           spec-kit-template-roo-ps-${{ steps.get_tag.outputs.package_version }}.zip \
           spec-kit-template-codebuddy-sh-${{ steps.get_tag.outputs.package_version }}.zip \
           spec-kit-template-codebuddy-ps-${{ steps.get_tag.outputs.package_version }}.zip \
-          spec-kit-template-qoder-sh-${{ steps.get_tag.outputs.package_version }}.zip \
-          spec-kit-template-qoder-ps-${{ steps.get_tag.outputs.package_version }}.zip \
+          spec-kit-template-qodercli-sh-${{ steps.get_tag.outputs.package_version }}.zip \
+          spec-kit-template-qodercli-ps-${{ steps.get_tag.outputs.package_version }}.zip \
+          spec-kit-template-agy-sh-${{ steps.get_tag.outputs.package_version }}.zip \
+          spec-kit-template-agy-ps-${{ steps.get_tag.outputs.package_version }}.zip \
+          spec-kit-template-generic-sh-${{ steps.get_tag.outputs.package_version }}.zip \
+          spec-kit-template-generic-ps-${{ steps.get_tag.outputs.package_version }}.zip \
           spec-kit-template-amp-sh-${{ steps.get_tag.outputs.package_version }}.zip \
           spec-kit-template-amp-ps-${{ steps.get_tag.outputs.package_version }}.zip \
           spec-kit-template-shai-sh-${{ steps.get_tag.outputs.package_version }}.zip \
