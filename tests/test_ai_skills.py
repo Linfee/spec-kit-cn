@@ -380,6 +380,30 @@ class TestInstallAiSkills:
         # .toml commands should be untouched
         assert (cmds_dir / "speckit.specify.toml").exists()
 
+    def test_toml_commands_supported_without_fallback(self, project_dir):
+        """When only .toml command files are available, skills should still be generated."""
+        cmds_dir = project_dir / ".gemini" / "commands"
+        cmds_dir.mkdir(parents=True)
+        (cmds_dir / "speckit.specify.toml").write_text(
+            'description = "Toml command"\n\n'
+            'prompt = """# Gemini Specify\\n\\nBody from TOML.\n"""\n',
+            encoding="utf-8",
+        )
+
+        fake_init = project_dir / "nowhere" / "src" / "specify_cli" / "__init__.py"
+        fake_init.parent.mkdir(parents=True, exist_ok=True)
+        fake_init.touch()
+
+        with patch.object(specify_cli, "__file__", str(fake_init)):
+            result = install_ai_skills(project_dir, "gemini")
+
+        assert result is True
+        skill_file = project_dir / ".gemini" / "skills" / "speckit-specify" / "SKILL.md"
+        assert skill_file.exists()
+        content = skill_file.read_text()
+        assert "name: speckit-specify" in content
+        assert "Body from TOML." in content
+
     @pytest.mark.parametrize("agent_key", [k for k in AGENT_CONFIG.keys() if k != "generic"])
     def test_skills_install_for_all_agents(self, temp_dir, agent_key):
         """install_ai_skills should produce skills for every configured agent."""

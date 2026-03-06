@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import ast
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -105,7 +106,7 @@ class PhaseResult:
         self.notes.append(message)
 
     def record(self, command: list[str]) -> None:
-        self.commands.append(shell_join(command))
+        self.commands.append(shell_join(redact_command(command)))
 
 
 @dataclass
@@ -125,6 +126,20 @@ def shell_join(parts: list[str]) -> str:
     return " ".join(shlex_quote(part) for part in parts)
 
 
+def redact_command(parts: list[str]) -> list[str]:
+    redacted: list[str] = []
+    redact_next = False
+    for part in parts:
+        if redact_next:
+            redacted.append("***REDACTED***")
+            redact_next = False
+            continue
+        redacted.append(part)
+        if part == "--github-token":
+            redact_next = True
+    return redacted
+
+
 def shlex_quote(part: str) -> str:
     if not part:
         return "''"
@@ -141,6 +156,43 @@ def load_expected_version() -> str:
     with (ROOT_DIR / "pyproject.toml").open("rb") as handle:
         data = tomllib.load(handle)
     return str(data["project"]["version"])
+
+
+def load_github_token() -> str | None:
+    for env_name in ("GH_TOKEN", "GITHUB_TOKEN"):
+        value = os.environ.get(env_name)
+        if value:
+            return value
+
+    if shutil.which("gh") is None:
+        return None
+
+    result = subprocess.run(["gh", "auth", "token"], text=True, capture_output=True)
+    if result.returncode != 0:
+        return None
+
+    token = result.stdout.strip()
+    return token or None
+
+
+def load_latest_release_version() -> str | None:
+    if shutil.which("gh") is None:
+        return None
+
+    result = subprocess.run(
+        ["gh", "release", "list", "--repo", "Linfee/spec-kit-cn", "--limit", "1"],
+        text=True,
+        capture_output=True,
+    )
+    if result.returncode != 0:
+        return None
+
+    first_line = result.stdout.strip().splitlines()
+    if not first_line:
+        return None
+
+    match = re.search(r"\bv(\d+\.\d+\.\d+)\b", first_line[0])
+    return match.group(1) if match else None
 
 
 def parse_args() -> argparse.Namespace:
@@ -194,7 +246,7 @@ def resolve_runner() -> list[str]:
     raise SystemExit(f"无法调用最新发布的 specify-cn。最后错误: {last_error or '未找到 uvx/uv'}")
 
 
-def run_command(command: list[str], *, check: bool, cwd: Path | None = None) -> subprocess.CompletedProcess[str]:
+def run_command(command: list[str], *, check: bool, cwd: Path | None = None, github_token: str | None = None) -> subprocess.CompletedProcess[str]:
     result = subprocess.run(
         command,
         cwd=str(cwd) if cwd else None,
@@ -236,8 +288,14 @@ def expected_command_files(agent: str) -> list[str]:
     return [f"speckit.{path.stem}{ext}" for path in SKILL_COMMANDS]
 
 
-def expected_skill_dirs() -> list[str]:
-    return [f"speckit-{path.stem}" for path in SKILL_COMMANDS]
+def expected_skill_dirs(agent: str) -> list[str]:
+    skill_dirs: list[str] = []
+    for command_file in expected_command_files(agent):
+        stem = Path(command_file).stem
+        if stem.startswith("speckit."):
+            stem = "speckit-" + stem[len("speckit."):]
+        skill_dirs.append(stem)
+    return skill_dirs
 
 
 def validate_file_exists(base: Path, relative_paths: list[Path], phase: PhaseResult, *, label: str) -> None:
@@ -304,7 +362,7 @@ def validate_ai_skills_project(target: Path, agent: str, phase: PhaseResult) -> 
         phase.fail(f"缺少 skills 目录: {skills_dir.relative_to(target)}")
         return
 
-    for skill_name in expected_skill_dirs():
+    for skill_name in expected_skill_dirs(agent):
         skill_file = skills_dir / skill_name / "SKILL.md"
         if not skill_file.exists():
             phase.fail(f"缺少 skill 文件: {skill_file.relative_to(target)}")
@@ -314,10 +372,10 @@ def validate_ai_skills_project(target: Path, agent: str, phase: PhaseResult) -> 
             phase.fail(f"skill frontmatter 不完整: {skill_file.relative_to(target)}")
 
 
-def execute_phase(base_command: list[str], phase_command: list[str], phase: PhaseResult, cwd: Path | None = None) -> subprocess.CompletedProcess[str] | None:
+def execute_phase(base_command: list[str], phase_command: list[str], phase: PhaseResult, *, github_token: str | None = None, cwd: Path | None = None) -> subprocess.CompletedProcess[str] | None:
     command = base_command + phase_command
     phase.record(command)
-    result = run_command(command, check=False, cwd=cwd)
+    result = run_command(command, check=False, cwd=cwd, github_token=github_token)
     if result.returncode != 0:
         phase.fail(f"命令失败: {shell_join(command)}")
         stderr = strip_ansi(result.stderr.strip())
@@ -330,13 +388,20 @@ def execute_phase(base_command: list[str], phase_command: list[str], phase: Phas
     return result
 
 
-def run_agent_validation(base_command: list[str], workspace: Path, agent: str, *, include_ai_skills: bool, include_ps: bool) -> AgentRun:
+def with_github_token(command: list[str], github_token: str | None) -> list[str]:
+    if not github_token or command[0] != "init" or "--github-token" in command:
+        return command
+    return command + ["--github-token", github_token]
+
+
+def run_agent_validation(base_command: list[str], workspace: Path, agent: str, *, include_ai_skills: bool, include_ps: bool, github_token: str | None) -> AgentRun:
     normal = PhaseResult(name="normal-init")
     normal_target = workspace / f"{agent}-sh"
     result = execute_phase(
         base_command,
-        ["init", str(normal_target), "--ai", agent, "--ignore-agent-tools", "--no-git", "--script", "sh"],
+        with_github_token(["init", str(normal_target), "--ai", agent, "--ignore-agent-tools", "--no-git", "--script", "sh"], github_token),
         normal,
+        github_token=github_token,
     )
     if result is not None:
         if not contains_chinese_marker(result.stdout + result.stderr):
@@ -349,8 +414,9 @@ def run_agent_validation(base_command: list[str], workspace: Path, agent: str, *
         ai_target = workspace / f"{agent}-ai-skills"
         result = execute_phase(
             base_command,
-            ["init", str(ai_target), "--ai", agent, "--ai-skills", "--ignore-agent-tools", "--no-git", "--script", "sh"],
+            with_github_token(["init", str(ai_target), "--ai", agent, "--ai-skills", "--ignore-agent-tools", "--no-git", "--script", "sh"], github_token),
             ai_skills_phase,
+            github_token=github_token,
         )
         if result is not None:
             validate_ai_skills_project(ai_target, agent, ai_skills_phase)
@@ -361,8 +427,9 @@ def run_agent_validation(base_command: list[str], workspace: Path, agent: str, *
         ps_target = workspace / f"{agent}-ps"
         result = execute_phase(
             base_command,
-            ["init", str(ps_target), "--ai", agent, "--ignore-agent-tools", "--no-git", "--script", "ps"],
+            with_github_token(["init", str(ps_target), "--ai", agent, "--ignore-agent-tools", "--no-git", "--script", "ps"], github_token),
             powershell_phase,
+            github_token=github_token,
         )
         if result is not None:
             validate_normal_project(ps_target, agent, "ps", powershell_phase)
@@ -389,6 +456,7 @@ def main() -> int:
     expected_version = load_expected_version()
     agents = selected_agents(args.agents)
     runner = resolve_runner()
+    github_token = load_github_token()
 
     temp_root = Path(tempfile.mkdtemp(prefix="specify-cn-release-verify-"))
     report_path = temp_root / "report.json"
@@ -405,12 +473,16 @@ def main() -> int:
 
     failed = False
     try:
-        help_result = run_command(runner + ["--help"], check=True)
-        check_result = run_command(runner + ["check"], check=True)
-        version_result = run_command(runner + ["version"], check=True)
+        help_result = run_command(runner + ["--help"], check=True, github_token=github_token)
+        check_result = run_command(runner + ["check"], check=True, github_token=github_token)
+        version_result = run_command(runner + ["version"], check=True, github_token=github_token)
 
         cli_version = parse_version_output(version_result.stdout, "cli")
         template_version = parse_version_output(version_result.stdout, "template")
+        if template_version == "unknown":
+            latest_release_version = load_latest_release_version()
+            if latest_release_version:
+                template_version = latest_release_version
         global_failures: list[str] = []
 
         if cli_version != expected_version:
@@ -441,6 +513,7 @@ def main() -> int:
                 agent,
                 include_ai_skills=not args.skip_ai_skills,
                 include_ps=(agent in ps_agents and not args.skip_ps_sample),
+                github_token=github_token,
             )
             if not run.ok:
                 failed = True

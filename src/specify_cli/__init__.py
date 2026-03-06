@@ -32,6 +32,7 @@ import tempfile
 import shutil
 import shlex
 import json
+import tomllib
 import yaml
 from pathlib import Path
 from typing import Optional, Tuple
@@ -700,10 +701,7 @@ def download_template_from_github(ai_assistant: str, download_dir: Path, *, scri
         raise typer.Exit(1)
 
     assets = release_data.get("assets", [])
-    template_asset_aliases = {
-        "qodercli": "qoder",
-    }
-    template_assistant = template_asset_aliases.get(ai_assistant, ai_assistant)
+    template_assistant = ai_assistant
     pattern = f"spec-kit-template-{template_assistant}-{script_type}"
     matching_assets = [
         asset for asset in assets
@@ -1085,23 +1083,53 @@ def install_ai_skills(project_path: Path, selected_ai: str, tracker: StepTracker
     else:
         templates_dir = project_path / commands_subdir
 
-    if not templates_dir.exists() or not any(templates_dir.glob("*.md")):
+    def _supported_command_files(directory: Path) -> list[Path]:
+        return sorted([*directory.glob("*.md"), *directory.glob("*.toml")])
+
+    def _parse_command_template(command_file: Path) -> tuple[dict, str, str]:
+        content = command_file.read_text(encoding="utf-8")
+
+        if command_file.suffix == ".toml":
+            data = tomllib.loads(content)
+            frontmatter = {"description": data.get("description", "")}
+            body = data.get("prompt", "").strip()
+            command_name = command_file.stem
+            return frontmatter, body, command_name
+
+        if content.startswith("---"):
+            parts = content.split("---", 2)
+            if len(parts) >= 3:
+                frontmatter = yaml.safe_load(parts[1])
+                if not isinstance(frontmatter, dict):
+                    frontmatter = {}
+                body = parts[2].strip()
+            else:
+                console.print(f"[yellow]Warning: {command_file.name} has malformed frontmatter (no closing ---), treating as plain content[/yellow]")
+                frontmatter = {}
+                body = content
+        else:
+            frontmatter = {}
+            body = content
+
+        return frontmatter, body, command_file.stem
+
+    if not templates_dir.exists() or not _supported_command_files(templates_dir):
         # Fallback: try the repo-relative path (for running from source checkout)
         # This also covers agents whose extracted commands are in a different
         # format (e.g. gemini uses .toml, not .md).
         script_dir = Path(__file__).parent.parent.parent  # up from src/specify_cli/
         fallback_dir = script_dir / "templates" / "commands"
-        if fallback_dir.exists() and any(fallback_dir.glob("*.md")):
+        if fallback_dir.exists() and _supported_command_files(fallback_dir):
             templates_dir = fallback_dir
 
-    if not templates_dir.exists() or not any(templates_dir.glob("*.md")):
+    if not templates_dir.exists() or not _supported_command_files(templates_dir):
         if tracker:
             tracker.error("ai-skills", "command templates not found")
         else:
             console.print("[yellow]Warning: command templates not found, skipping skills installation[/yellow]")
         return False
 
-    command_files = sorted(templates_dir.glob("*.md"))
+    command_files = _supported_command_files(templates_dir)
     if not command_files:
         if tracker:
             tracker.skip("ai-skills", "no command templates found")
@@ -1120,26 +1148,7 @@ def install_ai_skills(project_path: Path, selected_ai: str, tracker: StepTracker
     skipped_count = 0
     for command_file in command_files:
         try:
-            content = command_file.read_text(encoding="utf-8")
-
-            # Parse YAML frontmatter
-            if content.startswith("---"):
-                parts = content.split("---", 2)
-                if len(parts) >= 3:
-                    frontmatter = yaml.safe_load(parts[1])
-                    if not isinstance(frontmatter, dict):
-                        frontmatter = {}
-                    body = parts[2].strip()
-                else:
-                    # File starts with --- but has no closing ---
-                    console.print(f"[yellow]Warning: {command_file.name} has malformed frontmatter (no closing ---), treating as plain content[/yellow]")
-                    frontmatter = {}
-                    body = content
-            else:
-                frontmatter = {}
-                body = content
-
-            command_name = command_file.stem
+            frontmatter, body, command_name = _parse_command_template(command_file)
             # Normalize: extracted commands may be named "speckit.<cmd>.md";
             # strip the "speckit." prefix so skill names stay clean and
             # SKILL_DESCRIPTIONS lookups work.

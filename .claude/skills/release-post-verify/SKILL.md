@@ -47,9 +47,10 @@ python3 .claude/skills/release-post-verify/validate_release_post.py --skip-ai-sk
    - 首选 `uvx --isolated --from git+https://github.com/linfee/spec-kit-cn@main specify-cn`
    - 失败时再尝试 `uv tool run --isolated --from git+https://github.com/linfee/spec-kit-cn@main specify-cn`
    - 任何情况下都不能使用 `uv run specify-cn`、本地 editable 安装、仓库内 wheel 文件或本地路径依赖代替发布包
-3. 所有初始化必须在临时目录进行，不要把验证产物写回仓库。
-4. 默认应跑完整轮，即使某个 agent 失败，也继续其余 agent，最后统一汇总。
-5. 若脚本返回非零退出码，不要宣称验证通过；先根据报告定位失败项。
+3. 脚本会优先复用现有 `GH_TOKEN` / `GITHUB_TOKEN`，否则尝试读取 `gh auth token`，并自动传给需要访问 GitHub API 的命令。
+4. 所有初始化必须在临时目录进行，不要把验证产物写回仓库。
+5. 默认应跑完整轮，即使某个 agent 失败，也继续其余 agent，最后统一汇总。
+6. 若脚本返回非零退出码，不要宣称验证通过；先根据报告定位失败项。
 
 ## 输出解读
 
