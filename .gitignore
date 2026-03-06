@@ -46,3 +46,4 @@ env/
 .genreleases/
 *.zip
 sdd-*/
+.factory
