@@ -13,17 +13,23 @@ $ARGUMENTS
 
 执行步骤: 
 
-1. 验证环境准备, 使用tree命令来检查这些项, 需要完全同步的使用rsync命令确保同步
+1. 验证环境准备
    - 确认spec-kit目录存在且包含原版文件
    - 确认templates目录结构和spec-kit/templates保持一致
    - 确认memory目录结构和spec-kit/docs保持一致
    - 确认docs目录结构和spec-kit/docs保持一致
    - 确认src目录结构和spec-kit/src保持一致
-   - 确认scripts目录结构和spec-kit/scripts保持一致(需完全同步)
-   - 确认.devcontainer目录结构和spec-kit/.devcontainer保持一致(需完全同步)
-   - 确认media目录结构和spec-kit/media保持一致(需完全同步)
+   - 确认scripts目录结构和spec-kit/scripts保持一致
+   - 确认.devcontainer目录结构和spec-kit/.devcontainer保持一致
+   - 确认media目录结构和spec-kit/media保持一致
    - 确认AGENTS.md文件存在且正确引用CLAUDE.md
    - 确认pyproject.toml配置文件与原版结构一致
+
+   **⚠️ rsync 使用安全规则**:
+   - **禁止同步**: `.github/` 目录(本项目有独立的工作流)
+   - **完全同步目录** (可使用 rsync --delete): `scripts/`, `.devcontainer/`, `tests/`, `media/`
+   - **翻译目录禁止 --delete** (增量合并): `templates/`, `docs/`, `memory/`, 根目录文档
+   - **禁止使用**: `rsync --delete` 同步翻译目录, 会永久丢失中文翻译
    
 2. review核心md文件翻译质量
   - 深度遍历 templates, memory, docs 三个目录, 对找到的每个md文件, 对比原版对应文件, review翻译质量. 此步骤使用Task工具并行执行
