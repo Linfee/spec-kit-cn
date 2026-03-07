@@ -1273,17 +1273,17 @@ def init(
     ai_skills: bool = typer.Option(False, "--ai-skills", help="Install Prompt.MD templates as agent skills (requires --ai)"),
 ):
     """
-    Initialize a new Specify project from the latest template.
-    
-    This command will:
-    1. Check that required tools are installed (git is optional)
-    2. Let you choose your AI assistant
-    3. Download the appropriate template from GitHub
-    4. Extract the template to a new project directory or current directory
-    5. Initialize a fresh git repository (if not --no-git and no existing repo)
-    6. Optionally set up AI assistant commands
-    
-    Examples:
+    从最新模板初始化新的 Specify 项目.
+
+    此命令将:
+    1. 检查所需工具是否已安装 (git 为可选)
+    2. 让你选择 AI 助手
+    3. 从 GitHub 下载适当的模板
+    4. 将模板解压到新项目目录或当前目录
+    5. 初始化新的 git 仓库 (如果未使用 --no-git 且不存在现有仓库)
+    6. 可选地设置 AI 助手命令
+
+    示例:
         specify-cn init my-project
         specify-cn init my-project --ai claude
         specify-cn init my-project --ai copilot --no-git
@@ -1640,7 +1640,7 @@ def init(
 
 @app.command()
 def check():
-    """Check that all required tools are installed."""
+    """检查所有必需的工具是否已安装。"""
     show_banner()
     console.print("[bold]正在检查已安装的工具...[/bold]\n")
 

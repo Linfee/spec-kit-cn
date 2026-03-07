@@ -7,6 +7,13 @@
 
 ## [Unreleased]
 
+## [0.1.14] - 2026-03-07
+
+### 变更
+- **CLI 命令描述翻译**: 翻译 `init` 和 `check` 命令的帮助文档字符串
+  - `init`: "Initialize a new Specify project..." → "从最新模板初始化新的 Specify 项目..."
+  - `check`: "Check that all required tools are installed." → "检查所有必需的工具是否已安装。"
+
 ### 变更
 - **AGENTS.md 用途变更**: 从原版同步文件改为独立维护的 Agent 入口文件
   - 内容改为引用 `@CLAUDE.md`, 让所有 AI Code Agent 共用同一份项目指南
