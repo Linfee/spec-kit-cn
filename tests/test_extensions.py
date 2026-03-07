@@ -144,7 +144,7 @@ class TestExtensionManifest:
         with open(manifest_path, 'w') as f:
             yaml.dump({"schema_version": "1.0"}, f)  # Missing 'extension'
 
-        with pytest.raises(ValidationError, match=r"(Missing required field|缺少必填字段)"):
+        with pytest.raises(ValidationError, match="Missing required field"):
             ExtensionManifest(manifest_path)
 
     def test_invalid_extension_id(self, temp_dir, valid_manifest_data):
@@ -157,7 +157,7 @@ class TestExtensionManifest:
         with open(manifest_path, 'w') as f:
             yaml.dump(valid_manifest_data, f)
 
-        with pytest.raises(ValidationError, match=r"(Invalid extension ID|无效的扩展 ID)"):
+        with pytest.raises(ValidationError, match="Invalid extension ID"):
             ExtensionManifest(manifest_path)
 
     def test_invalid_version(self, temp_dir, valid_manifest_data):
@@ -170,7 +170,7 @@ class TestExtensionManifest:
         with open(manifest_path, 'w') as f:
             yaml.dump(valid_manifest_data, f)
 
-        with pytest.raises(ValidationError, match=r"(Invalid version|无效的版本号)"):
+        with pytest.raises(ValidationError, match="Invalid version"):
             ExtensionManifest(manifest_path)
 
     def test_invalid_command_name(self, temp_dir, valid_manifest_data):
@@ -183,7 +183,7 @@ class TestExtensionManifest:
         with open(manifest_path, 'w') as f:
             yaml.dump(valid_manifest_data, f)
 
-        with pytest.raises(ValidationError, match=r"(Invalid command name|无效的命令名称)"):
+        with pytest.raises(ValidationError, match="Invalid command name"):
             ExtensionManifest(manifest_path)
 
     def test_no_commands(self, temp_dir, valid_manifest_data):
@@ -196,7 +196,7 @@ class TestExtensionManifest:
         with open(manifest_path, 'w') as f:
             yaml.dump(valid_manifest_data, f)
 
-        with pytest.raises(ValidationError, match=r"(must provide at least one command|必须提供至少一个命令)"):
+        with pytest.raises(ValidationError, match="must provide at least one command"):
             ExtensionManifest(manifest_path)
 
     def test_manifest_hash(self, extension_dir):
@@ -296,7 +296,7 @@ class TestExtensionManager:
         manifest = ExtensionManifest(extension_dir / "extension.yml")
 
         # Requires >=0.1.0, but we have 0.0.1
-        with pytest.raises(CompatibilityError, match=r"(Extension requires spec-kit|扩展需要 spec-kit)"):
+        with pytest.raises(CompatibilityError, match="Extension requires spec-kit"):
             manager.check_compatibility(manifest, "0.0.1")
 
     def test_install_from_directory(self, extension_dir, project_dir):
@@ -326,7 +326,7 @@ class TestExtensionManager:
         manager.install_from_directory(extension_dir, "0.1.0", register_commands=False)
 
         # Try to install again
-        with pytest.raises(ExtensionError, match=r"(already installed|已安装)"):
+        with pytest.raises(ExtensionError, match="already installed"):
             manager.install_from_directory(extension_dir, "0.1.0", register_commands=False)
 
     def test_remove_extension(self, extension_dir, project_dir):
@@ -398,6 +398,12 @@ class TestExtensionManager:
 
 class TestCommandRegistrar:
     """Test CommandRegistrar command registration."""
+
+    def test_kiro_cli_agent_config_present(self):
+        """Kiro CLI should be mapped to .kiro/prompts and legacy q removed."""
+        assert "kiro-cli" in CommandRegistrar.AGENT_CONFIGS
+        assert CommandRegistrar.AGENT_CONFIGS["kiro-cli"]["dir"] == ".kiro/prompts"
+        assert "q" not in CommandRegistrar.AGENT_CONFIGS
 
     def test_parse_frontmatter_valid(self):
         """Test parsing valid YAML frontmatter."""
@@ -520,6 +526,121 @@ $ARGUMENTS
         assert (claude_dir / "speckit.alias.cmd.md").exists()
         assert (claude_dir / "speckit.shortcut.md").exists()
 
+    def test_register_commands_for_copilot(self, extension_dir, project_dir):
+        """Test registering commands for Copilot agent with .agent.md extension."""
+        # Create .github/agents directory (Copilot project)
+        agents_dir = project_dir / ".github" / "agents"
+        agents_dir.mkdir(parents=True)
+
+        manifest = ExtensionManifest(extension_dir / "extension.yml")
+
+        registrar = CommandRegistrar()
+        registered = registrar.register_commands_for_agent(
+            "copilot", manifest, extension_dir, project_dir
+        )
+
+        assert len(registered) == 1
+        assert "speckit.test.hello" in registered
+
+        # Verify command file uses .agent.md extension
+        cmd_file = agents_dir / "speckit.test.hello.agent.md"
+        assert cmd_file.exists()
+
+        # Verify NO plain .md file was created
+        plain_md_file = agents_dir / "speckit.test.hello.md"
+        assert not plain_md_file.exists()
+
+        content = cmd_file.read_text()
+        assert "description: Test hello command" in content
+        assert "<!-- Extension: test-ext -->" in content
+
+    def test_copilot_companion_prompt_created(self, extension_dir, project_dir):
+        """Test that companion .prompt.md files are created in .github/prompts/."""
+        agents_dir = project_dir / ".github" / "agents"
+        agents_dir.mkdir(parents=True)
+
+        manifest = ExtensionManifest(extension_dir / "extension.yml")
+
+        registrar = CommandRegistrar()
+        registrar.register_commands_for_agent(
+            "copilot", manifest, extension_dir, project_dir
+        )
+
+        # Verify companion .prompt.md file exists
+        prompt_file = project_dir / ".github" / "prompts" / "speckit.test.hello.prompt.md"
+        assert prompt_file.exists()
+
+        # Verify content has correct agent frontmatter
+        content = prompt_file.read_text()
+        assert content == "---\nagent: speckit.test.hello\n---\n"
+
+    def test_copilot_aliases_get_companion_prompts(self, project_dir, temp_dir):
+        """Test that aliases also get companion .prompt.md files for Copilot."""
+        import yaml
+
+        ext_dir = temp_dir / "ext-alias-copilot"
+        ext_dir.mkdir()
+
+        manifest_data = {
+            "schema_version": "1.0",
+            "extension": {
+                "id": "ext-alias-copilot",
+                "name": "Extension with Alias",
+                "version": "1.0.0",
+                "description": "Test",
+            },
+            "requires": {"speckit_version": ">=0.1.0"},
+            "provides": {
+                "commands": [
+                    {
+                        "name": "speckit.alias-copilot.cmd",
+                        "file": "commands/cmd.md",
+                        "aliases": ["speckit.shortcut-copilot"],
+                    }
+                ]
+            },
+        }
+
+        with open(ext_dir / "extension.yml", "w") as f:
+            yaml.dump(manifest_data, f)
+
+        (ext_dir / "commands").mkdir()
+        (ext_dir / "commands" / "cmd.md").write_text(
+            "---\ndescription: Test\n---\n\nTest"
+        )
+
+        # Set up Copilot project
+        (project_dir / ".github" / "agents").mkdir(parents=True)
+
+        manifest = ExtensionManifest(ext_dir / "extension.yml")
+        registrar = CommandRegistrar()
+        registered = registrar.register_commands_for_agent(
+            "copilot", manifest, ext_dir, project_dir
+        )
+
+        assert len(registered) == 2
+
+        # Both primary and alias get companion .prompt.md
+        prompts_dir = project_dir / ".github" / "prompts"
+        assert (prompts_dir / "speckit.alias-copilot.cmd.prompt.md").exists()
+        assert (prompts_dir / "speckit.shortcut-copilot.prompt.md").exists()
+
+    def test_non_copilot_agent_no_companion_file(self, extension_dir, project_dir):
+        """Test that non-copilot agents do NOT create .prompt.md files."""
+        claude_dir = project_dir / ".claude" / "commands"
+        claude_dir.mkdir(parents=True)
+
+        manifest = ExtensionManifest(extension_dir / "extension.yml")
+
+        registrar = CommandRegistrar()
+        registrar.register_commands_for_agent(
+            "claude", manifest, extension_dir, project_dir
+        )
+
+        # No .github/prompts directory should exist
+        prompts_dir = project_dir / ".github" / "prompts"
+        assert not prompts_dir.exists()
+
 
 # ===== Utility Function Tests =====
 
@@ -595,6 +716,31 @@ class TestIntegration:
         assert not manager.registry.is_installed("test-ext")
         assert not cmd_file.exists()
         assert len(manager.list_installed()) == 0
+
+    def test_copilot_cleanup_removes_prompt_files(self, extension_dir, project_dir):
+        """Test that removing a Copilot extension also removes .prompt.md files."""
+        agents_dir = project_dir / ".github" / "agents"
+        agents_dir.mkdir(parents=True)
+
+        manager = ExtensionManager(project_dir)
+        manager.install_from_directory(extension_dir, "0.1.0", register_commands=True)
+
+        # Verify copilot was detected and registered
+        metadata = manager.registry.get("test-ext")
+        assert "copilot" in metadata["registered_commands"]
+
+        # Verify files exist before cleanup
+        agent_file = agents_dir / "speckit.test.hello.agent.md"
+        prompt_file = project_dir / ".github" / "prompts" / "speckit.test.hello.prompt.md"
+        assert agent_file.exists()
+        assert prompt_file.exists()
+
+        # Use the extension manager to remove — exercises the copilot prompt cleanup code
+        result = manager.remove("test-ext")
+        assert result is True
+
+        assert not agent_file.exists()
+        assert not prompt_file.exists()
 
     def test_multiple_extensions(self, temp_dir, project_dir):
         """Test installing multiple extensions."""

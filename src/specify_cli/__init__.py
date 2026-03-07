@@ -217,11 +217,11 @@ AGENT_CONFIG = {
         "install_url": None,  # IDE-based
         "requires_cli": False,
     },
-    "q": {
-        "name": "Amazon Q Developer CLI",
-        "folder": ".amazonq/",
-        "commands_subdir": "prompts",  # Special: uses prompts/ not commands/
-        "install_url": "https://aws.amazon.com/developer/learning/q-developer-cli/",
+    "kiro-cli": {
+        "name": "Kiro CLI",
+        "folder": ".kiro/",
+        "commands_subdir": "prompts",
+        "install_url": "https://kiro.dev/docs/cli/",
         "requires_cli": True,
     },
     "amp": {
@@ -260,6 +260,39 @@ AGENT_CONFIG = {
         "requires_cli": False,
     },
 }
+
+
+AI_ASSISTANT_ALIASES = {
+    "kiro": "kiro-cli",
+}
+
+
+def _build_ai_assistant_help() -> str:
+    """构建 --ai 帮助文本，从 AGENT_CONFIG 同步运行时配置."""
+
+    non_generic_agents = sorted(agent for agent in AGENT_CONFIG if agent != "generic")
+    base_help = (
+        f"AI assistant to use: {', '.join(non_generic_agents)}, "
+        f"or generic (requires --ai-commands-dir)."
+    )
+
+    if not AI_ASSISTANT_ALIASES:
+        return base_help
+
+    alias_phrases = []
+    for alias, target in sorted(AI_ASSISTANT_ALIASES.items()):
+        alias_phrases.append(f"'{alias}' as an alias for '{target}'")
+
+    if len(alias_phrases) == 1:
+        aliases_text = alias_phrases[0]
+    else:
+        aliases_text = ', '.join(alias_phrases[:-1]) + ' and ' + alias_phrases[-1]
+
+    return base_help + " Use " + aliases_text + ". "
+
+
+AI_ASSISTANT_HELP = _build_ai_assistant_help()
+
 
 SCRIPT_TYPE_CHOICES = {"sh": "POSIX Shell (bash/zsh)", "ps": "PowerShell"}
 
@@ -1276,6 +1309,10 @@ def init(
         console.print("[yellow]Example:[/yellow] specify-cn init --ai claude --here")
         console.print(f"[yellow]Available agents:[/yellow] {', '.join(AGENT_CONFIG.keys())}")
         raise typer.Exit(1)
+
+    # Normalize aliases (e.g., "kiro" -> "kiro-cli")
+    if ai_assistant:
+        ai_assistant = AI_ASSISTANT_ALIASES.get(ai_assistant, ai_assistant)
     
     if ai_commands_dir and ai_commands_dir.startswith("--"):
         console.print(f"[red]Error:[/red] Invalid value for --ai-commands-dir: '{ai_commands_dir}'")
@@ -1382,7 +1419,7 @@ def init(
                     f"[cyan]{selected_ai}[/cyan] not found\n"
                     f"Install from: [cyan]{install_url}[/cyan]\n"
                     f"{agent_config['name']} is required to continue with this project type.\n\n"
-                    "Tip: Use [cyan]--ignore-agent-tools[/cyan] to skip this check",
+                    "提示: 使用 [cyan]--ignore-agent-tools[/cyan] 跳过此检查",
                     title="[red]Agent Detection Error[/red]",
                     border_style="red",
                     padding=(1, 2)
@@ -1477,15 +1514,16 @@ def init(
                 if skills_ok and not here:
                     agent_cfg = AGENT_CONFIG.get(selected_ai, {})
                     agent_folder = agent_cfg.get("folder", "")
+                    commands_subdir = agent_cfg.get("commands_subdir", "commands")
                     if agent_folder:
-                        cmds_dir = project_path / agent_folder.rstrip("/") / "commands"
+                        cmds_dir = project_path / agent_folder.rstrip("/") / commands_subdir
                         if cmds_dir.exists():
                             try:
                                 shutil.rmtree(cmds_dir)
                             except OSError:
                                 # Best-effort cleanup: skills are already installed,
                                 # so leaving stale commands is non-fatal.
-                                console.print("[yellow]Warning: could not remove extracted commands directory[/yellow]")
+                                console.print("[yellow]警告: 无法删除提取的命令目录[/yellow]")
 
             if not no_git:
                 tracker.start("git")
@@ -1604,7 +1642,7 @@ def init(
 def check():
     """Check that all required tools are installed."""
     show_banner()
-    console.print("[bold]Checking for installed tools...[/bold]\n")
+    console.print("[bold]正在检查已安装的工具...[/bold]\n")
 
     tracker = StepTracker("Check Available Tools")
 
@@ -1639,14 +1677,14 @@ def check():
     console.print("\n[bold green]Specify CN CLI 已就绪！[/bold green]")
 
     if not git_ok:
-        console.print("[dim]Tip: Install git for repository management[/dim]")
+        console.print("[dim]提示: 安装 git 以进行仓库管理[/dim]")
 
     if not any(agent_results.values()):
-        console.print("[dim]Tip: Install an AI assistant for the best experience[/dim]")
+        console.print("[dim]提示: 安装 AI 助手以获得最佳体验[/dim]")
 
 @app.command()
 def version():
-    """Display version and system information."""
+    """显示版本和系统信息。"""
     import platform
     import importlib.metadata
     
@@ -2049,7 +2087,7 @@ def extension_search(
 
     except ExtensionError as e:
         console.print(f"\n[red]Error:[/red] {e}")
-        console.print("\nTip: The catalog may be temporarily unavailable. Try again later.")
+        console.print("\n提示: 目录可能暂时不可用, 请稍后重试。")
         raise typer.Exit(1)
 
 
@@ -2198,7 +2236,7 @@ def extension_update(
             console.print("[yellow]No extensions installed[/yellow]")
             raise typer.Exit(0)
 
-        console.print("🔄 Checking for updates...\n")
+        console.print("🔄 正在检查更新...\n")
 
         updates_available = []
 
@@ -2260,7 +2298,7 @@ def extension_update(
             console.print(f"  specify-cn extension add {ext_id}")
 
         console.print(
-            "\n[cyan]Tip:[/cyan] Automatic updates will be available in a future version"
+            "\n[cyan]提示:[/cyan] 自动更新功能将在未来版本中提供"
         )
 
     except ExtensionError as e:
