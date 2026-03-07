@@ -18,6 +18,41 @@
 - 更新 `TRANSLATION_STANDARDS.md` 中的翻译范围说明
 - 更新 `/translation-review` 和 `/translation-sync` 命令中的相关检查逻辑
 
+## [0.1.13] - 2026-03-07
+
+### 同步原版
+- 同步原版 [v0.1.13](https://github.com/github/spec-kit/releases/tag/v0.1.13)
+- 对应原版范围: v0.1.10 → v0.1.13
+
+### 🚀 新增功能
+- **Kiro CLI 支持**: 替换 Amazon Q Developer CLI 为 Kiro CLI
+  - 新增 kiro-cli 和 kiro 别名到 AGENT_CONFIG
+  - 更新 CLI 工具检测和帮助文档
+- **社区扩展更新**: 新增多个社区扩展
+  - Retrospective Extension - 回顾分析扩展
+  - Spec Sync - 规格同步扩展
+  - Verify Extension - 验证扩展
+- **Copilot 扩展修复**: 修复 Copilot 扩展命令注册
+  - 扩展命令文件从 `.md` 改为 `.agent.md`
+  - 新增 `.prompt.md` 伴随文件生成
+  - 扩展移除时清理 `.prompt.md` 文件
+
+### 🔧 技术更新
+- **脚本增强**: 改进脚本错误处理
+  - create-new-feature.sh: 新增空描述验证和分支创建错误处理
+  - update-agent-context.sh/.ps1: Amazon Q → Kiro CLI 替换
+- **Devcontainer 更新**: 更新开发容器配置
+  - 移除 Amazon Q Developer 安装
+  - 新增 Kiro CLI 安装
+  - 更新 VS Code 扩展列表
+
+### 📝 文档更新
+- **README.md**: 更新 AI 助手列表
+  - Amazon Q → Kiro CLI 替换
+  - 新增 Kiro CLI 使用示例
+- **AGENTS.md**: 独立维护说明
+- **extensions/README.md**: 更新社区扩展列表
+
 ## [0.0.90] - 2025-12-05
 
 ### 同步原版
