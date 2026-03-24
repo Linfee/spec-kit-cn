@@ -1,14 +1,13 @@
 ---
-description: 执行实施规划工作流, 使用计划模板生成设计制品.
-handoffs:
-  - label: 创建任务
+description: Execute the implementation planning workflow using the plan template to generate design artifacts.
+handoffs: 
+  - label: Create Tasks
     agent: speckit.tasks
-    prompt: 将计划分解为任务
+    prompt: Break the plan into tasks
     send: true
-  - label: 创建检查清单
+  - label: Create Checklist
     agent: speckit.checklist
-    prompt: 为需求创建质量检查清单
-    send: true
+    prompt: Create a checklist for the following domain...
 scripts:
   sh: scripts/bash/setup-plan.sh --json
   ps: scripts/powershell/setup-plan.ps1 -Json
@@ -17,80 +16,144 @@ agent_scripts:
   ps: scripts/powershell/update-agent-context.ps1 -AgentType __AGENT__
 ---
 
-## 用户输入
+## User Input
 
 ```text
 $ARGUMENTS
 ```
 
-在继续之前, 你**必须**考虑用户输入(如果不为空).
+You **MUST** consider the user input before proceeding (if not empty).
 
-## 大纲
+## Pre-Execution Checks
 
-1. **设置**: 从仓库根目录运行 `{SCRIPT}` 并解析 JSON 获取 FEATURE_SPEC, IMPL_PLAN, SPECS_DIR, BRANCH. 对于参数中的单引号如 "I'm Groot", 使用转义语法: 例如 'I'\''m Groot'(或尽可能使用双引号: "I'm Groot").
+**Check for extension hooks (before planning)**:
+- Check if `.specify/extensions.yml` exists in the project root.
+- If it exists, read it and look for entries under the `hooks.before_plan` key
+- If the YAML cannot be parsed or is invalid, skip hook checking silently and continue normally
+- Filter out hooks where `enabled` is explicitly `false`. Treat hooks without an `enabled` field as enabled by default.
+- For each remaining hook, do **not** attempt to interpret or evaluate hook `condition` expressions:
+  - If the hook has no `condition` field, or it is null/empty, treat the hook as executable
+  - If the hook defines a non-empty `condition`, skip the hook and leave condition evaluation to the HookExecutor implementation
+- For each executable hook, output the following based on its `optional` flag:
+  - **Optional hook** (`optional: true`):
+    ```
+    ## Extension Hooks
 
-2. **加载上下文**: 读取 FEATURE_SPEC 和 `/memory/constitution.md`. 加载 IMPL_PLAN 模板(已复制).
+    **Optional Pre-Hook**: {extension}
+    Command: `/{command}`
+    Description: {description}
 
-3. **执行计划工作流**: 按照 IMPL_PLAN 模板中的结构: 
-   - 填充技术上下文(将未知项标记为 NEEDS CLARIFICATION)
-   - 从章程文档填充章程检查部分
-   - 评估关卡(如果违规无正当理由则报错)
-   - 阶段 0: 生成 research.md(解决所有 NEEDS CLARIFICATION)
-   - 阶段 1: 生成 data-model.md, contracts/, quickstart.md
-   - 阶段 1: 通过运行代理脚本更新代理上下文
-   - 设计后重新评估章程检查
+    Prompt: {prompt}
+    To execute: `/{command}`
+    ```
+  - **Mandatory hook** (`optional: false`):
+    ```
+    ## Extension Hooks
 
-4. **停止并报告**: 命令在阶段 2 规划后结束. 报告分支, IMPL_PLAN 路径和生成的制品.
+    **Automatic Pre-Hook**: {extension}
+    Executing: `/{command}`
+    EXECUTE_COMMAND: {command}
 
-## 阶段
+    Wait for the result of the hook command before proceeding to the Outline.
+    ```
+- If no hooks are registered or `.specify/extensions.yml` does not exist, skip silently
 
-### 阶段 0: 大纲与研究
+## Outline
 
-1. **从上述技术上下文中提取未知项**: 
-   - 每个 NEEDS CLARIFICATION → 研究任务
-   - 每个依赖项 → 最佳实践任务
-   - 每个集成 → 模式任务
+1. **Setup**: Run `{SCRIPT}` from repo root and parse JSON for FEATURE_SPEC, IMPL_PLAN, SPECS_DIR, BRANCH. For single quotes in args like "I'm Groot", use escape syntax: e.g 'I'\''m Groot' (or double-quote if possible: "I'm Groot").
 
-2. **生成和分发研究代理**: 
-   ```
+2. **Load context**: Read FEATURE_SPEC and `/memory/constitution.md`. Load IMPL_PLAN template (already copied).
+
+3. **Execute plan workflow**: Follow the structure in IMPL_PLAN template to:
+   - Fill Technical Context (mark unknowns as "NEEDS CLARIFICATION")
+   - Fill Constitution Check section from constitution
+   - Evaluate gates (ERROR if violations unjustified)
+   - Phase 0: Generate research.md (resolve all NEEDS CLARIFICATION)
+   - Phase 1: Generate data-model.md, contracts/, quickstart.md
+   - Phase 1: Update agent context by running the agent script
+   - Re-evaluate Constitution Check post-design
+
+4. **Stop and report**: Command ends after Phase 2 planning. Report branch, IMPL_PLAN path, and generated artifacts.
+
+5. **Check for extension hooks**: After reporting, check if `.specify/extensions.yml` exists in the project root.
+   - If it exists, read it and look for entries under the `hooks.after_plan` key
+   - If the YAML cannot be parsed or is invalid, skip hook checking silently and continue normally
+   - Filter out hooks where `enabled` is explicitly `false`. Treat hooks without an `enabled` field as enabled by default.
+   - For each remaining hook, do **not** attempt to interpret or evaluate hook `condition` expressions:
+     - If the hook has no `condition` field, or it is null/empty, treat the hook as executable
+     - If the hook defines a non-empty `condition`, skip the hook and leave condition evaluation to the HookExecutor implementation
+   - For each executable hook, output the following based on its `optional` flag:
+     - **Optional hook** (`optional: true`):
+       ```
+       ## Extension Hooks
+
+       **Optional Hook**: {extension}
+       Command: `/{command}`
+       Description: {description}
+
+       Prompt: {prompt}
+       To execute: `/{command}`
+       ```
+     - **Mandatory hook** (`optional: false`):
+       ```
+       ## Extension Hooks
+
+       **Automatic Hook**: {extension}
+       Executing: `/{command}`
+       EXECUTE_COMMAND: {command}
+       ```
+   - If no hooks are registered or `.specify/extensions.yml` does not exist, skip silently
+
+## Phases
+
+### Phase 0: Outline & Research
+
+1. **Extract unknowns from Technical Context** above:
+   - For each NEEDS CLARIFICATION → research task
+   - For each dependency → best practices task
+   - For each integration → patterns task
+
+2. **Generate and dispatch research agents**:
+
+   ```text
    For each unknown in Technical Context:
      Task: "Research {unknown} for {feature context}"
    For each technology choice:
      Task: "Find best practices for {tech} in {domain}"
    ```
 
-3. **在 `research.md` 中整合发现**, 使用格式: 
-   - Decision: [选择了什么]
-   - Rationale: [为什么选择]
-   - Alternatives considered: [还评估了什么]
+3. **Consolidate findings** in `research.md` using format:
+   - Decision: [what was chosen]
+   - Rationale: [why chosen]
+   - Alternatives considered: [what else evaluated]
 
-**输出**: research.md, 所有 NEEDS CLARIFICATION 已解决
+**Output**: research.md with all NEEDS CLARIFICATION resolved
 
-### 阶段 1: 设计与合同
+### Phase 1: Design & Contracts
 
-**前提条件**: `research.md` 完成
+**Prerequisites:** `research.md` complete
 
-1. **从功能规范中提取实体** → `data-model.md`: 
-   - 实体名称, 字段, 关系
-   - 来自需求的验证规则
-   - 状态转换(如适用)
+1. **Extract entities from feature spec** → `data-model.md`:
+   - Entity name, fields, relationships
+   - Validation rules from requirements
+   - State transitions if applicable
 
-2. **定义接口合同**(如果项目有外部接口) → `/contracts/`:
-   - 识别项目向用户或其他系统暴露的接口
-   - 为项目类型选择合适的合同格式
-   - 示例: 库的公共 API、CLI 工具的命令模式、Web 服务的端点、解析器的语法、应用程序的 UI 合同
-   - 如果项目是纯内部项目(构建脚本、一次性工具等), 跳过此步骤
+2. **Define interface contracts** (if project has external interfaces) → `/contracts/`:
+   - Identify what interfaces the project exposes to users or other systems
+   - Document the contract format appropriate for the project type
+   - Examples: public APIs for libraries, command schemas for CLI tools, endpoints for web services, grammars for parsers, UI contracts for applications
+   - Skip if project is purely internal (build scripts, one-off tools, etc.)
 
-3. **代理上下文更新**: 
-   - 运行 `{AGENT_SCRIPT}`
-   - 这些脚本检测正在使用哪个 AI 代理
-   - 更新相应的代理特定上下文文件
-   - 仅添加当前计划中的新技术
-   - 保留标记之间的手动添加内容
+3. **Agent context update**:
+   - Run `{AGENT_SCRIPT}`
+   - These scripts detect which AI agent is in use
+   - Update the appropriate agent-specific context file
+   - Add only new technology from current plan
+   - Preserve manual additions between markers
 
-**输出**: data-model.md, /contracts/*, quickstart.md, 代理特定文件
+**Output**: data-model.md, /contracts/*, quickstart.md, agent-specific file
 
-## 关键规则
+## Key rules
 
-- 使用绝对路径
-- 关卡失败或未解决的澄清事项时报错
+- Use absolute paths
+- ERROR on gate failures or unresolved clarifications

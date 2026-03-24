@@ -4,9 +4,10 @@
 param(
     [switch]$Json,
     [string]$ShortName,
+    [Parameter()]
     [int]$Number = 0,
     [switch]$Help,
-    [Parameter(ValueFromRemainingArguments = $true)]
+    [Parameter(Position = 0, ValueFromRemainingArguments = $true)]
     [string[]]$FeatureDescription
 )
 $ErrorActionPreference = 'Stop'
@@ -140,6 +141,9 @@ if (-not $fallbackRoot) {
     Write-Error "Error: Could not determine repository root. Please run this script from within the repository."
     exit 1
 }
+
+# Load common functions (includes Resolve-Template)
+. "$PSScriptRoot/common.ps1"
 
 try {
     $repoRoot = git rev-parse --show-toplevel 2>$null
@@ -276,9 +280,9 @@ if ($hasGit) {
 $featureDir = Join-Path $specsDir $branchName
 New-Item -ItemType Directory -Path $featureDir -Force | Out-Null
 
-$template = Join-Path $repoRoot '.specify/templates/spec-template.md'
+$template = Resolve-Template -TemplateName 'spec-template' -RepoRoot $repoRoot
 $specFile = Join-Path $featureDir 'spec.md'
-if (Test-Path $template) { 
+if ($template -and (Test-Path $template)) { 
     Copy-Item $template $specFile -Force 
 } else { 
     New-Item -ItemType File -Path $specFile | Out-Null 

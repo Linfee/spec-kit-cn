@@ -14,7 +14,7 @@
 
 .PARAMETER Agents
     Comma or space separated subset of agents to build (default: all)
-    Valid agents: claude, gemini, copilot, cursor-agent, qwen, opencode, windsurf, codex, kilocode, auggie, roo, codebuddy, amp, kiro-cli, bob, qodercli, shai, tabnine, agy, vibe, kimi, generic
+    Valid agents: claude, gemini, copilot, cursor-agent, qwen, opencode, windsurf, codex, kilocode, auggie, roo, codebuddy, amp, kiro-cli, bob, qodercli, shai, tabnine, agy, vibe, kimi, trae, pi, iflow, generic
 
 .PARAMETER Scripts
     Comma or space separated subset of script types to build (default: both)
@@ -382,7 +382,7 @@ function Build-Variant {
         }
         'qwen' {
             $cmdDir = Join-Path $baseDir ".qwen/commands"
-            Generate-Commands -Agent 'qwen' -Extension 'toml' -ArgFormat '{{args}}' -OutputDir $cmdDir -ScriptVariant $Script
+            Generate-Commands -Agent 'qwen' -Extension 'md' -ArgFormat '$ARGUMENTS' -OutputDir $cmdDir -ScriptVariant $Script
             if (Test-Path "agent_templates/qwen/QWEN.md") {
                 Copy-Item -Path "agent_templates/qwen/QWEN.md" -Destination (Join-Path $baseDir "QWEN.md")
             }
@@ -454,6 +454,19 @@ function Build-Variant {
             New-Item -ItemType Directory -Force -Path $skillsDir | Out-Null
             New-KimiSkills -SkillsDir $skillsDir -ScriptVariant $Script
         }
+        'trae' {
+            $rulesDir = Join-Path $baseDir ".trae/rules"
+            New-Item -ItemType Directory -Force -Path $rulesDir | Out-Null
+            Generate-Commands -Agent 'trae' -Extension 'md' -ArgFormat '$ARGUMENTS' -OutputDir $rulesDir -ScriptVariant $Script
+        }
+        'pi' {
+            $cmdDir = Join-Path $baseDir ".pi/prompts"
+            Generate-Commands -Agent 'pi' -Extension 'md' -ArgFormat '$ARGUMENTS' -OutputDir $cmdDir -ScriptVariant $Script
+        }
+        'iflow' {
+            $cmdDir = Join-Path $baseDir ".iflow/commands"
+            Generate-Commands -Agent 'iflow' -Extension 'md' -ArgFormat '$ARGUMENTS' -OutputDir $cmdDir -ScriptVariant $Script
+        }
         'generic' {
             $cmdDir = Join-Path $baseDir ".speckit/commands"
             Generate-Commands -Agent 'generic' -Extension 'md' -ArgFormat '$ARGUMENTS' -OutputDir $cmdDir -ScriptVariant $Script
@@ -470,7 +483,7 @@ function Build-Variant {
 }
 
 # Define all agents and scripts
-$AllAgents = @('claude', 'gemini', 'copilot', 'cursor-agent', 'qwen', 'opencode', 'windsurf', 'codex', 'kilocode', 'auggie', 'roo', 'codebuddy', 'amp', 'kiro-cli', 'bob', 'qodercli', 'shai', 'tabnine', 'agy', 'vibe', 'kimi', 'generic')
+$AllAgents = @('claude', 'gemini', 'copilot', 'cursor-agent', 'qwen', 'opencode', 'windsurf', 'codex', 'kilocode', 'auggie', 'roo', 'codebuddy', 'amp', 'kiro-cli', 'bob', 'qodercli', 'shai', 'tabnine', 'agy', 'vibe', 'kimi', 'trae', 'pi', 'iflow', 'generic')
 $AllScripts = @('sh', 'ps')
 
 function Normalize-List {
