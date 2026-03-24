@@ -21,6 +21,24 @@
 - 更新 `TRANSLATION_STANDARDS.md` 中的翻译范围说明
 - 更新 `/translation-review` 和 `/translation-sync` 命令中的相关检查逻辑
 
+## [0.3.2] - 2026-03-24
+
+### 同步原版
+- 同步原版 [v0.3.2](https://github.com/github/spec-kit/releases/tag/v0.3.2)
+- 对应原版范围: v0.2.1 → v0.3.2
+
+### 🚀 新增功能
+- 引入 Preset 系统（`presets/`、`preset` 子命令与优先级/启用状态管理）
+- 新增 `specify-cn status` 与 `specify-cn doctor` 能力
+- 扩展系统继续增强（catalog、社区扩展、selftest 扩展等）
+- 新增/扩展 AI 助手支持（Trae、iFlow、PI 等）与命令模板联动
+
+### 🔧 技术更新
+- 新增核心模块：`src/specify_cli/presets.py`、`src/specify_cli/agents.py`
+- `src/specify_cli/__init__.py`、`extensions.py` 同步到 v0.3.2 逻辑
+- `pyproject.toml` 版本更新到 `0.3.2`，并包含 `json5` 依赖
+- 同步并通过新增测试：`tests/test_presets.py`、`tests/test_merge.py`
+
 ## [0.2.1] - 2026-03-24
 
 ### 同步原版
