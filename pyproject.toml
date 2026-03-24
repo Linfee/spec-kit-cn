@@ -1,7 +1,7 @@
 [project]
 name = "specify-cn-cli"
-version = "0.1.13"
-description = "Specify CN CLI, part of GitHub Spec Kit CN. A tool to bootstrap your projects for Spec-Driven Development (SDD). Corresponds to upstream spec-kit v0.1.13."
+version = "0.2.1"
+description = "Specify CN CLI, part of GitHub Spec Kit CN. A tool to bootstrap your projects for Spec-Driven Development (SDD). Corresponds to upstream spec-kit v0.2.1."
 requires-python = ">=3.11"
 dependencies = [
     "typer",
@@ -13,6 +13,7 @@ dependencies = [
     "truststore>=0.10.4",
     "pyyaml>=6.0",
     "packaging>=23.0",
+    "pathspec>=0.12.0",
 ]
 
 [project.scripts]

@@ -30,12 +30,12 @@
 #
 # 5. Multi-Agent Support
 #    - Handles agent-specific file paths and naming conventions
-#    - Supports: Claude, Gemini, Copilot, Cursor, Qwen, opencode, Codex, Windsurf, Kilo Code, Auggie CLI, Roo Code, CodeBuddy CLI, Qoder CLI, Amp, SHAI, Kiro CLI, or Antigravity
+#    - Supports: Claude, Gemini, Copilot, Cursor, Qwen, opencode, Codex, Windsurf, Kilo Code, Auggie CLI, Roo Code, CodeBuddy CLI, Qoder CLI, Amp, SHAI, Tabnine CLI, Kiro CLI, Mistral Vibe, Kimi Code, Antigravity or Generic
 #    - Can update single agents or all existing agent files
 #    - Creates default Claude file if no agent files exist
 #
 # Usage: ./update-agent-context.sh [agent_type]
-# Agent types: claude|gemini|copilot|cursor-agent|qwen|opencode|codex|windsurf|kilocode|auggie|roo|codebuddy|amp|shai|kiro-cli|agy|bob|qodercli
+# Agent types: claude|gemini|copilot|cursor-agent|qwen|opencode|codex|windsurf|kilocode|auggie|roo|codebuddy|amp|shai|tabnine|kiro-cli|agy|bob|vibe|qodercli|kimi|generic
 # Leave empty to update all existing agent files
 
 set -e
@@ -73,9 +73,12 @@ CODEBUDDY_FILE="$REPO_ROOT/CODEBUDDY.md"
 QODER_FILE="$REPO_ROOT/QODER.md"
 AMP_FILE="$REPO_ROOT/AGENTS.md"
 SHAI_FILE="$REPO_ROOT/SHAI.md"
+TABNINE_FILE="$REPO_ROOT/TABNINE.md"
 KIRO_FILE="$REPO_ROOT/AGENTS.md"
 AGY_FILE="$REPO_ROOT/.agent/rules/specify-rules.md"
 BOB_FILE="$REPO_ROOT/AGENTS.md"
+VIBE_FILE="$REPO_ROOT/.vibe/agents/specify-agents.md"
+KIMI_FILE="$REPO_ROOT/KIMI.md"
 
 # Template file
 TEMPLATE_FILE="$REPO_ROOT/.specify/templates/agent-file-template.md"
@@ -648,6 +651,9 @@ update_specific_agent() {
         shai)
             update_agent_file "$SHAI_FILE" "SHAI"
             ;;
+        tabnine)
+            update_agent_file "$TABNINE_FILE" "Tabnine CLI"
+            ;;
         kiro-cli)
             update_agent_file "$KIRO_FILE" "Kiro CLI"
             ;;
@@ -657,12 +663,18 @@ update_specific_agent() {
         bob)
             update_agent_file "$BOB_FILE" "IBM Bob"
             ;;
+        vibe)
+            update_agent_file "$VIBE_FILE" "Mistral Vibe"
+            ;;
+        kimi)
+            update_agent_file "$KIMI_FILE" "Kimi Code"
+            ;;
         generic)
             log_info "Generic agent: no predefined context file. Use the agent-specific update script for your agent."
             ;;
         *)
             log_error "Unknown agent type '$agent_type'"
-            log_error "Expected: claude|gemini|copilot|cursor-agent|qwen|opencode|codex|windsurf|kilocode|auggie|roo|codebuddy|amp|shai|kiro-cli|agy|bob|qodercli|generic"
+            log_error "Expected: claude|gemini|copilot|cursor-agent|qwen|opencode|codex|windsurf|kilocode|auggie|roo|codebuddy|amp|shai|tabnine|kiro-cli|agy|bob|vibe|qodercli|kimi|generic"
             exit 1
             ;;
     esac
@@ -732,6 +744,11 @@ update_all_existing_agents() {
         found_agent=true
     fi
 
+    if [[ -f "$TABNINE_FILE" ]]; then
+        update_agent_file "$TABNINE_FILE" "Tabnine CLI"
+        found_agent=true
+    fi
+
     if [[ -f "$QODER_FILE" ]]; then
         update_agent_file "$QODER_FILE" "Qoder CLI"
         found_agent=true
@@ -748,6 +765,16 @@ update_all_existing_agents() {
     fi
     if [[ -f "$BOB_FILE" ]]; then
         update_agent_file "$BOB_FILE" "IBM Bob"
+        found_agent=true
+    fi
+
+    if [[ -f "$VIBE_FILE" ]]; then
+        update_agent_file "$VIBE_FILE" "Mistral Vibe"
+        found_agent=true
+    fi
+    
+    if [[ -f "$KIMI_FILE" ]]; then
+        update_agent_file "$KIMI_FILE" "Kimi Code"
         found_agent=true
     fi
     
@@ -774,8 +801,7 @@ print_summary() {
     fi
     
     echo
-
-    log_info "Usage: $0 [claude|gemini|copilot|cursor-agent|qwen|opencode|codex|windsurf|kilocode|auggie|roo|codebuddy|amp|shai|kiro-cli|agy|bob|qodercli]"
+    log_info "Usage: $0 [claude|gemini|copilot|cursor-agent|qwen|opencode|codex|windsurf|kilocode|auggie|roo|codebuddy|amp|shai|tabnine|kiro-cli|agy|bob|vibe|qodercli|kimi|generic]"
 }
 
 #==============================================================================

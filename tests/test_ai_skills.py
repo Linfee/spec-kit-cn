@@ -147,6 +147,11 @@ class TestGetSkillsDir:
         result = _get_skills_dir(project_dir, "gemini")
         assert result == project_dir / ".gemini" / "skills"
 
+    def test_tabnine_skills_dir(self, project_dir):
+        """Tabnine should use .tabnine/agent/skills/."""
+        result = _get_skills_dir(project_dir, "tabnine")
+        assert result == project_dir / ".tabnine" / "agent" / "skills"
+
     def test_copilot_skills_dir(self, project_dir):
         """Copilot should use .github/skills/."""
         result = _get_skills_dir(project_dir, "copilot")
@@ -405,8 +410,11 @@ class TestInstallAiSkills:
         skills_dir = _get_skills_dir(proj, agent_key)
         assert skills_dir.exists()
         skill_dirs = [d.name for d in skills_dir.iterdir() if d.is_dir()]
-        assert "speckit-specify" in skill_dirs
-        assert (skills_dir / "speckit-specify" / "SKILL.md").exists()
+        # Kimi uses dot-separator (speckit.specify) to match /skill:speckit.* invocation;
+        # all other agents use hyphen-separator (speckit-specify).
+        expected_skill_name = "speckit.specify" if agent_key == "kimi" else "speckit-specify"
+        assert expected_skill_name in skill_dirs
+        assert (skills_dir / expected_skill_name / "SKILL.md").exists()
 
 
 
@@ -662,7 +670,8 @@ class TestCliValidation:
 
         plain = re.sub(r'\x1b\[[0-9;]*m', '', result.output)
         assert "--ai-skills" in plain
-        assert "agent skills" in plain.lower()
+        compact = " ".join(plain.lower().split())
+        assert "agent skills" in compact
 
     def test_kiro_alias_normalized_to_kiro_cli(self, tmp_path):
         """--ai kiro should normalize to canonical kiro-cli agent key."""

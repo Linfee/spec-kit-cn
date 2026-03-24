@@ -21,6 +21,25 @@
 - 更新 `TRANSLATION_STANDARDS.md` 中的翻译范围说明
 - 更新 `/translation-review` 和 `/translation-sync` 命令中的相关检查逻辑
 
+## [0.2.1] - 2026-03-24
+
+### 同步原版
+- 同步原版 [v0.2.1](https://github.com/github/spec-kit/releases/tag/v0.2.1)
+- 对应原版范围: v0.1.13 → v0.2.1
+
+### 🚀 新增功能
+- 扩展系统支持多 Catalog 叠加与优先级解析
+- 新增扩展 Catalog 管理命令（list/add/remove）
+- 支持 `.extensionignore` 过滤扩展安装文件
+- 新增/完善 AI 助手支持：Tabnine、Kimi、Mistral Vibe 等
+- 新增 `templates/commands/tasks.md` 模板并接入相关 hooks
+
+### 🔧 技术更新
+- `src/specify_cli/extensions.py` 引入多 Catalog 与安装策略校验
+- `src/specify_cli/__init__.py` 同步 v0.2.1 命令与初始化逻辑
+- 同步 `update-agent-context` 与 release 打包脚本更新
+- `pyproject.toml` 新增依赖 `pathspec>=0.12.0`
+
 ## [0.1.13] - 2026-03-07
 
 ### 同步原版
