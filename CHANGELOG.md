@@ -21,6 +21,22 @@
 - 更新 `TRANSLATION_STANDARDS.md` 中的翻译范围说明
 - 更新 `/translation-review` 和 `/translation-sync` 命令中的相关检查逻辑
 
+## [0.4.0] - 2026-03-24
+
+### 同步原版
+- 同步原版 [v0.4.0](https://github.com/github/spec-kit/releases/tag/v0.4.0)
+- 对应原版范围: v0.3.2 → v0.4.0
+
+### 🚀 新增功能
+- 引入离线 core pack 打包能力，`specify-cn init --offline` 可使用内置资产初始化
+- 新增基于时间戳的分支编号策略（`--branch-numbering timestamp`）
+- Codex/native skills 初始化与回退逻辑增强
+
+### 🔧 技术更新
+- `pyproject.toml` 对齐 `0.4.0` 并加入 wheel `force-include` 资产映射
+- `src/specify_cli/__init__.py`、`agents.py`、`extensions.py`、`presets.py` 同步到 v0.4.0
+- 新增并通过测试：`tests/test_core_pack_scaffold.py`、`tests/test_timestamp_branches.py`、`tests/test_branch_numbering.py`
+
 ## [0.3.2] - 2026-03-24
 
 ### 同步原版

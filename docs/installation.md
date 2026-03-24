@@ -1,80 +1,133 @@
-# 安装指南
+# Installation Guide
 
-## 前置要求
+## Prerequisites
 
-- **Linux/macOS**(或 Windows; 现在支持 PowerShell 脚本, 无需 WSL)
-- AI编码助手: [Claude Code](https://www.anthropic.com/claude-code), [GitHub Copilot](https://code.visualstudio.com/), [Codebuddy CLI](https://www.codebuddy.ai/cli)或 [Gemini CLI](https://github.com/google-gemini/gemini-cli)
-- [uv](https://docs.astral.sh/uv/) 用于包管理
+- **Linux/macOS** (or Windows; PowerShell scripts now supported without WSL)
+- AI coding agent: [Claude Code](https://www.anthropic.com/claude-code), [GitHub Copilot](https://code.visualstudio.com/), [Codebuddy CLI](https://www.codebuddy.ai/cli), [Gemini CLI](https://github.com/google-gemini/gemini-cli), or [Pi Coding Agent](https://pi.dev)
+- [uv](https://docs.astral.sh/uv/) for package management
 - [Python 3.11+](https://www.python.org/downloads/)
 - [Git](https://git-scm.com/downloads)
 
-## 安装
+## Installation
 
-### 初始化新项目
+### Initialize a New Project
 
-最简单的入门方式是初始化一个新项目: 
-
-```bash
-uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <PROJECT_NAME>
-```
-
-或者在当前目录中初始化: 
+The easiest way to get started is to initialize a new project. Pin a specific release tag for stability (check [Releases](https://github.com/github/spec-kit/releases) for the latest):
 
 ```bash
-uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init .
-# 或使用 --here 标志
-uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init --here
+# Install from a specific stable release (recommended — replace vX.Y.Z with the latest tag)
+uvx --from git+https://github.com/github/spec-kit.git@vX.Y.Z specify init <PROJECT_NAME>
+
+# Or install latest from main (may include unreleased changes)
+uvx --from git+https://github.com/github/spec-kit.git specify init <PROJECT_NAME>
 ```
 
-### 指定 AI 助手
-
-你可以在初始化时主动指定你的 AI 助手: 
+Or initialize in the current directory:
 
 ```bash
-uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <project_name> --ai claude
-uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <project_name> --ai gemini
-uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <project_name> --ai copilot
-uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <project_name> --ai codebuddy
+uvx --from git+https://github.com/github/spec-kit.git@vX.Y.Z specify init .
+# or use the --here flag
+uvx --from git+https://github.com/github/spec-kit.git@vX.Y.Z specify init --here
 ```
 
-### 指定脚本类型(Shell vs PowerShell)
+### Specify AI Agent
 
-所有自动化脚本现在同时提供 Bash(`.sh`)和 PowerShell(`.ps1`)两种变体.
-
-自动行为: 
-- Windows 默认: `ps`
-- 其他操作系统默认: `sh`
-- 交互模式: 除非你传递 `--script` 参数, 否则会提示你选择
-
-强制指定特定脚本类型: 
-```bash
-uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <project_name> --script sh
-uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <project_name> --script ps
-```
-
-### 忽略助手工具检查
-
-如果你希望获取模板而不检查正确的工具: 
+You can proactively specify your AI agent during initialization:
 
 ```bash
-uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <project_name> --ai claude --ignore-agent-tools
+uvx --from git+https://github.com/github/spec-kit.git@vX.Y.Z specify init <project_name> --ai claude
+uvx --from git+https://github.com/github/spec-kit.git@vX.Y.Z specify init <project_name> --ai gemini
+uvx --from git+https://github.com/github/spec-kit.git@vX.Y.Z specify init <project_name> --ai copilot
+uvx --from git+https://github.com/github/spec-kit.git@vX.Y.Z specify init <project_name> --ai codebuddy
+uvx --from git+https://github.com/github/spec-kit.git@vX.Y.Z specify init <project_name> --ai pi
 ```
 
-## 验证
+### Specify Script Type (Shell vs PowerShell)
 
-初始化后, 你应该在 AI 助手中看到以下可用命令: 
+All automation scripts now have both Bash (`.sh`) and PowerShell (`.ps1`) variants.
 
-- `/speckit.specify` - 创建规范
-- `/speckit.plan` - 生成实施计划
-- `/speckit.tasks` - 分解为可执行任务
+Auto behavior:
 
-`.specify/scripts` 目录将同时包含 `.sh` 和 `.ps1` 脚本.
+- Windows default: `ps`
+- Other OS default: `sh`
+- Interactive mode: you'll be prompted unless you pass `--script`
 
-## 故障排除
+Force a specific script type:
 
-### Linux 上的 Git 凭据管理器
+```bash
+uvx --from git+https://github.com/github/spec-kit.git@vX.Y.Z specify init <project_name> --script sh
+uvx --from git+https://github.com/github/spec-kit.git@vX.Y.Z specify init <project_name> --script ps
+```
 
-如果你在 Linux 上遇到 Git 身份验证问题, 可以安装 Git 凭据管理器: 
+### Ignore Agent Tools Check
+
+If you prefer to get the templates without checking for the right tools:
+
+```bash
+uvx --from git+https://github.com/github/spec-kit.git@vX.Y.Z specify init <project_name> --ai claude --ignore-agent-tools
+```
+
+## Verification
+
+After initialization, you should see the following commands available in your AI agent:
+
+- `/speckit.specify` - Create specifications
+- `/speckit.plan` - Generate implementation plans  
+- `/speckit.tasks` - Break down into actionable tasks
+
+The `.specify/scripts` directory will contain both `.sh` and `.ps1` scripts.
+
+## Troubleshooting
+
+### Enterprise / Air-Gapped Installation
+
+If your environment blocks access to PyPI (you see 403 errors when running `uv tool install` or `pip install`), you can create a portable wheel bundle on a connected machine and transfer it to the air-gapped target.
+
+**Step 1: Build the wheel on a connected machine (same OS and Python version as the target)**
+
+```bash
+# Clone the repository
+git clone https://github.com/github/spec-kit.git
+cd spec-kit
+
+# Build the wheel
+pip install build
+python -m build --wheel --outdir dist/
+
+# Download the wheel and all its runtime dependencies
+pip download -d dist/ dist/specify_cli-*.whl
+```
+
+> **Important:** `pip download` resolves platform-specific wheels (e.g., PyYAML includes native extensions). You must run this step on a machine with the **same OS and Python version** as the air-gapped target. If you need to support multiple platforms, repeat this step on each target OS (Linux, macOS, Windows) and Python version.
+
+**Step 2: Transfer the `dist/` directory to the air-gapped machine**
+
+Copy the entire `dist/` directory (which contains the `specify-cli` wheel and all dependency wheels) to the target machine via USB, network share, or other approved transfer method.
+
+**Step 3: Install on the air-gapped machine**
+
+```bash
+pip install --no-index --find-links=./dist specify-cli
+```
+
+**Step 4: Initialize a project (no network required)**
+
+```bash
+# Initialize a project — no GitHub access needed
+specify init my-project --ai claude --offline
+```
+
+The `--offline` flag tells the CLI to use the templates, commands, and scripts bundled inside the wheel instead of downloading from GitHub.
+
+> **Deprecation notice:** Starting with v0.6.0, `specify init` will use bundled assets by default and the `--offline` flag will be removed. The GitHub download path will be retired because bundled assets eliminate the need for network access, avoid proxy/firewall issues, and guarantee that templates always match the installed CLI version. No action will be needed — `specify init` will simply work without network access out of the box.
+
+> **Note:** Python 3.11+ is required.
+
+> **Windows note:** Offline scaffolding requires PowerShell 7+ (`pwsh`), not Windows PowerShell 5.x (`powershell.exe`). Install from https://aka.ms/powershell.
+
+### Git Credential Manager on Linux
+
+If you're having issues with Git authentication on Linux, you can install Git Credential Manager:
 
 ```bash
 #!/usr/bin/env bash

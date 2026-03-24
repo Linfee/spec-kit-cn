@@ -646,8 +646,6 @@ class PresetManager:
             short_name = cmd_name
             if short_name.startswith("speckit."):
                 short_name = short_name[len("speckit."):]
-            # Kimi CLI discovers skills by directory name and invokes them as
-            # /skill:<name> — use dot separator to match packaging convention.
             if selected_ai == "kimi":
                 skill_name = f"speckit.{short_name}"
             else:
@@ -1064,8 +1062,8 @@ class PresetCatalog:
         if not config_path.exists():
             return None
         try:
-            data = yaml.safe_load(config_path.read_text()) or {}
-        except (yaml.YAMLError, OSError) as e:
+            data = yaml.safe_load(config_path.read_text(encoding="utf-8")) or {}
+        except (yaml.YAMLError, OSError, UnicodeError) as e:
             raise PresetValidationError(
                 f"Failed to read catalog config {config_path}: {e}"
             )

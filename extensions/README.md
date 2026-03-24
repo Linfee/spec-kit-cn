@@ -1,121 +1,144 @@
-# Spec Kit 扩展系统
+# Spec Kit Extensions
 
-[Spec Kit](https://github.com/github/spec-kit) 的扩展系统 - 无需膨胀核心框架即可添加新功能. 
+Extension system for [Spec Kit](https://github.com/github/spec-kit) - add new functionality without bloating the core framework.
 
-## 扩展目录
+## Extension Catalogs
 
-Spec Kit 提供两个不同用途的目录文件:
+Spec Kit provides two catalog files with different purposes:
 
-### 你的目录 (`catalog.json`)
+### Your Catalog (`catalog.json`)
 
-- **用途**: Spec Kit CLI 使用的默认上游扩展目录
-- **默认状态**: 在上游项目中默认为空 - 你或你的组织填充一个分支/副本, 包含你信任的扩展
-- **位置 (上游)**: GitHub 托管的 spec-kit 仓库中的 `extensions/catalog.json`
-- **CLI 默认值**: `specify extension` 命令默认使用上游目录 URL, 除非被覆盖
-- **组织目录**: 将 `SPECKIT_CATALOG_URL` 指向你组织的分支或托管的目录 JSON 来替代上游默认值
-- **自定义**: 从社区目录复制条目到你的组织目录, 或直接添加你自己的扩展
+- **Purpose**: Default upstream catalog of extensions used by the Spec Kit CLI
+- **Default State**: Empty by design in the upstream project - you or your organization populate a fork/copy with extensions you trust
+- **Location (upstream)**: `extensions/catalog.json` in the GitHub-hosted spec-kit repo
+- **CLI Default**: The `specify extension` commands use the upstream catalog URL by default, unless overridden
+- **Org Catalog**: Point `SPECKIT_CATALOG_URL` at your organization's fork or hosted catalog JSON to use it instead of the upstream default
+- **Customization**: Copy entries from the community catalog into your org catalog, or add your own extensions directly
 
-**示例覆盖:**
+**Example override:**
 ```bash
-# 用你组织的目录覆盖默认的上游目录
+# Override the default upstream catalog with your organization's catalog
 export SPECKIT_CATALOG_URL="https://your-org.com/spec-kit/catalog.json"
-specify extension search  # 现在使用你组织的目录而不是上游默认值
+specify extension search  # Now uses your organization's catalog instead of the upstream default
 ```
 
-### 社区参考目录 (`catalog.community.json`)
+### Community Reference Catalog (`catalog.community.json`)
 
-- **用途**: 浏览可用的社区贡献扩展
-- **状态**: 活跃 - 包含社区提交的扩展
-- **位置**: `extensions/catalog.community.json`
-- **用法**: 用于发现可用扩展的参考目录
-- **提交**: 通过 Pull Request 开放社区贡献
+- **Purpose**: Browse available community-contributed extensions
+- **Status**: Active - contains extensions submitted by the community
+- **Location**: `extensions/catalog.community.json`
+- **Usage**: Reference catalog for discovering available extensions
+- **Submission**: Open to community contributions via Pull Request
 
-**工作原理:**
+**How It Works:**
 
-## 使扩展可用
+## Making Extensions Available
 
-你可以控制团队成员可以发现和安装哪些扩展:
+You control which extensions your team can discover and install:
 
-### 选项 1: 精选目录 (推荐用于组织)
+### Option 1: Curated Catalog (Recommended for Organizations)
 
-用已批准的扩展填充你的 `catalog.json`:
+Populate your `catalog.json` with approved extensions:
 
-1. **发现** 来自各种来源的扩展:
-   - 浏览 `catalog.community.json` 中的社区扩展
-   - 在你组织的仓库中查找私有/内部扩展
-   - 从可信的第三方发现扩展
-2. **审查** 扩展并选择你想要提供的扩展
-3. **添加** 这些扩展条目到你自己的 `catalog.json`
-4. **团队成员** 现在可以发现并安装它们:
-   - `specify extension search` 显示你的精选目录
-   - `specify extension add <name>` 从你的目录安装
+1. **Discover** extensions from various sources:
+   - Browse `catalog.community.json` for community extensions
+   - Find private/internal extensions in your organization's repos
+   - Discover extensions from trusted third parties
+2. **Review** extensions and choose which ones you want to make available
+3. **Add** those extension entries to your own `catalog.json`
+4. **Team members** can now discover and install them:
+   - `specify extension search` shows your curated catalog
+   - `specify extension add <name>` installs from your catalog
 
-**优势**: 完全控制可用扩展, 团队一致性, 组织审批流程
+**Benefits**: Full control over available extensions, team consistency, organizational approval workflow
 
-**示例**: 从 `catalog.community.json` 复制一个条目到你的 `catalog.json`, 然后你的团队就可以发现并按名称安装它. 
+**Example**: Copy an entry from `catalog.community.json` to your `catalog.json`, then your team can discover and install it by name.
 
-### 选项 2: 直接 URL (用于临时使用)
+### Option 2: Direct URLs (For Ad-hoc Use)
 
-跳过目录管理 - 团队成员直接使用 URL 安装:
+Skip catalog curation - team members install directly using URLs:
 
 ```bash
 specify extension add --from https://github.com/org/spec-kit-ext/archive/refs/tags/v1.0.0.zip
 ```
 
-**优势**: 适合一次性测试或私有扩展
+**Benefits**: Quick for one-off testing or private extensions
 
-**权衡**: 以这种方式安装的扩展不会出现在其他团队成员的 `specify extension search` 中, 除非你也把它们添加到你的 `catalog.json`. 
+**Tradeoff**: Extensions installed this way won't appear in `specify extension search` for other team members unless you also add them to your `catalog.json`.
 
-## 可用的社区扩展
+## Available Community Extensions
 
-以下社区贡献的扩展可在 [`catalog.community.json`](catalog.community.json) 中找到:
+The following community-contributed extensions are available in [`catalog.community.json`](catalog.community.json):
 
-| 扩展 | 用途 | URL |
-|------|------|-----|
-| V-Model Extension Pack | 强制执行 V-Model 配对生成开发规范和测试规范, 具有完整的可追溯性 | [spec-kit-v-model](https://github.com/leocamello/spec-kit-v-model) |
-| Cleanup Extension | 实施后质量门禁, 审查变更, 修复小问题 (scout rule), 为中等问题创建任务, 为大问题生成分析 | [spec-kit-cleanup](https://github.com/dsrednicki/spec-kit-cleanup) |
+**Categories:** `docs` — reads, validates, or generates spec artifacts · `code` — reviews, validates, or modifies source code · `process` — orchestrates workflow across phases · `integration` — syncs with external platforms · `visibility` — reports on project health or progress
 
-## 添加你的扩展
+**Effect:** `Read-only` — produces reports without modifying files · `Read+Write` — modifies files, creates artifacts, or updates specs
 
-### 提交流程
+| Extension | Purpose | Category | Effect | URL |
+|-----------|---------|----------|--------|-----|
+| Archive Extension | Archive merged features into main project memory. | `docs` | Read+Write | [spec-kit-archive](https://github.com/stn1slv/spec-kit-archive) |
+| Azure DevOps Integration | Sync user stories and tasks to Azure DevOps work items using OAuth authentication | `integration` | Read+Write | [spec-kit-azure-devops](https://github.com/pragya247/spec-kit-azure-devops) |
+| Cleanup Extension | Post-implementation quality gate that reviews changes, fixes small issues (scout rule), creates tasks for medium issues, and generates analysis for large issues | `code` | Read+Write | [spec-kit-cleanup](https://github.com/dsrednicki/spec-kit-cleanup) |
+| Cognitive Squad | Multi-agent cognitive system with Triadic Model: understanding, internalization, application — with quality gates, backpropagation verification, and self-healing | `docs` | Read+Write | [cognitive-squad](https://github.com/Testimonial/cognitive-squad) |
+| Conduct Extension | Orchestrates spec-kit phases via sub-agent delegation to reduce context pollution. | `process` | Read+Write | [spec-kit-conduct-ext](https://github.com/twbrandon7/spec-kit-conduct-ext) |
+| DocGuard — CDD Enforcement | Canonical-Driven Development enforcement. Validates, scores, and traces project documentation with automated checks, AI-driven workflows, and spec-kit hooks. Zero NPM runtime dependencies. | `docs` | Read+Write | [spec-kit-docguard](https://github.com/raccioly/docguard) |
+| Fleet Orchestrator | Orchestrate a full feature lifecycle with human-in-the-loop gates across all SpecKit phases | `process` | Read+Write | [spec-kit-fleet](https://github.com/sharathsatish/spec-kit-fleet) |
+| Iterate | Iterate on spec documents with a two-phase define-and-apply workflow — refine specs mid-implementation and go straight back to building | `docs` | Read+Write | [spec-kit-iterate](https://github.com/imviancagrace/spec-kit-iterate) |
+| Jira Integration | Create Jira Epics, Stories, and Issues from spec-kit specifications and task breakdowns with configurable hierarchy and custom field support | `integration` | Read+Write | [spec-kit-jira](https://github.com/mbachorik/spec-kit-jira) |
+| Learning Extension | Generate educational guides from implementations and enhance clarifications with mentoring context | `docs` | Read+Write | [spec-kit-learn](https://github.com/imviancagrace/spec-kit-learn) |
+| Project Health Check | Diagnose a Spec Kit project and report health issues across structure, agents, features, scripts, extensions, and git | `visibility` | Read-only | [spec-kit-doctor](https://github.com/KhawarHabibKhan/spec-kit-doctor) |
+| Project Status | Show current SDD workflow progress — active feature, artifact status, task completion, workflow phase, and extensions summary | `visibility` | Read-only | [spec-kit-status](https://github.com/KhawarHabibKhan/spec-kit-status) |
+| Ralph Loop | Autonomous implementation loop using AI agent CLI | `code` | Read+Write | [spec-kit-ralph](https://github.com/Rubiss/spec-kit-ralph) |
+| Reconcile Extension | Reconcile implementation drift by surgically updating feature artifacts. | `docs` | Read+Write | [spec-kit-reconcile](https://github.com/stn1slv/spec-kit-reconcile) |
+| Retrospective Extension | Post-implementation retrospective with spec adherence scoring, drift analysis, and human-gated spec updates | `docs` | Read+Write | [spec-kit-retrospective](https://github.com/emi-dm/spec-kit-retrospective) |
+| Review Extension | Post-implementation comprehensive code review with specialized agents for code quality, comments, tests, error handling, type design, and simplification | `code` | Read-only | [spec-kit-review](https://github.com/ismaelJimenez/spec-kit-review) |
+| SDD Utilities | Resume interrupted workflows, validate project health, and verify spec-to-task traceability | `process` | Read+Write | [speckit-utils](https://github.com/mvanhorn/speckit-utils) |
+| Spec Sync | Detect and resolve drift between specs and implementation. AI-assisted resolution with human approval | `docs` | Read+Write | [spec-kit-sync](https://github.com/bgervin/spec-kit-sync) |
+| Understanding | Automated requirements quality analysis — 31 deterministic metrics against IEEE/ISO standards with experimental energy-based ambiguity detection | `docs` | Read-only | [understanding](https://github.com/Testimonial/understanding) |
+| V-Model Extension Pack | Enforces V-Model paired generation of development specs and test specs with full traceability | `docs` | Read+Write | [spec-kit-v-model](https://github.com/leocamello/spec-kit-v-model) |
+| Verify Extension | Post-implementation quality gate that validates implemented code against specification artifacts | `code` | Read-only | [spec-kit-verify](https://github.com/ismaelJimenez/spec-kit-verify) |
+| Verify Tasks Extension | Detect phantom completions: tasks marked [X] in tasks.md with no real implementation | `code` | Read-only | [spec-kit-verify-tasks](https://github.com/datastone-inc/spec-kit-verify-tasks) |
 
-要将你的扩展添加到社区目录:
 
-1. **准备你的扩展**, 遵循 [扩展开发指南](EXTENSION-DEVELOPMENT-GUIDE.md)
-2. **创建 GitHub release** 为你的扩展
-3. **提交 Pull Request**:
-   - 将你的扩展添加到 `extensions/catalog.community.json`
-   - 在可用扩展表中更新此 README
-4. **等待审核** - 维护者将审核并在满足条件时合并
+## Adding Your Extension
 
-详细步骤请参阅 [扩展发布指南](EXTENSION-PUBLISHING-GUIDE.md). 
+### Submission Process
 
-### 提交清单
+To add your extension to the community catalog:
 
-提交前, 请确保:
+1. **Prepare your extension** following the [Extension Development Guide](EXTENSION-DEVELOPMENT-GUIDE.md)
+2. **Create a GitHub release** for your extension
+3. **Submit a Pull Request** that:
+   - Adds your extension to `extensions/catalog.community.json`
+   - Updates this README with your extension in the Available Extensions table
+4. **Wait for review** - maintainers will review and merge if criteria are met
 
-- ✅ 有效的 `extension.yml` 清单
-- ✅ 完整的 README, 包含安装和使用说明
-- ✅ 包含 LICENSE 文件
-- ✅ 创建了带有语义版本号的 GitHub release (如 v1.0.0)
-- ✅ 在真实项目上测试过扩展
-- ✅ 所有命令按文档工作
+See the [Extension Publishing Guide](EXTENSION-PUBLISHING-GUIDE.md) for detailed step-by-step instructions.
 
-## 安装扩展
+### Submission Checklist
 
-一旦扩展可用（在你的目录中或通过直接 URL）, 安装它们:
+Before submitting, ensure:
+
+- ✅ Valid `extension.yml` manifest
+- ✅ Complete README with installation and usage instructions
+- ✅ LICENSE file included
+- ✅ GitHub release created with semantic version (e.g., v1.0.0)
+- ✅ Extension tested on a real project
+- ✅ All commands working as documented
+
+## Installing Extensions
+Once extensions are available (either in your catalog or via direct URL), install them:
 
 ```bash
-# 从你的精选目录 (按名称)
-specify extension search                  # 查看目录中的内容
-specify extension add <extension-name>    # 按名称安装
+# From your curated catalog (by name)
+specify extension search                  # See what's in your catalog
+specify extension add <extension-name>    # Install by name
 
-# 直接从 URL (绕过目录)
+# Direct from URL (bypasses catalog)
 specify extension add --from https://github.com/<org>/<repo>/archive/refs/tags/<version>.zip
 
-# 列出已安装的扩展
+# List installed extensions
 specify extension list
 ```
 
-更多信息请参阅 [扩展用户指南](EXTENSION-USER-GUIDE.md). 
-STATS:comma=0,period=0,colon=0,semicolon=0,exclaim=0,question=0,dunhao=0
+For more information, see the [Extension User Guide](EXTENSION-USER-GUIDE.md).
