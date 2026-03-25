@@ -1,67 +1,67 @@
-# Extension Publishing Guide
+# 扩展发布指南
 
-This guide explains how to publish your extension to the Spec Kit extension catalog, making it discoverable by `specify extension search`.
+本指南解释如何将你的扩展发布到 Spec Kit 扩展目录, 使其可以通过 `specify-cn extension search` 被发现.
 
-## Table of Contents
+## 目录
 
-1. [Prerequisites](#prerequisites)
-2. [Prepare Your Extension](#prepare-your-extension)
-3. [Submit to Catalog](#submit-to-catalog)
-4. [Verification Process](#verification-process)
-5. [Release Workflow](#release-workflow)
-6. [Best Practices](#best-practices)
-
----
-
-## Prerequisites
-
-Before publishing an extension, ensure you have:
-
-1. **Valid Extension**: A working extension with a valid `extension.yml` manifest
-2. **Git Repository**: Extension hosted on GitHub (or other public git hosting)
-3. **Documentation**: README.md with installation and usage instructions
-4. **License**: Open source license file (MIT, Apache 2.0, etc.)
-5. **Versioning**: Semantic versioning (e.g., 1.0.0)
-6. **Testing**: Extension tested on real projects
+1. [先决条件](#先决条件)
+2. [准备你的扩展](#准备你的扩展)
+3. [提交到目录](#提交到目录)
+4. [验证流程](#验证流程)
+5. [发布工作流](#发布工作流)
+6. [最佳实践](#最佳实践)
 
 ---
 
-## Prepare Your Extension
+## 先决条件
 
-### 1. Extension Structure
+在发布扩展之前, 确保你有:
 
-Ensure your extension follows the standard structure:
+1. **有效的扩展**: 带有有效 `extension.yml` 清单的工作扩展
+2. **Git 仓库**: 托管在 GitHub(或其他公共 git 托管平台)的扩展
+3. **文档**: 带有安装和使用说明的 README.md
+4. **许可证**: 开源许可证文件(MIT, Apache 2.0 等)
+5. **版本控制**: 语义版本控制(例如 1.0.0)
+6. **测试**: 在真实项目上测试过的扩展
+
+---
+
+## 准备你的扩展
+
+### 1. 扩展结构
+
+确保你的扩展遵循标准结构:
 
 ```text
 your-extension/
-├── extension.yml              # Required: Extension manifest
-├── README.md                  # Required: Documentation
-├── LICENSE                    # Required: License file
-├── CHANGELOG.md               # Recommended: Version history
-├── .gitignore                 # Recommended: Git ignore rules
+├── extension.yml              # 必需: 扩展清单
+├── README.md                  # 必需: 文档
+├── LICENSE                    # 必需: 许可证文件
+├── CHANGELOG.md               # 推荐: 版本历史
+├── .gitignore                 # 推荐: Git 忽略规则
 │
-├── commands/                  # Extension commands
+├── commands/                  # 扩展命令
 │   ├── command1.md
 │   └── command2.md
 │
-├── config-template.yml        # Config template (if needed)
+├── config-template.yml        # 配置模板(如需要)
 │
-└── docs/                      # Additional documentation
+└── docs/                      # 附加文档
     ├── usage.md
     └── examples/
 ```
 
-### 2. extension.yml Validation
+### 2. extension.yml 验证
 
-Verify your manifest is valid:
+验证你的清单是否有效:
 
 ```yaml
 schema_version: "1.0"
 
 extension:
-  id: "your-extension"           # Unique lowercase-hyphenated ID
-  name: "Your Extension Name"     # Human-readable name
-  version: "1.0.0"                # Semantic version
+  id: "your-extension"           # 唯一的小写连字符 ID
+  name: "Your Extension Name"     # 人类可读名称
+  version: "1.0.0"                # 语义版本
   description: "Brief description (one sentence)"
   author: "Your Name or Organization"
   repository: "https://github.com/your-org/spec-kit-your-extension"
@@ -69,86 +69,86 @@ extension:
   homepage: "https://github.com/your-org/spec-kit-your-extension"
 
 requires:
-  speckit_version: ">=0.1.0"    # Required spec-kit version
+  speckit_version: ">=0.1.0"    # 需要的 spec-kit 版本
 
 provides:
-  commands:                       # List all commands
+  commands:                       # 列出所有命令
     - name: "speckit.your-extension.command"
       file: "commands/command.md"
       description: "Command description"
 
-tags:                             # 2-5 relevant tags
+tags:                             # 2-5 个相关标签
   - "category"
   - "tool-name"
 ```
 
-**Validation Checklist**:
+**验证清单**:
 
-- ✅ `id` is lowercase with hyphens only (no underscores, spaces, or special characters)
-- ✅ `version` follows semantic versioning (X.Y.Z)
-- ✅ `description` is concise (under 100 characters)
-- ✅ `repository` URL is valid and public
-- ✅ All command files exist in the extension directory
-- ✅ Tags are lowercase and descriptive
+- ✅ `id` 只有小写字母和连字符(没有下划线, 空格或特殊字符)
+- ✅ `version` 遵循语义版本控制(X.Y.Z)
+- ✅ `description` 简洁(100 字符以内)
+- ✅ `repository` URL 有效且公开
+- ✅ 所有命令文件存在于扩展目录中
+- ✅ 标签是小写且描述性的
 
-### 3. Create GitHub Release
+### 3. 创建 GitHub Release
 
-Create a GitHub release for your extension version:
+为你的扩展版本创建 GitHub release:
 
 ```bash
-# Tag the release
+# 标记 release
 git tag v1.0.0
 git push origin v1.0.0
 
-# Create release on GitHub
-# Go to: https://github.com/your-org/spec-kit-your-extension/releases/new
-# - Tag: v1.0.0
-# - Title: v1.0.0 - Release Name
-# - Description: Changelog/release notes
+# 在 GitHub 上创建 release
+# 访问: https://github.com/your-org/spec-kit-your-extension/releases/new
+# - 标签: v1.0.0
+# - 标题: v1.0.0 - Release Name
+# - 描述: 变更日志/release 说明
 ```
 
-The release archive URL will be:
+Release 归档 URL 将是:
 
 ```text
 https://github.com/your-org/spec-kit-your-extension/archive/refs/tags/v1.0.0.zip
 ```
 
-### 4. Test Installation
+### 4. 测试安装
 
-Test that users can install from your release:
+测试用户可以从你的 release 安装:
 
 ```bash
-# Test dev installation
-specify extension add --dev /path/to/your-extension
+# 测试开发安装
+specify-cn extension add --dev /path/to/your-extension
 
-# Test from GitHub archive
-specify extension add --from https://github.com/your-org/spec-kit-your-extension/archive/refs/tags/v1.0.0.zip
+# 从 GitHub 归档测试
+specify-cn extension add --from https://github.com/your-org/spec-kit-your-extension/archive/refs/tags/v1.0.0.zip
 ```
 
 ---
 
-## Submit to Catalog
+## 提交到目录
 
-### Understanding the Catalogs
+### 理解目录
 
-Spec Kit uses a dual-catalog system. For details about how catalogs work, see the main [Extensions README](README.md#extension-catalogs).
+Spec Kit 使用双目录系统. 有关目录如何工作的详细信息, 请参阅主 [扩展 README](README.md#extension-catalogs).
 
-**For extension publishing**: All community extensions should be added to `catalog.community.json`. Users browse this catalog and copy extensions they trust into their own `catalog.json`.
+**对于扩展发布**: 所有社区扩展应该添加到 `catalog.community.json`. 用户浏览此目录并将他们信任的扩展复制到自己的 `catalog.json` 中.
 
-### 1. Fork the spec-kit Repository
+### 1. Fork spec-kit 仓库
 
 ```bash
-# Fork on GitHub
+# 在 GitHub 上 Fork
 # https://github.com/github/spec-kit/fork
 
-# Clone your fork
+# 克隆你的 fork
 git clone https://github.com/YOUR-USERNAME/spec-kit.git
 cd spec-kit
 ```
 
-### 2. Add Extension to Community Catalog
+### 2. 将扩展添加到社区目录
 
-Edit `extensions/catalog.community.json` and add your extension:
+编辑 `extensions/catalog.community.json` 并添加你的扩展:
 
 ```json
 {
@@ -197,43 +197,43 @@ Edit `extensions/catalog.community.json` and add your extension:
 }
 ```
 
-**Important**:
+**重要**:
 
-- Set `verified: false` (maintainers will verify)
-- Set `downloads: 0` and `stars: 0` (auto-updated later)
-- Use current timestamp for `created_at` and `updated_at`
-- Update the top-level `updated_at` to current time
+- 设置 `verified: false`(维护者将验证)
+- 设置 `downloads: 0` 和 `stars: 0`(稍后自动更新)
+- 为 `created_at` 和 `updated_at` 使用当前时间戳
+- 将顶层 `updated_at` 更新为当前时间
 
-### 3. Update Extensions README
+### 3. 更新扩展 README
 
-Add your extension to the Available Extensions table in `extensions/README.md`:
+将你的扩展添加到 `extensions/README.md` 的可用扩展表中:
 
 ```markdown
 | Your Extension Name | Brief description of what it does | `<category>` | <effect> | [repo-name](https://github.com/your-org/spec-kit-your-extension) |
 ```
 
-**(Table) Category** — pick the one that best fits your extension:
+**(表)类别** — 选择最适合你扩展的一个:
 
-- `docs` — reads, validates, or generates spec artifacts
-- `code` — reviews, validates, or modifies source code
-- `process` — orchestrates workflow across phases
-- `integration` — syncs with external platforms
-- `visibility` — reports on project health or progress
+- `docs` — 读取, 验证或生成规范制品
+- `code` — 审查, 验证或修改源代码
+- `process` — 跨阶段编排工作流
+- `integration` — 与外部平台同步
+- `visibility` — 报告项目健康或进度
 
-**Effect** — choose one:
+**效果** — 选择一个:
 
-- Read-only — produces reports without modifying files
-- Read+Write — modifies files, creates artifacts, or updates specs
+- Read-only — 生成报告而不修改文件
+- Read+Write — 修改文件, 创建制品或更新规范
 
-Insert your extension in alphabetical order in the table.
+在表中按字母顺序插入你的扩展.
 
-### 4. Submit Pull Request
+### 4. 提交 Pull Request
 
 ```bash
-# Create a branch
+# 创建分支
 git checkout -b add-your-extension
 
-# Commit your changes
+# 提交更改
 git add extensions/catalog.community.json extensions/README.md
 git commit -m "Add your-extension to community catalog
 
@@ -243,14 +243,14 @@ git commit -m "Add your-extension to community catalog
 - Description: Brief description
 "
 
-# Push to your fork
+# 推送到你的 fork
 git push origin add-your-extension
 
-# Create Pull Request on GitHub
+# 在 GitHub 上创建 Pull Request
 # https://github.com/github/spec-kit/compare
 ```
 
-**Pull Request Template**:
+**Pull Request 模板**:
 
 ```markdown
 ## Extension Submission
@@ -265,15 +265,15 @@ git push origin add-your-extension
 Brief description of what your extension does.
 
 ### Checklist
-- [x] Valid extension.yml manifest
-- [x] README.md with installation and usage docs
-- [x] LICENSE file included
-- [x] GitHub release created (v1.0.0)
-- [x] Extension tested on real project
-- [x] All commands working
-- [x] No security vulnerabilities
-- [x] Added to extensions/catalog.community.json
-- [x] Added to extensions/README.md Available Extensions table
+- [x] 有效的 extension.yml 清单
+- [x] 带有安装和使用文档的 README.md
+- [x] 包含 LICENSE 文件
+- [x] 已创建 GitHub release (v1.0.0)
+- [x] 在真实项目上测试过扩展
+- [x] 所有命令正常工作
+- [x] 无安全漏洞
+- [x] 已添加到 extensions/catalog.community.json
+- [x] 已添加到 extensions/README.md 可用扩展表
 
 ### Testing
 Tested on:
@@ -286,86 +286,86 @@ Any additional context or notes for reviewers.
 
 ---
 
-## Verification Process
+## 验证流程
 
-### What Happens After Submission
+### 提交后会发生什么
 
-1. **Automated Checks** (if available):
-   - Manifest validation
-   - Download URL accessibility
-   - Repository existence
-   - License file presence
+1. **自动化检查**(如果可用):
+   - 清单验证
+   - 下载 URL 可访问性
+   - 仓库存在性
+   - 许可证文件存在性
 
-2. **Manual Review**:
-   - Code quality review
-   - Security audit
-   - Functionality testing
-   - Documentation review
+2. **手动审查**:
+   - 代码质量审查
+   - 安全审计
+   - 功能测试
+   - 文档审查
 
-3. **Verification**:
-   - If approved, `verified: true` is set
-   - Extension appears in `specify extension search --verified`
+3. **验证**:
+   - 如果批准, 设置 `verified: true`
+   - 扩展出现在 `specify-cn extension search --verified` 中
 
-### Verification Criteria
+### 验证标准
 
-To be verified, your extension must:
+要被验证, 你的扩展必须:
 
-✅ **Functionality**:
+✅ **功能性**:
 
-- Works as described in documentation
-- All commands execute without errors
-- No breaking changes to user workflows
+- 按文档描述工作
+- 所有命令执行无错误
+- 对用户工作流没有破坏性更改
 
-✅ **Security**:
+✅ **安全性**:
 
-- No known vulnerabilities
-- No malicious code
-- Safe handling of user data
-- Proper validation of inputs
+- 没有已知漏洞
+- 没有恶意代码
+- 安全处理用户数据
+- 正确验证输入
 
-✅ **Code Quality**:
+✅ **代码质量**:
 
-- Clean, readable code
-- Follows extension best practices
-- Proper error handling
-- Helpful error messages
+- 干净, 可读的代码
+- 遵循扩展最佳实践
+- 正确的错误处理
+- 有帮助的错误消息
 
-✅ **Documentation**:
+✅ **文档**:
 
-- Clear installation instructions
-- Usage examples
-- Troubleshooting section
-- Accurate description
+- 清晰的安装说明
+- 使用示例
+- 故障排除部分
+- 准确的描述
 
-✅ **Maintenance**:
+✅ **维护**:
 
-- Active repository
-- Responsive to issues
-- Regular updates
-- Semantic versioning followed
+- 活跃的仓库
+- 对 issue 响应及时
+- 定期更新
+- 遵循语义版本控制
 
-### Typical Review Timeline
+### 典型审查时间线
 
-- **Automated checks**: Immediate (if implemented)
-- **Manual review**: 3-7 business days
-- **Verification**: After successful review
+- **自动化检查**: 立即(如果已实现)
+- **手动审查**: 3-7 个工作日
+- **验证**: 成功审查后
 
 ---
 
-## Release Workflow
+## 发布工作流
 
-### Publishing New Versions
+### 发布新版本
 
-When releasing a new version:
+发布新版本时:
 
-1. **Update version** in `extension.yml`:
+1. **更新版本** 在 `extension.yml` 中:
 
    ```yaml
    extension:
-     version: "1.1.0"  # Updated version
+     version: "1.1.0"  # 更新的版本
    ```
 
-2. **Update CHANGELOG.md**:
+2. **更新 CHANGELOG.md**:
 
    ```markdown
    ## [1.1.0] - 2026-02-15
@@ -377,136 +377,136 @@ When releasing a new version:
    - Bug fix Y
    ```
 
-3. **Create GitHub release**:
+3. **创建 GitHub release**:
 
    ```bash
    git tag v1.1.0
    git push origin v1.1.0
-   # Create release on GitHub
+   # 在 GitHub 上创建 release
    ```
 
-4. **Update catalog**:
+4. **更新目录**:
 
    ```bash
-   # Fork spec-kit repo (or update existing fork)
+   # Fork spec-kit 仓库(或更新现有 fork)
    cd spec-kit
 
-   # Update extensions/catalog.json
-   jq '.extensions["your-extension"].version = "1.1.0"' extensions/catalog.json > tmp.json && mv tmp.json extensions/catalog.json
-   jq '.extensions["your-extension"].download_url = "https://github.com/your-org/spec-kit-your-extension/archive/refs/tags/v1.1.0.zip"' extensions/catalog.json > tmp.json && mv tmp.json extensions/catalog.json
-   jq '.extensions["your-extension"].updated_at = "2026-02-15T00:00:00Z"' extensions/catalog.json > tmp.json && mv tmp.json extensions/catalog.json
-   jq '.updated_at = "2026-02-15T00:00:00Z"' extensions/catalog.json > tmp.json && mv tmp.json extensions/catalog.json
+   # 更新 extensions/catalog.community.json
+   jq '.extensions["your-extension"].version = "1.1.0"' extensions/catalog.community.json > tmp.json && mv tmp.json extensions/catalog.community.json
+   jq '.extensions["your-extension"].download_url = "https://github.com/your-org/spec-kit-your-extension/archive/refs/tags/v1.1.0.zip"' extensions/catalog.community.json > tmp.json && mv tmp.json extensions/catalog.community.json
+   jq '.extensions["your-extension"].updated_at = "2026-02-15T00:00:00Z"' extensions/catalog.community.json > tmp.json && mv tmp.json extensions/catalog.community.json
+   jq '.updated_at = "2026-02-15T00:00:00Z"' extensions/catalog.community.json > tmp.json && mv tmp.json extensions/catalog.community.json
 
-   # Submit PR
+   # 提交 PR
    git checkout -b update-your-extension-v1.1.0
-   git add extensions/catalog.json
+   git add extensions/catalog.community.json
    git commit -m "Update your-extension to v1.1.0"
    git push origin update-your-extension-v1.1.0
    ```
 
-5. **Submit update PR** with changelog in description
+5. **提交更新 PR**, 在描述中包含变更日志
 
 ---
 
-## Best Practices
+## 最佳实践
 
-### Extension Design
+### 扩展设计
 
-1. **Single Responsibility**: Each extension should focus on one tool/integration
-2. **Clear Naming**: Use descriptive, unambiguous names
-3. **Minimal Dependencies**: Avoid unnecessary dependencies
-4. **Backward Compatibility**: Follow semantic versioning strictly
+1. **单一职责**: 每个扩展应该专注于一个工具/集成
+2. **清晰命名**: 使用描述性的, 无歧义的名称
+3. **最小依赖**: 避免不必要的依赖
+4. **向后兼容**: 严格遵循语义版本控制
 
-### Documentation
+### 文档
 
-1. **README.md Structure**:
-   - Overview and features
-   - Installation instructions
-   - Configuration guide
-   - Usage examples
-   - Troubleshooting
-   - Contributing guidelines
+1. **README.md 结构**:
+   - 概述和功能
+   - 安装说明
+   - 配置指南
+   - 使用示例
+   - 故障排除
+   - 贡献指南
 
-2. **Command Documentation**:
-   - Clear description
-   - Prerequisites listed
-   - Step-by-step instructions
-   - Error handling guidance
-   - Examples
+2. **命令文档**:
+   - 清晰的描述
+   - 列出先决条件
+   - 分步说明
+   - 错误处理指南
+   - 示例
 
-3. **Configuration**:
-   - Provide template file
-   - Document all options
-   - Include examples
-   - Explain defaults
+3. **配置**:
+   - 提供模板文件
+   - 记录所有选项
+   - 包含示例
+   - 解释默认值
 
-### Security
+### 安全
 
-1. **Input Validation**: Validate all user inputs
-2. **No Hardcoded Secrets**: Never include credentials
-3. **Safe Dependencies**: Only use trusted dependencies
-4. **Audit Regularly**: Check for vulnerabilities
+1. **输入验证**: 验证所有用户输入
+2. **无硬编码密钥**: 永远不要包含凭据
+3. **安全依赖**: 只使用受信任的依赖
+4. **定期审计**: 检查漏洞
 
-### Maintenance
+### 维护
 
-1. **Respond to Issues**: Address issues within 1-2 weeks
-2. **Regular Updates**: Keep dependencies updated
-3. **Changelog**: Maintain detailed changelog
-4. **Deprecation**: Give advance notice for breaking changes
+1. **响应 Issue**: 在 1-2 周内处理 issue
+2. **定期更新**: 保持依赖更新
+3. **变更日志**: 维护详细的变更日志
+4. **弃用**: 对破坏性更改提前通知
 
-### Community
+### 社区
 
-1. **License**: Use permissive open-source license (MIT, Apache 2.0)
-2. **Contributing**: Welcome contributions
-3. **Code of Conduct**: Be respectful and inclusive
-4. **Support**: Provide ways to get help (issues, discussions, email)
-
----
-
-## FAQ
-
-### Q: Can I publish private/proprietary extensions?
-
-A: The main catalog is for public extensions only. For private extensions:
-
-- Host your own catalog.json file
-- Users add your catalog: `specify extension add-catalog https://your-domain.com/catalog.json`
-- Not yet implemented - coming in Phase 4
-
-### Q: How long does verification take?
-
-A: Typically 3-7 business days for initial review. Updates to verified extensions are usually faster.
-
-### Q: What if my extension is rejected?
-
-A: You'll receive feedback on what needs to be fixed. Make the changes and resubmit.
-
-### Q: Can I update my extension anytime?
-
-A: Yes, submit a PR to update the catalog with your new version. Verified status may be re-evaluated for major changes.
-
-### Q: Do I need to be verified to be in the catalog?
-
-A: No, unverified extensions are still searchable. Verification just adds trust and visibility.
-
-### Q: Can extensions have paid features?
-
-A: Extensions should be free and open-source. Commercial support/services are allowed, but core functionality must be free.
+1. **许可证**: 使用宽松的开源许可证(MIT, Apache 2.0)
+2. **贡献**: 欢迎贡献
+3. **行为准则**: 保持尊重和包容
+4. **支持**: 提供获取帮助的方式(issue, 讨论, 邮件)
 
 ---
 
-## Support
+## 常见问题
 
-- **Catalog Issues**: <https://github.com/statsperform/spec-kit/issues>
-- **Extension Template**: <https://github.com/statsperform/spec-kit-extension-template> (coming soon)
-- **Development Guide**: See EXTENSION-DEVELOPMENT-GUIDE.md
-- **Community**: Discussions and Q&A
+### 问: 我可以发布私有/专有扩展吗?
+
+答: 主目录仅用于公共扩展. 对于私有扩展:
+
+- 托管你自己的 catalog.json 文件
+- 用户添加你的目录: `specify-cn extension add-catalog https://your-domain.com/catalog.json`
+- 尚未实现 — 将在第 4 阶段推出
+
+### 问: 验证需要多长时间?
+
+答: 初始审查通常需要 3-7 个工作日. 对已验证扩展的更新通常更快.
+
+### 问: 如果我的扩展被拒绝怎么办?
+
+答: 你将收到需要修复的反馈. 进行更改后重新提交.
+
+### 问: 我可以随时更新我的扩展吗?
+
+答: 可以, 提交 PR 以使用新版本更新目录. 对于重大更改可能会重新评估验证状态.
+
+### 问: 我需要被验证才能进入目录吗?
+
+答: 不需要, 未验证的扩展仍然可以搜索到. 验证只是增加信任和可见性.
+
+### 问: 扩展可以有付费功能吗?
+
+答: 扩展应该是免费和开源的. 商业支持/服务是允许的, 但核心功能必须是免费的.
 
 ---
 
-## Appendix: Catalog Schema
+## 支持
 
-### Complete Catalog Entry Schema
+- **目录问题**: <https://github.com/statsperform/spec-kit/issues>
+- **扩展模板**: <https://github.com/statsperform/spec-kit-extension-template> (即将推出)
+- **开发指南**: 参阅 EXTENSION-DEVELOPMENT-GUIDE.md
+- **社区**: 讨论和问答
+
+---
+
+## 附录: 目录 Schema
+
+### 完整目录条目 Schema
 
 ```json
 {
@@ -544,18 +544,18 @@ A: Extensions should be free and open-source. Commercial support/services are al
 }
 ```
 
-### Valid Tags
+### 有效标签
 
-Recommended tag categories:
+推荐的标签类别:
 
-- **Integration**: jira, linear, github, gitlab, azure-devops
-- **Category**: issue-tracking, vcs, ci-cd, documentation, testing
-- **Platform**: atlassian, microsoft, google
-- **Feature**: automation, reporting, deployment, monitoring
+- **集成**: jira, linear, github, gitlab, azure-devops
+- **类别**: issue-tracking, vcs, ci-cd, documentation, testing
+- **平台**: atlassian, microsoft, google
+- **功能**: automation, reporting, deployment, monitoring
 
-Use 2-5 tags that best describe your extension.
+使用 2-5 个最能描述你扩展的标签.
 
 ---
 
-*Last Updated: 2026-01-28*
-*Catalog Format Version: 1.0*
+*最后更新: 2026-01-28*
+*目录格式版本: 1.0*

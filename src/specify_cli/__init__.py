@@ -1980,7 +1980,7 @@ def init(
                     f"[cyan]{selected_ai}[/cyan] not found\n"
                     f"Install from: [cyan]{install_url}[/cyan]\n"
                     f"{agent_config['name']} is required to continue with this project type.\n\n"
-                    "Tip: Use [cyan]--ignore-agent-tools[/cyan] to skip this check",
+                    "提示: 使用 [cyan]--ignore-agent-tools[/cyan] 跳过此检查",
                     title="[red]Agent Detection Error[/red]",
                     border_style="red",
                     padding=(1, 2)
@@ -2346,7 +2346,7 @@ def init(
 def check():
     """Check that all required tools are installed."""
     show_banner()
-    console.print("[bold]Checking for installed tools...[/bold]\n")
+    console.print("[bold]正在检查已安装的工具...[/bold]\n")
 
     tracker = StepTracker("Check Available Tools")
 
@@ -2378,13 +2378,13 @@ def check():
 
     console.print(tracker.render())
 
-    console.print("\n[bold green]Specify CLI is ready to use![/bold green]")
+    console.print("\n[bold green]Specify CLI 已准备就绪![/bold green]")
 
     if not git_ok:
-        console.print("[dim]Tip: Install git for repository management[/dim]")
+        console.print("[dim]提示: 安装 git 以进行仓库管理[/dim]")
 
     if not any(agent_results.values()):
-        console.print("[dim]Tip: Install an AI assistant for the best experience[/dim]")
+        console.print("[dim]提示: 安装 AI 助手以获得最佳体验[/dim]")
 
 @app.command()
 def version():
@@ -3770,7 +3770,7 @@ def extension_search(
 
     except ExtensionError as e:
         console.print(f"\n[red]Error:[/red] {e}")
-        console.print("\nTip: The catalog may be temporarily unavailable. Try again later.")
+        console.print("\n提示: 目录可能暂时不可用, 请稍后重试.")
         raise typer.Exit(1)
 
 
@@ -4011,7 +4011,7 @@ def extension_update(
             console.print("[yellow]No extensions installed[/yellow]")
             raise typer.Exit(0)
 
-        console.print("🔄 Checking for updates...\n")
+        console.print("🔄 正在检查更新...\n")
 
         updates_available = []
 

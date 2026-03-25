@@ -1,9 +1,9 @@
 # 变更日志
 
-此扩展的所有显著更改都将记录在此文件中. 
+此扩展的所有显著更改都将记录在此文件中.
 
-格式基于 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), 
-本项目遵循 [语义版本控制](https://semver.org/spec/v2.0.0.html). 
+格式基于 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+本项目遵循 [语义版本控制](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
@@ -15,7 +15,7 @@
 
 ## [1.0.0] - YYYY-MM-DD
 
-### Added
+### 新增
 
 - 扩展初始发布
 - 命令: `/speckit.my-extension.example` - 示例命令功能

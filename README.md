@@ -9,9 +9,9 @@
 </p>
 
 <p align="center">
-    <a href="https://github.com/Linfee/spec-kit-cn/actions/workflows/release.yml"><img src="https://github.com/Linfee/spec-kit-cn/actions/workflows/release.yml/badge.svg" alt="Release"/></a>
-    <a href="https://github.com/Linfee/spec-kit-cn/stargazers"><img src="https://img.shields.io/github/stars/Linfee/spec-kit-cn?style=social" alt="GitHub stars"/></a>
-    <a href="https://github.com/Linfee/spec-kit-cn/blob/main/LICENSE"><img src="https://img.shields.io/github/license/Linfee/spec-kit-cn" alt="License"/></a>
+    <a href="https://github.com/linfee/spec-kit-cn/actions/workflows/release.yml"><img src="https://github.com/linfee/spec-kit-cn/actions/workflows/release.yml/badge.svg" alt="Release"/></a>
+    <a href="https://github.com/linfee/spec-kit-cn/stargazers"><img src="https://img.shields.io/github/stars/linfee/spec-kit-cn?style=social" alt="GitHub stars"/></a>
+    <a href="https://github.com/linfee/spec-kit-cn/blob/main/LICENSE"><img src="https://img.shields.io/github/license/linfee/spec-kit-cn" alt="License"/></a>
     <a href="https://linfee.github.io/spec-kit-cn/"><img src="https://img.shields.io/badge/docs-GitHub_Pages-blue" alt="Documentation"/></a>
 </p>
 
@@ -189,6 +189,22 @@ uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <PROJEC
 
 [![Spec Kit 视频标题](/media/spec-kit-video-header.jpg)](https://www.youtube.com/watch?v=a9eR1xsfvHg&pp=0gcJCckJAYcqIYzv)
 
+## 🚶 社区演练
+
+通过这些社区贡献的演练, 在不同场景中观看规范驱动开发的实际操作:
+
+- **[全新 .NET CLI 工具](https://github.com/mnriem/spec-kit-dotnet-cli-demo)** — 从空白目录构建时区工具作为 .NET 单一二进制 CLI 工具, 涵盖完整的 spec-kit 工作流: constitution, specify, plan, tasks, 以及使用 GitHub Copilot 代理的多轮实现。
+
+- **[全新 Spring Boot + React 平台](https://github.com/mnriem/spec-kit-spring-react-demo)** — 使用 Spring Boot, 嵌入式 React, PostgreSQL 和 Docker Compose 从零构建 LLM 性能分析平台(REST API, 图表, 迭代跟踪), 包含 clarify 步骤和跨制品一致性分析。
+
+- **[存量 ASP.NET CMS 扩展](https://github.com/mnriem/spec-kit-aspnet-brownfield-demo)** — 扩展现有的开源 .NET CMS(CarrotCakeCMS-Core, 约 307,000 行 C#, Razor, SQL, JavaScript 和配置文件), 添加两个新功能 — 跨平台 Docker Compose 基础设施和令牌认证的无头 REST API — 展示 spec-kit 如何在没有预先规范或章程的情况下融入现有代码库。
+
+- **[存量 Java 运行时扩展](https://github.com/mnriem/spec-kit-java-brownfield-demo)** — 扩展现有的开源 Jakarta EE 运行时(Piranha, 约 420,000 行 Java, XML, JSP, HTML 和配置文件, 跨 180 个 Maven 模块), 添加密码保护的服务器管理控制台, 展示在没有预先规范或章程的大型多模块 Java 项目上使用 spec-kit。
+
+- **[存量 Go / React 仪表板演示](https://github.com/mnriem/spec-kit-go-brownfield-demo)** — 展示完全从**终端使用 GitHub Copilot CLI** 驱动 spec-kit。扩展 NASA 的开源 Hermes 地面支持系统(Go), 添加轻量级的基于 React 的 Web 遥测仪表板, 展示完整的 constitution → specify → plan → tasks → implement 工作流可以从终端运行。
+
+- **[使用自定义预设的全新 Spring Boot MVC](https://github.com/mnriem/spec-kit-pirate-speak-preset-demo)** — 使用自定义海盗语言预设从零构建 Spring Boot MVC 应用程序, 展示预设如何重塑整个 spec-kit 体验: 规范变成"航海宣言", 计划变成"作战计划", 任务变成"船员分配" — 全部以完整的海盗方言生成, 而无需更改任何工具。
+
 ## 🤖 支持的 AI 代理
 
 | 代理                                                                                 | 支持 | 说明                                                                                                                                     |
@@ -335,6 +351,68 @@ specify-cn check
 | 变量              | 描述                                                                                                                                                                                           |
 | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SPECIFY_FEATURE` | 为非 Git 仓库覆盖功能检测. 设置为功能目录名称(例如, `001-photo-albums`)以在不使用 Git 分支的情况下处理特定功能. <br/>\*\*必须在你正在使用的代理上下文中设置, 然后才能使用 `/speckit.plan` 或后续命令.  |
+
+## 🧩 打造专属 Spec Kit: 扩展与预设
+
+Spec Kit 可以通过两个互补的系统来满足你的需求 — **扩展** 和 **预设** — 以及项目本地覆盖用于一次性调整:
+
+```mermaid
+block-beta
+    columns 1
+    overrides["⬆ 最高优先级\n项目本地覆盖\n.specify/templates/overrides/"]
+    presets["预设 — 定制核心和扩展\n.specify/presets/<preset-id>/templates/"]
+    extensions["扩展 — 添加新功能\n.specify/extensions/<ext-id>/templates/"]
+    core["Spec Kit 核心 — 内置 SDD 命令和模板\n.specify/templates/\n⬇ 最低优先级"]
+
+    style overrides fill:transparent,stroke:#999
+    style presets fill:transparent,stroke:#4a9eda
+    style extensions fill:transparent,stroke:#4a9e4a
+    style core fill:transparent,stroke:#e6a817
+```
+
+**模板**在**运行时**解析 — Spec Kit 从上到下遍历堆栈并使用第一个匹配项。项目本地覆盖(`.specify/templates/overrides/`)让你可以为单个项目进行一次性调整, 而无需创建完整的预设。**命令**在**安装时**应用 — 当你运行 `specify extension add` 或 `specify preset add` 时, 命令文件会被写入代理目录(例如 `.claude/commands/`)。如果多个预设或扩展提供相同的命令, 则最高优先级的版本获胜。删除时, 下一个最高优先级的版本会自动恢复。如果没有覆盖或自定义, Spec Kit 使用其核心默认值。
+
+### 扩展 — 添加新功能
+
+当你需要超出 Spec Kit 核心功能时使用**扩展**。扩展引入新的命令和模板 — 例如, 添加内置 SDD 命令未涵盖的领域特定工作流, 与外部工具集成, 或添加全新的开发阶段。它们扩展*Spec Kit 能做什么*。
+
+```bash
+# 搜索可用扩展
+specify-cn extension search
+
+# 安装扩展
+specify-cn extension add <extension-name>
+```
+
+例如, 扩展可以添加 Jira 集成, 实施后代码审查, V-Model 测试可追溯性, 或项目健康诊断。
+
+请参阅 [扩展 README](./extensions/README.md) 获取完整指南, 完整的社区目录, 以及如何构建和发布你自己的扩展。
+
+### 预设 — 定制现有工作流
+
+当你想要更改*Spec Kit 如何工作*而不添加新功能时使用**预设**。预设覆盖核心和已安装扩展附带的模板和命令 — 例如, 强制执行符合合规要求的规范格式, 使用领域特定术语, 或将组织标准应用于计划和任务。它们定制 Spec Kit 及其扩展产生的制品和指令。
+
+```bash
+# 搜索可用预设
+specify-cn preset search
+
+# 安装预设
+specify-cn preset add <preset-name>
+```
+
+例如, 预设可以重构规范模板以要求法规可追溯性, 调整工作流以适应你使用的方法(例如, 敏捷, 看板, 瀑布, 待完成工作, 或领域驱动设计), 向计划添加强制性安全审查关卡, 强制测试优先的任务排序, 或将整个工作流本地化为不同的语言。[海盗语言演示](https://github.com/mnriem/spec-kit-pirate-speak-preset-demo)展示了定制可以有多深入。多个预设可以按优先级顺序堆叠。
+
+请参阅 [预设 README](./presets/README.md) 获取完整指南, 包括解析顺序, 优先级, 以及如何创建你自己的预设。
+
+### 何时使用哪个
+
+| 目标 | 使用 |
+| --- | --- |
+| 添加全新的命令或工作流 | 扩展 |
+| 定制规范, 计划或任务的格式 | 预设 |
+| 与外部工具或服务集成 | 扩展 |
+| 强制执行组织或法规标准 | 预设 |
+| 发布可重用的领域特定模板 | 两者皆可 — 预设用于模板覆盖, 扩展用于与新命令捆绑的模板 |
 
 ## 📚 核心理念
 
@@ -693,7 +771,7 @@ rm gcm-linux_amd64.2.6.1.deb
 
 ## 💬 支持
 
-如需支持, 请打开[GitHub issue](https://github.com/Linfee/spec-kit-cn/issues/new). 我们欢迎错误报告, 功能请求和关于使用规范驱动开发的问题.
+如需支持, 请打开[GitHub issue](https://github.com/linfee/spec-kit-cn/issues/new). 我们欢迎错误报告, 功能请求和关于使用规范驱动开发的问题.
 
 ## 🙏 致谢
 

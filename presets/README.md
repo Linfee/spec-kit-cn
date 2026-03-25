@@ -1,117 +1,117 @@
-# Presets
+# Presets(预设)
 
-Presets are stackable, priority-ordered collections of template and command overrides for Spec Kit. They let you customize both the artifacts produced by the Spec-Driven Development workflow (specs, plans, tasks, checklists, constitutions) and the commands that guide the LLM in creating them — without forking or modifying core files.
+Presets 是 Spec Kit 的可堆叠, 按优先级排序的模板和命令覆盖集合. 它们让你可以自定义规范驱动开发工作流产生的制品(specs, plans, tasks, checklists, constitutions)以及指导 LLM 创建它们的命令 — 而无需分叉或修改核心文件.
 
-## How It Works
+## 工作原理
 
-When Spec Kit needs a template (e.g. `spec-template`), it walks a resolution stack:
+当 Spec Kit 需要模板(例如 `spec-template`)时, 它会遍历一个解析栈:
 
-1. `.specify/templates/overrides/` — project-local one-off overrides
-2. `.specify/presets/<preset-id>/templates/` — installed presets (sorted by priority)
-3. `.specify/extensions/<ext-id>/templates/` — extension-provided templates
-4. `.specify/templates/` — core templates shipped with Spec Kit
+1. `.specify/templates/overrides/` — 项目本地的一次性覆盖
+2. `.specify/presets/<preset-id>/templates/` — 已安装的 presets(按优先级排序)
+3. `.specify/extensions/<ext-id>/templates/` — 扩展提供的模板
+4. `.specify/templates/` — Spec Kit 附带的核心模板
 
-If no preset is installed, core templates are used — exactly the same behavior as before presets existed.
+如果没有安装 preset, 则使用核心模板 — 与 presets 存在之前的行为完全相同.
 
-Template resolution happens **at runtime** — although preset files are copied into `.specify/presets/<id>/` during installation, Spec Kit walks the resolution stack on every template lookup rather than merging templates into a single location.
+模板解析发生在**运行时** — 尽管 preset 文件在安装期间被复制到 `.specify/presets/<id>/` 中, Spec Kit 在每次模板查找时遍历解析栈, 而不是将模板合并到单个位置.
 
-For detailed resolution and command registration flows, see [ARCHITECTURE.md](ARCHITECTURE.md).
+有关详细的解析和命令注册流程, 请参阅 [ARCHITECTURE.md](ARCHITECTURE.md).
 
-## Command Overrides
+## 命令覆盖
 
-Presets can also override the commands that guide the SDD workflow. Templates define *what* gets produced (specs, plans, constitutions); commands define *how* the LLM produces them (the step-by-step instructions).
+Presets 还可以覆盖指导 SDD 工作流的命令. 模板定义*生产什么*(specs, plans, constitutions); 命令定义 LLM *如何*生产它们(分步说明).
 
-Unlike templates, command overrides are applied **at install time**. When a preset includes `type: "command"` entries, the commands are registered into all detected agent directories (`.claude/commands/`, `.gemini/commands/`, etc.) in the correct format (Markdown or TOML with appropriate argument placeholders). When the preset is removed, the registered commands are cleaned up.
+与模板不同, 命令覆盖在**安装时**应用. 当 preset 包含 `type: "command"` 条目时, 命令会以正确的格式(带有适当参数占位符的 Markdown 或 TOML)注册到所有检测到的代理目录(`.claude/commands/`, `.gemini/commands/` 等)中. 当 preset 被移除时, 已注册的命令会被清理.
 
-## Quick Start
-
-```bash
-# Search available presets
-specify preset search
-
-# Install a preset from the catalog
-specify preset add healthcare-compliance
-
-# Install from a local directory (for development)
-specify preset add --dev ./my-preset
-
-# Install with a specific priority (lower = higher precedence)
-specify preset add healthcare-compliance --priority 5
-
-# List installed presets
-specify preset list
-
-# See which template a name resolves to
-specify preset resolve spec-template
-
-# Get detailed info about a preset
-specify preset info healthcare-compliance
-
-# Remove a preset
-specify preset remove healthcare-compliance
-```
-
-## Stacking Presets
-
-Multiple presets can be installed simultaneously. The `--priority` flag controls which one wins when two presets provide the same template (lower number = higher precedence):
+## 快速开始
 
 ```bash
-specify preset add enterprise-safe --priority 10      # base layer
-specify preset add healthcare-compliance --priority 5  # overrides enterprise-safe
-specify preset add pm-workflow --priority 1            # overrides everything
+# 搜索可用的 presets
+specify-cn preset search
+
+# 从目录安装 preset
+specify-cn preset add healthcare-compliance
+
+# 从本地目录安装(用于开发)
+specify-cn preset add --dev ./my-preset
+
+# 使用特定优先级安装(数字越小 = 优先级越高)
+specify-cn preset add healthcare-compliance --priority 5
+
+# 列出已安装的 presets
+specify-cn preset list
+
+# 查看模板名称解析到哪个模板
+specify-cn preset resolve spec-template
+
+# 获取 preset 的详细信息
+specify-cn preset info healthcare-compliance
+
+# 移除 preset
+specify-cn preset remove healthcare-compliance
 ```
 
-Presets **override**, they don't merge. If two presets both provide `spec-template`, the one with the lowest priority number wins entirely.
+## 堆叠 Presets
 
-## Catalog Management
-
-Presets are discovered through catalogs. By default, Spec Kit uses the official and community catalogs:
+多个 presets 可以同时安装. `--priority` 标志控制当两个 presets 提供相同模板时哪个获胜(数字越小 = 优先级越高):
 
 ```bash
-# List active catalogs
-specify preset catalog list
-
-# Add a custom catalog
-specify preset catalog add https://example.com/catalog.json --name my-org --install-allowed
-
-# Remove a catalog
-specify preset catalog remove my-org
+specify-cn preset add enterprise-safe --priority 10      # 基础层
+specify-cn preset add healthcare-compliance --priority 5  # 覆盖 enterprise-safe
+specify-cn preset add pm-workflow --priority 1            # 覆盖所有
 ```
 
-## Creating a Preset
+Presets **覆盖**, 它们不合并. 如果两个 presets 都提供 `spec-template`, 优先级数字最低的那个完全获胜.
 
-See [scaffold/](scaffold/) for a scaffold you can copy to create your own preset.
+## 目录管理
 
-1. Copy `scaffold/` to a new directory
-2. Edit `preset.yml` with your preset's metadata
-3. Add or replace templates in `templates/`
-4. Test locally with `specify preset add --dev .`
-5. Verify with `specify preset resolve spec-template`
+Presets 通过目录发现. 默认情况下, Spec Kit 使用官方和社区目录:
 
-## Environment Variables
+```bash
+# 列出活跃的目录
+specify-cn preset catalog list
 
-| Variable | Description |
-|----------|-------------|
-| `SPECKIT_PRESET_CATALOG_URL` | Override the catalog URL (replaces all defaults) |
+# 添加自定义目录
+specify-cn preset catalog add https://example.com/catalog.json --name my-org --install-allowed
 
-## Configuration Files
+# 移除目录
+specify-cn preset catalog remove my-org
+```
 
-| File | Scope | Description |
-|------|-------|-------------|
-| `.specify/preset-catalogs.yml` | Project | Custom catalog stack for this project |
-| `~/.specify/preset-catalogs.yml` | User | Custom catalog stack for all projects |
+## 创建 Preset
 
-## Future Considerations
+请参阅 [scaffold/](scaffold/) 获取可用于创建自己 preset 的脚手架.
 
-The following enhancements are under consideration for future releases:
+1. 将 `scaffold/` 复制到新目录
+2. 使用 preset 的元数据编辑 `preset.yml`
+3. 在 `templates/` 中添加或替换模板
+4. 使用 `specify-cn preset add --dev .` 在本地测试
+5. 使用 `specify-cn preset resolve spec-template` 验证
 
-- **Composition strategies** — Allow presets to declare a `strategy` per template instead of the default `replace`:
+## 环境变量
 
-  | Type | `replace` | `prepend` | `append` | `wrap` |
+| 变量 | 描述 |
+|------|------|
+| `SPECKIT_PRESET_CATALOG_URL` | 覆盖目录 URL(替换所有默认值) |
+
+## 配置文件
+
+| 文件 | 范围 | 描述 |
+|------|------|------|
+| `.specify/preset-catalogs.yml` | 项目 | 此项目的自定义目录栈 |
+| `~/.specify/preset-catalogs.yml` | 用户 | 所有项目的自定义目录栈 |
+
+## 未来考虑
+
+以下增强功能正在考虑用于未来版本:
+
+- **组合策略** — 允许 presets 为每个模板声明 `strategy` 而不是默认的 `replace`:
+
+  | 类型 | `replace` | `prepend` | `append` | `wrap` |
   |------|-----------|-----------|----------|--------|
-  | **template** | ✓ (default) | ✓ | ✓ | ✓ |
-  | **command** | ✓ (default) | ✓ | ✓ | ✓ |
-  | **script** | ✓ (default) | — | — | ✓ |
+  | **template** | ✓ (默认) | ✓ | ✓ | ✓ |
+  | **command** | ✓ (默认) | ✓ | ✓ | ✓ |
+  | **script** | ✓ (默认) | — | — | ✓ |
 
-  For artifacts and commands (which are LLM directives), `wrap` would inject preset content before and after the core template using a `{CORE_TEMPLATE}` placeholder. For scripts, `wrap` would run custom logic before/after the core script via a `$CORE_SCRIPT` variable.
-- **Script overrides** — Enable presets to provide alternative versions of core scripts (e.g. `create-new-feature.sh`) for workflow customization. A `strategy: "wrap"` option could allow presets to run custom logic before/after the core script without fully replacing it.
+  对于制品和命令(它们是 LLM 指令), `wrap` 将使用 `{CORE_TEMPLATE}` 占位符在核心模板之前和之后注入 preset 内容. 对于脚本, `wrap` 将通过 `$CORE_SCRIPT` 变量在核心脚本之前/之后运行自定义逻辑.
+- **脚本覆盖** — 使 presets 能够提供核心脚本的替代版本(例如 `create-new-feature.sh`)以进行工作流自定义. `strategy: "wrap"` 选项可以允许 presets 在核心脚本之前/之后运行自定义逻辑, 而无需完全替换它.

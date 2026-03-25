@@ -1,20 +1,20 @@
 ---
-description: "Override of the myext extension's myextcmd command"
+description: "覆盖 myext 扩展的 myextcmd 命令"
 ---
 
-<!-- Preset override for speckit.myext.myextcmd -->
+<!-- 预设对 speckit.myext.myextcmd 的覆盖 -->
 
-You are following a customized version of the myext extension's myextcmd command.
+你正在使用 myext 扩展 `myextcmd` 命令的自定义版本。
 
-When executing this command:
+执行此命令时：
 
-1. Read the user's input from $ARGUMENTS
-2. Follow the standard myextcmd workflow
-3. Additionally, apply the following customizations from this preset:
-   - Add compliance checks before proceeding
-   - Include audit trail entries in the output
+1. 从 `$ARGUMENTS` 读取用户输入
+2. 按照标准 `myextcmd` 工作流执行
+3. 另外应用此预设提供的以下自定义：
+   - 在继续前添加合规性检查
+   - 在输出中包含审计追踪记录
 
-> CUSTOMIZE: Replace the instructions above with your own.
-> This file overrides the command that the "myext" extension provides.
-> When this preset is installed, all agents (Claude, Gemini, Copilot, etc.)
-> will use this version instead of the extension's original.
+> 自定义：将上面的说明替换为你自己的内容。
+> 此文件覆盖 `myext` 扩展提供的命令。
+> 安装此预设后，所有代理（Claude、Gemini、Copilot 等）
+> 都会使用这个版本，而不是扩展原始版本。

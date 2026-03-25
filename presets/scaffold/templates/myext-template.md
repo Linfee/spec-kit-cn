@@ -1,24 +1,24 @@
-# MyExt Report
+# MyExt 报告
 
-> This template overrides the one provided by the "myext" extension.
-> Customize it to match your needs.
+> 此模板覆盖 `myext` 扩展提供的模板。
+> 请按你的需要进行自定义。
 
-## Summary
+## 摘要
 
-Brief summary of the report.
+报告的简要摘要。
 
-## Details
+## 详情
 
-- Detail 1
-- Detail 2
+- 详情 1
+- 详情 2
 
-## Actions
+## 操作项
 
-- [ ] Action 1
-- [ ] Action 2
+- [ ] 操作项 1
+- [ ] 操作项 2
 
 <!--
-  CUSTOMIZE: This template takes priority over the myext extension's
-  version of myext-template. The extension's original is still available
-  if you remove this preset.
+  自定义：此模板优先于 myext 扩展提供的
+  myext-template 版本。如果移除此预设，
+  你仍可使用扩展原始版本。
 -->

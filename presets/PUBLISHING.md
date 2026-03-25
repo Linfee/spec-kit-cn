@@ -1,73 +1,73 @@
-# Preset Publishing Guide
+# Preset 发布指南
 
-This guide explains how to publish your preset to the Spec Kit preset catalog, making it discoverable by `specify preset search`.
+本指南解释如何将你的 preset 发布到 Spec Kit preset 目录, 使其可以通过 `specify-cn preset search` 被发现.
 
-## Table of Contents
+## 目录
 
-1. [Prerequisites](#prerequisites)
-2. [Prepare Your Preset](#prepare-your-preset)
-3. [Submit to Catalog](#submit-to-catalog)
-4. [Verification Process](#verification-process)
-5. [Release Workflow](#release-workflow)
-6. [Best Practices](#best-practices)
-
----
-
-## Prerequisites
-
-Before publishing a preset, ensure you have:
-
-1. **Valid Preset**: A working preset with a valid `preset.yml` manifest
-2. **Git Repository**: Preset hosted on GitHub (or other public git hosting)
-3. **Documentation**: README.md with description and usage instructions
-4. **License**: Open source license file (MIT, Apache 2.0, etc.)
-5. **Versioning**: Semantic versioning (e.g., 1.0.0)
-6. **Testing**: Preset tested on real projects with `specify preset add --dev`
+1. [先决条件](#先决条件)
+2. [准备你的 Preset](#准备你的-preset)
+3. [提交到目录](#提交到目录)
+4. [验证流程](#验证流程)
+5. [发布工作流](#发布工作流)
+6. [最佳实践](#最佳实践)
 
 ---
 
-## Prepare Your Preset
+## 先决条件
 
-### 1. Preset Structure
+在发布 preset 之前, 确保你有:
 
-Ensure your preset follows the standard structure:
+1. **有效的 Preset**: 带有有效 `preset.yml` 清单的工作 preset
+2. **Git 仓库**: Preset 托管在 GitHub(或其他公共 git 托管平台)
+3. **文档**: 带有描述和使用说明的 README.md
+4. **许可证**: 开源许可证文件(MIT, Apache 2.0 等)
+5. **版本控制**: 语义版本控制(例如 1.0.0)
+6. **测试**: 使用 `specify-cn preset add --dev` 在真实项目上测试过的 preset
+
+---
+
+## 准备你的 Preset
+
+### 1. Preset 结构
+
+确保你的 preset 遵循标准结构:
 
 ```text
 your-preset/
-├── preset.yml                 # Required: Preset manifest
-├── README.md                  # Required: Documentation
-├── LICENSE                    # Required: License file
-├── CHANGELOG.md               # Recommended: Version history
+├── preset.yml                 # 必需: Preset 清单
+├── README.md                  # 必需: 文档
+├── LICENSE                    # 必需: 许可证文件
+├── CHANGELOG.md               # 推荐: 版本历史
 │
-├── templates/                 # Template overrides
+├── templates/                 # 模板覆盖
 │   ├── spec-template.md
 │   ├── plan-template.md
 │   └── ...
 │
-└── commands/                  # Command overrides (optional)
+└── commands/                  # 命令覆盖(可选)
     └── speckit.specify.md
 ```
 
-Start from the [scaffold](scaffold/) if you're creating a new preset.
+如果你正在创建新 preset, 请从 [scaffold](scaffold/) 开始.
 
-### 2. preset.yml Validation
+### 2. preset.yml 验证
 
-Verify your manifest is valid:
+验证你的清单是否有效:
 
 ```yaml
 schema_version: "1.0"
 
 preset:
-  id: "your-preset"               # Unique lowercase-hyphenated ID
-  name: "Your Preset Name"        # Human-readable name
-  version: "1.0.0"                # Semantic version
+  id: "your-preset"               # 唯一的小写连字符 ID
+  name: "Your Preset Name"        # 人类可读名称
+  version: "1.0.0"                # 语义版本
   description: "Brief description (one sentence)"
   author: "Your Name or Organization"
   repository: "https://github.com/your-org/spec-kit-preset-your-preset"
   license: "MIT"
 
 requires:
-  speckit_version: ">=0.1.0"      # Required spec-kit version
+  speckit_version: ">=0.1.0"      # 需要的 spec-kit 版本
 
 provides:
   templates:
@@ -77,101 +77,101 @@ provides:
       description: "Custom spec template"
       replaces: "spec-template"
 
-tags:                              # 2-5 relevant tags
+tags:                              # 2-5 个相关标签
   - "category"
   - "workflow"
 ```
 
-**Validation Checklist**:
+**验证清单**:
 
-- ✅ `id` is lowercase with hyphens only (no underscores, spaces, or special characters)
-- ✅ `version` follows semantic versioning (X.Y.Z)
-- ✅ `description` is concise (under 200 characters)
-- ✅ `repository` URL is valid and public
-- ✅ All template and command files exist in the preset directory
-- ✅ Template names are lowercase with hyphens only
-- ✅ Command names use dot notation (e.g. `speckit.specify`)
-- ✅ Tags are lowercase and descriptive
+- ✅ `id` 只有小写字母和连字符(没有下划线, 空格或特殊字符)
+- ✅ `version` 遵循语义版本控制(X.Y.Z)
+- ✅ `description` 简洁(200 字符以内)
+- ✅ `repository` URL 有效且公开
+- ✅ 所有模板和命令文件存在于 preset 目录中
+- ✅ 模板名称只有小写字母和连字符
+- ✅ 命令名称使用点表示法(例如 `speckit.specify`)
+- ✅ 标签是小写且描述性的
 
-### 3. Test Locally
+### 3. 本地测试
 
 ```bash
-# Install from local directory
-specify preset add --dev /path/to/your-preset
+# 从本地目录安装
+specify-cn preset add --dev /path/to/your-preset
 
-# Verify templates resolve from your preset
-specify preset resolve spec-template
+# 验证模板从你的 preset 解析
+specify-cn preset resolve spec-template
 
-# Verify preset info
-specify preset info your-preset
+# 验证 preset 信息
+specify-cn preset info your-preset
 
-# List installed presets
-specify preset list
+# 列出已安装的 presets
+specify-cn preset list
 
-# Remove when done testing
-specify preset remove your-preset
+# 测试完成后移除
+specify-cn preset remove your-preset
 ```
 
-If your preset includes command overrides, verify they appear in the agent directories:
+如果你的 preset 包含命令覆盖, 验证它们出现在代理目录中:
 
 ```bash
-# Check Claude commands (if using Claude)
+# 检查 Claude 命令(如果使用 Claude)
 ls .claude/commands/speckit.*.md
 
-# Check Copilot commands (if using Copilot)
+# 检查 Copilot 命令(如果使用 Copilot)
 ls .github/agents/speckit.*.agent.md
 
-# Check Gemini commands (if using Gemini)
+# 检查 Gemini 命令(如果使用 Gemini)
 ls .gemini/commands/speckit.*.toml
 ```
 
-### 4. Create GitHub Release
+### 4. 创建 GitHub Release
 
-Create a GitHub release for your preset version:
+为你的 preset 版本创建 GitHub release:
 
 ```bash
-# Tag the release
+# 标记 release
 git tag v1.0.0
 git push origin v1.0.0
 ```
 
-The release archive URL will be:
+Release 归档 URL 将是:
 
 ```text
 https://github.com/your-org/spec-kit-preset-your-preset/archive/refs/tags/v1.0.0.zip
 ```
 
-### 5. Test Installation from Archive
+### 5. 从归档测试安装
 
 ```bash
-specify preset add --from https://github.com/your-org/spec-kit-preset-your-preset/archive/refs/tags/v1.0.0.zip
+specify-cn preset add --from https://github.com/your-org/spec-kit-preset-your-preset/archive/refs/tags/v1.0.0.zip
 ```
 
 ---
 
-## Submit to Catalog
+## 提交到目录
 
-### Understanding the Catalogs
+### 理解目录
 
-Spec Kit uses a dual-catalog system:
+Spec Kit 使用双目录系统:
 
-- **`catalog.json`** — Official, verified presets (install allowed by default)
-- **`catalog.community.json`** — Community-contributed presets (discovery only by default)
+- **`catalog.json`** — 官方, 已验证的 presets(默认允许安装)
+- **`catalog.community.json`** — 社区贡献的 presets(默认仅发现)
 
-All community presets should be submitted to `catalog.community.json`.
+所有社区 presets 应该提交到 `catalog.community.json`.
 
-### 1. Fork the spec-kit Repository
+### 1. Fork spec-kit 仓库
 
 ```bash
 git clone https://github.com/YOUR-USERNAME/spec-kit.git
 cd spec-kit
 ```
 
-### 2. Add Preset to Community Catalog
+### 2. 将 Preset 添加到社区目录
 
-Edit `presets/catalog.community.json` and add your preset.
+编辑 `presets/catalog.community.json` 并添加你的 preset.
 
-> **⚠️ Entries must be sorted alphabetically by preset ID.** Insert your preset in the correct position within the `"presets"` object.
+> **⚠️ 条目必须按 preset ID 字母顺序排序.** 在 `"presets"` 对象中将你的 preset 插入到正确位置.
 
 ```json
 {
@@ -205,7 +205,7 @@ Edit `presets/catalog.community.json` and add your preset.
 }
 ```
 
-### 3. Submit Pull Request
+### 3. 提交 Pull Request
 
 ```bash
 git checkout -b add-your-preset
@@ -220,7 +220,7 @@ git commit -m "Add your-preset to community catalog
 git push origin add-your-preset
 ```
 
-**Pull Request Checklist**:
+**Pull Request 清单**:
 
 ```markdown
 ## Preset Submission
@@ -231,65 +231,65 @@ git push origin add-your-preset
 **Repository**: https://github.com/your-org/spec-kit-preset-your-preset
 
 ### Checklist
-- [ ] Valid preset.yml manifest
-- [ ] README.md with description and usage
-- [ ] LICENSE file included
-- [ ] GitHub release created
-- [ ] Preset tested with `specify preset add --dev`
-- [ ] Templates resolve correctly (`specify preset resolve`)
-- [ ] Commands register to agent directories (if applicable)
-- [ ] Commands match template sections (command + template are coherent)
-- [ ] Added to presets/catalog.community.json
+- [ ] 有效的 preset.yml 清单
+- [ ] 带有描述和用法的 README.md
+- [ ] 包含 LICENSE 文件
+- [ ] 已创建 GitHub release
+- [ ] 使用 `specify-cn preset add --dev` 测试过 preset
+- [ ] 模板正确解析(`specify-cn preset resolve`)
+- [ ] 命令注册到代理目录(如适用)
+- [ ] 命令与模板部分匹配(命令 + 模板一致)
+- [ ] 已添加到 presets/catalog.community.json
 ```
 
 ---
 
-## Verification Process
+## 验证流程
 
-After submission, maintainers will review:
+提交后, 维护者将审查:
 
-1. **Manifest validation** — valid `preset.yml`, all files exist
-2. **Template quality** — templates are useful and well-structured
-3. **Command coherence** — commands reference sections that exist in templates
-4. **Security** — no malicious content, safe file operations
-5. **Documentation** — clear README explaining what the preset does
+1. **清单验证** — 有效的 `preset.yml`, 所有文件存在
+2. **模板质量** — 模板有用且结构良好
+3. **命令一致性** — 命令引用模板中存在的部分
+4. **安全性** — 无恶意内容, 安全的文件操作
+5. **文档** — 清晰的 README 解释 preset 的作用
 
-Once verified, `verified: true` is set and the preset appears in `specify preset search`.
-
----
-
-## Release Workflow
-
-When releasing a new version:
-
-1. Update `version` in `preset.yml`
-2. Update CHANGELOG.md
-3. Tag and push: `git tag v1.1.0 && git push origin v1.1.0`
-4. Submit PR to update `version` and `download_url` in `presets/catalog.community.json`
+一旦验证通过, 会设置 `verified: true`, preset 会出现在 `specify-cn preset search` 中.
 
 ---
 
-## Best Practices
+## 发布工作流
 
-### Template Design
+发布新版本时:
 
-- **Keep sections clear** — use headings and placeholder text the LLM can replace
-- **Match commands to templates** — if your preset overrides a command, make sure it references the sections in your template
-- **Document customization points** — use HTML comments to guide users on what to change
+1. 更新 `preset.yml` 中的 `version`
+2. 更新 CHANGELOG.md
+3. 标记并推送: `git tag v1.1.0 && git push origin v1.1.0`
+4. 提交 PR 以更新 `presets/catalog.community.json` 中的 `version` 和 `download_url`
 
-### Naming
+---
 
-- Preset IDs should be descriptive: `healthcare-compliance`, `enterprise-safe`, `startup-lean`
-- Avoid generic names: `my-preset`, `custom`, `test`
+## 最佳实践
 
-### Stacking
+### 模板设计
 
-- Design presets to work well when stacked with others
-- Only override templates you need to change
-- Document which templates and commands your preset modifies
+- **保持部分清晰** — 使用标题和 LLM 可以替换的占位符文本
+- **使命令与模板匹配** — 如果你的 preset 覆盖命令, 确保它引用模板中的部分
+- **记录自定义点** — 使用 HTML 注释指导用户更改什么
 
-### Command Overrides
+### 命名
 
-- Only override commands when the workflow needs to change, not just the output format
-- If you only need different template sections, a template override is sufficient
-- Test command overrides with multiple agents (Claude, Gemini, Copilot)
+- Preset ID 应该具有描述性: `healthcare-compliance`, `enterprise-safe`, `startup-lean`
+- 避免通用名称: `my-preset`, `custom`, `test`
+
+### 堆叠
+
+- 设计 presets 以便与其他 presets 堆叠时良好工作
+- 只覆盖你需要更改的模板
+- 记录你的 preset 修改哪些模板和命令
+
+### 命令覆盖
+
+- 只在工作流需要更改时覆盖命令, 而不仅仅是输出格式
+- 如果你只需要不同的模板部分, 模板覆盖就足够了
+- 使用多个代理(Claude, Gemini, Copilot)测试命令覆盖

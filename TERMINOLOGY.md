@@ -35,6 +35,7 @@
 | CodeBuddy | CodeBuddy | 不翻译, AI助手名称 |
 | Amazon Q Developer CLI | Amazon Q Developer CLI | 不翻译, AI助手名称 |
 | Amp | Amp | 不翻译, AI助手名称 |
+| Pi Coding Agent | Pi Coding Agent | 不翻译, AI助手名称 |
 
 ---
 
@@ -63,6 +64,15 @@
 | Resilience | 弹性 | 系统容错和恢复能力 |
 | Rollback | 回滚 | 系统回退机制 |
 | Dependencies | 依赖关系 | 技术组件间的依赖 |
+| Preset | 预设 | 可堆叠的模板和命令覆盖集合 |
+| Extension | 扩展 | 为 Spec Kit 添加新功能的模块化包 |
+| Catalog | 目录 | 扩展和预设的发现列表 |
+| Air-Gapped | 离线环境 | 无网络访问的隔离环境 |
+| Wheel | Wheel | Python 包分发格式 |
+| Bundle | 打包 | 将依赖打包成离线安装包 |
+| Resolution Stack | 解析栈 | 模板查找的优先级顺序 |
+| Override | 覆盖 | 替换默认模板或命令 |
+| Stack | 堆叠 | 多个预设的叠加使用 |
 
 ---
 
@@ -406,6 +416,6 @@
 
 ---
 
-*本术语表由Spec Kit CN项目维护, 最后更新时间: 2025-10-13(新增6个类别32个术语)*
+*本术语表由Spec Kit CN项目维护, 最后更新时间: 2026-03-24(新增 Preset/Extension 相关术语)*
 
 *如有疑问或建议, 请通过GitHub Issues反馈: https://github.com/linfee/spec-kit-cn/issues*

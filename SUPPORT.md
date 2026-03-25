@@ -1,18 +1,18 @@
-# Support
+# 支持
 
-## How to get help
+## 如何获取帮助
 
-Please search existing [issues](https://github.com/github/spec-kit/issues) and [discussions](https://github.com/github/spec-kit/discussions) before creating new ones to avoid duplicates.
+请在创建新问题前搜索现有的 [issues](https://github.com/linfee/spec-kit-cn/issues) 和 [discussions](https://github.com/linfee/spec-kit-cn/discussions), 以避免重复.
 
-- Review the [README](./README.md) for getting started instructions and troubleshooting tips
-- Check the [comprehensive guide](./spec-driven.md) for detailed documentation on the Spec-Driven Development process
-- Ask in [GitHub Discussions](https://github.com/github/spec-kit/discussions) for questions about using Spec Kit or the Spec-Driven Development methodology
-- Open a [GitHub issue](https://github.com/github/spec-kit/issues/new) for bug reports and feature requests
+- 查看 [README](./README.md) 获取入门说明和故障排除技巧
+- 查阅 [综合指南](./spec-driven.md) 了解规范驱动开发流程的详细文档
+- 在 [GitHub Discussions](https://github.com/linfee/spec-kit-cn/discussions) 中提问关于使用 Spec Kit CN 或规范驱动开发方法的问题
+- 提交 [GitHub issue](https://github.com/linfee/spec-kit-cn/issues/new) 报告错误和功能请求
 
-## Project Status
+## 项目状态
 
-**Spec Kit** is under active development and maintained by GitHub staff and the community. We will do our best to respond to support, feature requests, and community questions as time permits.
+**Spec Kit CN** 正在积极开发中, 由社区维护. 我们会尽力在时间允许的情况下回复支持请求, 功能请求和社区问题.
 
-## GitHub Support Policy
+## GitHub 支持政策
 
-Support for this project is limited to the resources listed above.
+本项目的支持仅限于上述列出的资源.

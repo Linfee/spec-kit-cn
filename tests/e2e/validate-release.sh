@@ -62,7 +62,14 @@ for agent in "${agents[@]}"; do
   echo "  - validating $agent (sh)"
   target="$TMP_DIR/init-$agent-sh"
   log="$TMP_DIR/init-$agent-sh.log"
-  if ! uv run specify-cn init "$target" --ai "$agent" --ignore-agent-tools --no-git --script sh >"$log" 2>&1; then
+
+  # codex and agy require --ai-skills flag
+  extra_flags=""
+  if [ "$agent" = "codex" ] || [ "$agent" = "agy" ]; then
+    extra_flags="--ai-skills"
+  fi
+
+  if ! uv run specify-cn init "$target" --ai "$agent" --ignore-agent-tools --no-git --script sh $extra_flags >"$log" 2>&1; then
     if grep -q "No matching release asset found" "$log"; then
       echo "    skipped $agent (sh): latest release has no matching template asset"
       skipped_agents=$((skipped_agents + 1))
@@ -85,7 +92,7 @@ for agent in "${agents[@]}"; do
     cursor-agent) test -d "$target/.cursor/commands" ;;
     qwen) test -d "$target/.qwen/commands" ;;
     opencode) test -d "$target/.opencode/command" ;;
-    codex) test -d "$target/.codex/prompts" ;;
+    codex) test -d "$target/.agents/skills" ;;
     windsurf) test -d "$target/.windsurf/workflows" ;;
     kilocode) test -d "$target/.kilocode/workflows" ;;
     auggie) test -d "$target/.augment/commands" ;;
@@ -96,7 +103,7 @@ for agent in "${agents[@]}"; do
     shai) test -d "$target/.shai/commands" ;;
     tabnine) test -d "$target/.tabnine/agent/commands" ;;
     kiro-cli) test -d "$target/.kiro/prompts" ;;
-    agy) test -d "$target/.agent/workflows" ;;
+    agy) test -d "$target/.agents/skills" ;;
     bob) test -d "$target/.bob/commands" ;;
     vibe) test -d "$target/.vibe/prompts" ;;
     kimi) test -d "$target/.kimi/skills" ;;

@@ -1,23 +1,23 @@
-# [PROJECT NAME] 开发指南
+# [PROJECT_NAME] 开发指南
 
 基于所有功能计划自动生成. 最后更新时间: [DATE]
 
 ## 活跃技术
-[EXTRACTED FROM ALL PLAN.MD FILES]
+[从所有 PLAN.MD 文件提取]
 
 ## 项目结构
 ```
-[ACTUAL STRUCTURE FROM PLANS]
+[从计划中获取的实际结构]
 ```
 
 ## 命令
-[ONLY COMMANDS FOR ACTIVE TECHNOLOGIES]
+[仅包含活跃技术的命令]
 
 ## 代码风格
-[LANGUAGE-SPECIFIC, ONLY FOR LANGUAGES IN USE]
+[特定于语言, 仅包含正在使用的语言]
 
 ## 最近变更
-[LAST 3 FEATURES AND WHAT THEY ADDED]
+[最近 3 个功能及其添加内容]
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->
