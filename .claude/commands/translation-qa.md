@@ -37,6 +37,7 @@ $ARGUMENTS
    - CLI帮助文本测试
    - 模板文件可用性测试
    - 发布前E2E自动化: `./tests/e2e/validate-release.sh`
+   - 必须检查 `specify-cn --help`、`specify-cn init --help`、`specify-cn preset add --help`、`specify-cn extension add --help` 的输出是否存在成段英文 help 文案
 
 5. 质量评分和报告
    - 为每个文件生成质量评分

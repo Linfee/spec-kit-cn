@@ -50,6 +50,10 @@ translation-review    # 人工审核(已存在)
 /translation-qa        # 全面质量检查
 /translation-fix       # 修复关键问题
 /translation-review    # 最终人工审核
+uv run specify-cn --help
+uv run specify-cn init --help
+uv run specify-cn preset add --help
+uv run specify-cn extension add --help
 ./tests/e2e/validate-release.sh  # 发布前自动化验证(必跑)
 ```
 
@@ -66,6 +70,7 @@ translation-review    # 人工审核(已存在)
 2. **重点关注**: CLI相关文件和核心模板需要更严格检查
 3. **一致性维护**: 定期检查术语使用和翻译风格一致性
 4. **用户反馈**: 建立用户反馈机制, 持续改进翻译质量
+5. **CLI help 强制校验**: 每次涉及 `src/specify_cli/` 的同步或翻译后, 必须检查 command help、docstring、Argument/Option help 和框架默认 help 标签是否全部中文化
 
 ### 风险控制策略
 1. **分支操作**: 所有翻译操作都在分支进行, 确保主分支稳定

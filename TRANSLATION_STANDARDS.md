@@ -12,13 +12,20 @@
 
 ### 翻译范围
 
-**需要完全中文本地化的内容**: 
+**需要完全中文本地化的内容**:
 - 用户文档: README.md, spec-driven.md, docs/ 目录
 - 模板系统: templates/ 和 templates/commands/ 目录下的所有文件
 - 文档: docs/ 目录下的所有文件
 - 项目章程: memory/constitution.md(包括占位符和说明文本)
 - CLI 界面: src/specify_cli/ 中的输出信息, 帮助文本, 错误消息
+  - **包括 Typer/Click command help**: `app = typer.Typer(help=...)`, `add_typer(..., help=...)`, `@app.command()` 对应函数 docstring
+  - **包括参数帮助文本**: `typer.Argument(..., help=...)`, `typer.Option(..., help=...)`
+  - **包括框架默认帮助标签的本地化**: `Usage`, `Arguments`, `Options`, `Commands`, `Show this message and exit.` 等默认 help 标签
+  - **包括长帮助文案**: 多行 docstring 中的说明段落, 步骤列表, 注意事项和 Examples 注释
 - 项目级文件: CONTRIBUTING.md, SUPPORT.md, SECURITY.md, CODE_OF_CONDUCT.md
+- 预设系统: presets/ 目录下的所有 .md 文件(README.md, ARCHITECTURE.md, PUBLISHING.md 等)
+- 扩展系统: extensions/ 目录下的所有 .md 文件(README.md, EXTENSION-*.md 等)
+- **注意**: presets/ 和 extensions/ 目录下的 catalog.json 和 catalog.community.json 文件保持英文, 不翻译
 
 **保持英文不翻译的内容**:
 - 构建脚本: scripts/ 目录(完全同步原版)
@@ -91,7 +98,37 @@
 - [ ] 确保发布时不会产生重复的 `.specify.specify/` 路径
 - [ ] 所有内部引用与原版保持一致
 
-## 不可翻译技术标记
+### CLI help 与 docstring 本地化规则
+
+CLI help 属于用户界面的一部分, 不能只翻译运行时输出而遗漏帮助页. 对 `src/specify_cli/` 中的 CLI 代码, 必须同时检查以下来源:
+
+1. `typer.Typer(help=...)` 和 `add_typer(..., help=...)`
+2. `@app.command()` / `@*.command()` 对应函数的 docstring
+3. `typer.Argument(..., help=...)` 与 `typer.Option(..., help=...)`
+4. Click/Typer 默认帮助标签 (如 `Usage`, `Arguments`, `Options`, `Commands`, `Show this message and exit.`)
+5. 长帮助文案中的步骤列表, 注意事项, 示例注释
+
+#### 必检规则
+- **不能只看短 help**: 必须实际运行 `--help` 检查长 docstring 是否仍为英文
+- **不能只翻译参数**: 命令级 docstring 与子命令组 help 也必须翻译
+- **不能漏掉框架默认标签**: `Usage`/`Options`/`Commands` 等默认标签必须显示为中文
+- **Examples 注释要本地化**: 示例命令本身保持命令格式, 但行尾说明注释应翻译为中文
+
+#### 最低验证要求
+至少运行以下命令进行人工或自动校验:
+```bash
+uv run specify-cn --help
+uv run specify-cn init --help
+uv run specify-cn preset --help
+uv run specify-cn preset add --help
+uv run specify-cn extension --help
+uv run specify-cn extension add --help
+```
+
+验证标准:
+- help 页面中不存在成段英文说明文案
+- 默认标签显示为中文
+- command / subcommand / argument / option 的帮助文本均为中文
 
 ### 重要说明
 以下标记是**脚本依赖的技术标记**, 必须保持英文格式, 否则会导致自动化工具失效.
@@ -147,6 +184,9 @@
 - [ ] 错误消息清晰易懂
 - [ ] 交互界面符合中文习惯
 - [ ] 模板文件占位符保持正确格式
+- [ ] `specify-cn --help` 与关键子命令 `--help` 页面不存在成段英文帮助文案
+- [ ] 长 docstring、步骤说明、Examples 注释已完成中文化
+- [ ] Click/Typer 默认帮助标签(`Usage`/`Arguments`/`Options`/`Commands`)已显示为中文
 
 ### 路径和链接检查
 - [ ] 所有路径和斜杠命令遵循路径和斜杠命令处理准则
@@ -225,6 +265,70 @@
 - 技术术语: `API`, `CLI`, `Git` 等保持英文
 - 格式保护: 不破坏 Markdown 格式和系统标记
 - 中文中始终使用你而不是您
+
+### Presets 和 Extensions 文档翻译标准
+
+`presets/` 和 `extensions/` 目录下的文档需要完全翻译, 但需注意以下规则:
+
+#### ✅ 必须翻译的内容
+- 所有 Markdown 文档(.md 文件)
+- 用户界面文本和说明
+- 命令示例中的描述性注释
+- 表格中的类别和效果说明
+
+#### ❌ 保持英文的内容
+- YAML 清单文件(`preset.yml`, `extension.yml`)中的字段名和示例
+- JSON 目录文件(`catalog.json`, `catalog.community.json`)— 完全保持英文
+- 命令名称(如 `speckit.specify`, `speckit.myext.cmd`)
+- 模板名称(如 `spec-template`, `plan-template`)
+- 文件路径和 URL
+- Mermaid 图表代码
+- 代码块中的配置示例
+
+#### 🔧 特殊术语处理
+- **Preset** → 预设(首次出现时可标注"Presets(预设)")
+- **Extension** → 扩展
+- **Catalog** → 目录
+- **Stack/Stacking** → 堆叠
+- **Override** → 覆盖
+- **Resolution Stack** → 解析栈
+
+#### 📋 扩展表格类别翻译
+在扩展列表表格中, 类别和效果需要翻译:
+
+| 原文类别 | 中文类别 |
+|----------|----------|
+| `docs` | 规范制品 |
+| `code` | 源代码 |
+| `process` | 工作流编排 |
+| `integration` | 外部平台集成 |
+| `visibility` | 项目健康报告 |
+
+| 原文效果 | 中文效果 |
+|----------|----------|
+| Read-only | 只读 |
+| Read+Write | 读写 |
+
+### 离线安装文档特殊处理
+
+`docs/installation.md` 中的离线安装(Air-Gapped Installation)部分:
+
+#### ✅ 翻译内容
+- 所有说明文字和步骤描述
+- 警告和提示信息
+- 故障排除指南
+
+#### ❌ 保持英文
+- 下载 URL 和文件路径
+- Git 命令和参数
+- Python 包名(如 `specify-cli`, `PyYAML`)
+- 技术术语: `wheel`, `pip`, `uv`, `PyPI`
+
+#### 🔧 术语处理
+- **Air-Gapped** → 离线环境(首次出现可标注"Air-Gapped(离线环境)")
+- **Enterprise** → 企业级
+- **Wheel Bundle** → Wheel 包 / 离线安装包
+- **Native Extensions** → 原生扩展
 
 ## 参考资源
 
