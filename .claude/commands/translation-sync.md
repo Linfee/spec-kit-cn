@@ -88,6 +88,8 @@ $ARGUMENTS
 8. 质量验证和集成
    - 运行翻译质量检查: `/translation-qa`
    - 验证CLI功能正常: `uv run specify-cn --help`
+   - 必须额外验证关键帮助页: `uv run specify-cn init --help`, `uv run specify-cn preset add --help`, `uv run specify-cn extension add --help`
+   - 若存在 `Usage`, `Options`, `Commands` 或长段落英文说明未翻译, 视为同步未完成
    - 检查文档和模板完整性
    - 更新版本信息和CHANGELOG
 

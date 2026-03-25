@@ -267,6 +267,18 @@ class TestInstallAiSkills:
         assert parsed["name"] == "speckit-specify"
         assert "description" in parsed
 
+    def test_generated_skill_preserves_unicode_in_frontmatter(self, project_dir, templates_dir):
+        r"""Generated SKILL.md frontmatter should keep Chinese text instead of \u escapes."""
+        install_ai_skills(project_dir, "claude")
+
+        skill_file = project_dir / ".claude" / "skills" / "speckit-specify" / "SKILL.md"
+        content = skill_file.read_text(encoding="utf-8")
+
+        assert "根据自然语言描述创建或更新功能规范" in content
+        assert "需要包含 .specify/ 目录的 spec-kit 项目结构" in content
+        assert "\\u6839\\u636E" not in content
+        assert "\\u9700\\u8981" not in content
+
     def test_empty_yaml_frontmatter(self, project_dir, templates_dir):
         """Templates with empty YAML frontmatter (---\\n---) should not crash."""
         result = install_ai_skills(project_dir, "claude")
@@ -1152,6 +1164,32 @@ class TestCliValidation:
         assert "--ai-skills" in plain
         compact = " ".join(plain.lower().split())
         assert "agent skills" in compact
+
+    def test_init_help_long_docstring_is_localized(self):
+        """init --help should show localized long-form help text."""
+        from typer.testing import CliRunner
+
+        runner = CliRunner()
+        result = runner.invoke(app, ["init", "--help"])
+
+        plain = re.sub(r'\x1b\[[0-9;]*m', '', result.output)
+        assert "默认情况下, 项目文件会从最新的 GitHub release 下载." in plain
+        assert "此命令将会:" in plain
+        assert "示例:" in plain
+        assert "By default, project files are downloaded from the latest GitHub release." not in plain
+
+    def test_preset_add_help_is_localized(self):
+        """preset add --help should show localized command and parameter help."""
+        from typer.testing import CliRunner
+
+        runner = CliRunner()
+        result = runner.invoke(app, ["preset", "add", "--help"])
+
+        plain = re.sub(r'\x1b\[[0-9;]*m', '', result.output)
+        assert "安装预设。" in plain
+        assert "要从目录安装的预设 ID" in plain
+        assert "解析优先级（数值越小优先级越高，默认 10）" in plain
+        assert "Install a preset." not in plain
 
     def test_kiro_alias_normalized_to_kiro_cli(self, tmp_path):
         """--ai kiro should normalize to canonical kiro-cli agent key."""

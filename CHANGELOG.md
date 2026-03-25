@@ -8,6 +8,14 @@
 ## [Unreleased]
 
 ### 变更
+- **CLI help 本地化补全**: 修复 `specify-cn init --help` 中长 docstring 仍为英文的问题
+  - 翻译 `init()` 命令的完整帮助说明, 包括离线初始化说明, 步骤列表与示例注释
+  - 补全关键子命令帮助页的中文化回归测试
+- **AI skills 元数据本地化**: 修复 `specify-cn init --ai-skills` 生成的 skill `description` 与 `compatibility` 仍为英文的问题
+  - 统一 `install_ai_skills`、preset 覆盖与 extension/agent skill 生成链路的中文描述来源
+- **翻译流程防回归增强**: 更新翻译标准与工作流, 明确 CLI command help、docstring、Argument/Option help 和框架默认标签均属于必须本地化范围
+  - `TRANSLATION_STANDARDS.md` 增加 CLI help/docstring 专项规则与最低验证命令
+  - 更新 `/translation-workflow`、`/translation-qa`、`/translation-review`、`/translation-sync` 的强制检查项
 - **CLI 命令描述翻译**: 翻译 `init` 和 `check` 命令的帮助文档字符串
   - `init`: "Initialize a new Specify project..." → "从最新模板初始化新的 Specify 项目..."
   - `check`: "Check that all required tools are installed." → "检查所有必需的工具是否已安装。"

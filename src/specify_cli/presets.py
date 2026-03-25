@@ -628,7 +628,11 @@ class PresetManager:
         if not skills_dir:
             return []
 
-        from . import SKILL_DESCRIPTIONS, load_init_options
+        from . import (
+            SKILL_COMPATIBILITY_TEXT,
+            get_skill_description,
+            load_init_options,
+        )
 
         opts = load_init_options(self.project_root)
         selected_ai = opts.get("ai", "")
@@ -673,21 +677,18 @@ class PresetManager:
                 body = content
 
             original_desc = frontmatter.get("description", "")
-            enhanced_desc = SKILL_DESCRIPTIONS.get(
-                short_name,
-                original_desc or f"Spec-kit workflow command: {short_name}",
-            )
+            enhanced_desc = get_skill_description(short_name, original_desc)
 
             frontmatter_data = {
                 "name": skill_name,
                 "description": enhanced_desc,
-                "compatibility": "Requires spec-kit project structure with .specify/ directory",
+                "compatibility": SKILL_COMPATIBILITY_TEXT,
                 "metadata": {
                     "author": "github-spec-kit",
                     "source": f"preset:{manifest.id}",
                 },
             }
-            frontmatter_text = yaml.safe_dump(frontmatter_data, sort_keys=False).strip()
+            frontmatter_text = yaml.safe_dump(frontmatter_data, sort_keys=False, allow_unicode=True).strip()
             skill_content = (
                 f"---\n"
                 f"{frontmatter_text}\n"
@@ -720,7 +721,7 @@ class PresetManager:
         if not skills_dir:
             return
 
-        from . import SKILL_DESCRIPTIONS
+        from . import SKILL_COMPATIBILITY_TEXT, get_skill_description
 
         # Locate core command templates from the project's installed templates
         core_templates_dir = self.project_root / ".specify" / "templates" / "commands"
@@ -761,21 +762,18 @@ class PresetManager:
                     body = content
 
                 original_desc = frontmatter.get("description", "")
-                enhanced_desc = SKILL_DESCRIPTIONS.get(
-                    short_name,
-                    original_desc or f"Spec-kit workflow command: {short_name}",
-                )
+                enhanced_desc = get_skill_description(short_name, original_desc)
 
                 frontmatter_data = {
                     "name": skill_name,
                     "description": enhanced_desc,
-                    "compatibility": "Requires spec-kit project structure with .specify/ directory",
+                    "compatibility": SKILL_COMPATIBILITY_TEXT,
                     "metadata": {
                         "author": "github-spec-kit",
                         "source": f"templates/commands/{short_name}.md",
                     },
                 }
-                frontmatter_text = yaml.safe_dump(frontmatter_data, sort_keys=False).strip()
+                frontmatter_text = yaml.safe_dump(frontmatter_data, sort_keys=False, allow_unicode=True).strip()
                 skill_content = (
                     f"---\n"
                     f"{frontmatter_text}\n"

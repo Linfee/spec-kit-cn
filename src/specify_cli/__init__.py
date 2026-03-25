@@ -25,6 +25,7 @@ Or install globally:
     specify-cn init --here
 """
 
+import inspect
 import os
 import subprocess
 import sys
@@ -39,6 +40,7 @@ from pathlib import Path
 from typing import Any, Optional, Tuple
 
 import typer
+import click
 import httpx
 from rich.console import Console
 from rich.panel import Panel
@@ -323,8 +325,8 @@ def _build_ai_assistant_help() -> str:
 
     non_generic_agents = sorted(agent for agent in AGENT_CONFIG if agent != "generic")
     base_help = (
-        f"AI assistant to use: {', '.join(non_generic_agents)}, "
-        "or generic (requires --ai-commands-dir)."
+        f"要使用的 AI 助手: {', '.join(non_generic_agents)}, "
+        "或 generic（需要 --ai-commands-dir）。"
     )
 
     if not AI_ASSISTANT_ALIASES:
@@ -332,15 +334,171 @@ def _build_ai_assistant_help() -> str:
 
     alias_phrases = []
     for alias, target in sorted(AI_ASSISTANT_ALIASES.items()):
-        alias_phrases.append(f"'{alias}' as an alias for '{target}'")
+        alias_phrases.append(f"'{alias}' 是 '{target}' 的别名")
 
     if len(alias_phrases) == 1:
         aliases_text = alias_phrases[0]
     else:
-        aliases_text = ', '.join(alias_phrases[:-1]) + ' and ' + alias_phrases[-1]
+        aliases_text = '、'.join(alias_phrases[:-1]) + '，以及 ' + alias_phrases[-1]
 
-    return base_help + " Use " + aliases_text + "."
+    return base_help + " 可使用 " + aliases_text + "。"
 AI_ASSISTANT_HELP = _build_ai_assistant_help()
+
+HELP_TEXT_TRANSLATIONS = {
+    "Usage:": "用法:",
+    "Arguments": "参数",
+    "Options": "选项",
+    "Commands": "命令",
+    "Show this message and exit.": "显示此帮助信息并退出。",
+}
+
+APP_HELP_TRANSLATIONS = {
+    "Setup tool for Specify spec-driven development projects": "设置用于规范驱动开发的 Specify 项目",
+    "Manage spec-kit extensions": "管理 spec-kit 扩展",
+    "Manage extension catalogs": "管理扩展目录",
+    "Manage spec-kit presets": "管理 spec-kit 预设",
+    "Manage preset catalogs": "管理预设目录",
+}
+
+COMMAND_HELP_TRANSLATIONS = {
+    "check": "检查所有必需工具是否已安装。",
+    "version": "显示版本和系统信息。",
+    "preset": "管理 spec-kit 预设",
+    "preset_list": "列出已安装的预设。",
+    "preset_add": "安装预设。",
+    "preset_remove": "移除已安装的预设。",
+    "preset_search": "在目录中搜索预设。",
+    "preset_resolve": "显示指定名称会解析到哪个模板。",
+    "preset_info": "显示预设的详细信息。",
+    "preset_set_priority": "设置已安装预设的解析优先级。",
+    "preset_enable": "启用已禁用的预设。",
+    "preset_disable": "禁用预设但不移除。",
+    "preset_catalog": "管理预设目录",
+    "preset_catalog_list": "列出所有启用的预设目录。",
+    "preset_catalog_add": "将目录添加到 .specify/preset-catalogs.yml。",
+    "preset_catalog_remove": "从 .specify/preset-catalogs.yml 移除目录。",
+    "extension": "管理 spec-kit 扩展",
+    "extension_list": "列出已安装的扩展。",
+    "catalog": "管理扩展目录",
+    "catalog_list": "列出所有启用的扩展目录。",
+    "catalog_add": "将目录添加到 .specify/extension-catalogs.yml。",
+    "catalog_remove": "从 .specify/extension-catalogs.yml 移除目录。",
+    "extension_add": "安装扩展。",
+    "extension_remove": "卸载扩展。",
+    "extension_search": "在目录中搜索可用扩展。",
+    "extension_info": "显示扩展的详细信息。",
+    "extension_update": "将扩展更新到最新版本。",
+    "extension_enable": "启用已禁用的扩展。",
+    "extension_disable": "禁用扩展但不移除。",
+    "extension_set_priority": "设置已安装扩展的解析优先级。",
+}
+
+PARAM_HELP_TRANSLATIONS = {
+    "Name for your new project directory (optional if using --here, or use '.' for current directory)": "新项目目录名称（若使用 --here 则可省略，或使用 '.' 表示当前目录）",
+    "Directory for agent command files (required with --ai generic, e.g. .myagent/commands/)": "代理命令文件目录（与 --ai generic 搭配时必填，例如 .myagent/commands/）",
+    "Script type to use: sh or ps": "要使用的脚本类型：sh 或 ps",
+    "Skip checks for AI agent tools like Claude Code": "跳过对 Claude Code 等 AI 代理工具的检查",
+    "Skip git repository initialization": "跳过 Git 仓库初始化",
+    "Initialize project in the current directory instead of creating a new one": "在当前目录初始化项目，而不是创建新目录",
+    "Force merge/overwrite when using --here (skip confirmation)": "使用 --here 时强制合并/覆盖（跳过确认）",
+    "Skip SSL/TLS verification (not recommended)": "跳过 SSL/TLS 校验（不推荐）",
+    "Show verbose diagnostic output for network and extraction failures": "在网络或解压失败时显示详细诊断输出",
+    "GitHub token to use for API requests (or set GH_TOKEN or GITHUB_TOKEN environment variable)": "用于 API 请求的 GitHub token（也可设置 GH_TOKEN 或 GITHUB_TOKEN 环境变量）",
+    "Install Prompt.MD templates as agent skills (requires --ai)": "将 Prompt.MD 模板安装为 agent skill（需要 --ai）",
+    "Use assets bundled in the specify-cn-cli package instead of downloading from GitHub (no network access required). Bundled assets will become the default in v0.6.0 and this flag will be removed.": "使用 specify-cn-cli 包内置的资源，而不是从 GitHub 下载（无需网络）。内置资源将在 v0.6.0 成为默认方式，并移除此标志。",
+    "Install a preset during initialization (by preset ID)": "初始化时安装预设（按预设 ID）",
+    "Branch numbering strategy: 'sequential' (001, 002, ...) or 'timestamp' (YYYYMMDD-HHMMSS)": "分支编号策略：'sequential'（001, 002, ...）或 'timestamp'（YYYYMMDD-HHMMSS）",
+    "Preset ID to install from catalog": "要从目录安装的预设 ID",
+    "Install from a URL (ZIP file)": "从 URL 安装（ZIP 文件）",
+    "Install from local directory (development mode)": "从本地目录安装（开发模式）",
+    "Resolution priority (lower = higher precedence, default 10)": "解析优先级（数值越小优先级越高，默认 10）",
+    "Preset ID to remove": "要移除的预设 ID",
+    "Search query": "搜索关键词",
+    "Filter by tag": "按标签过滤",
+    "Filter by author": "按作者过滤",
+    "Template name to resolve (e.g., spec-template)": "要解析的模板名称（例如 spec-template）",
+    "Preset ID to get info about": "要查看信息的预设 ID",
+    "Preset ID": "预设 ID",
+    "New priority (lower = higher precedence)": "新的优先级（数值越小优先级越高）",
+    "Preset ID to enable": "要启用的预设 ID",
+    "Preset ID to disable": "要禁用的预设 ID",
+    "Catalog URL (must use HTTPS)": "目录 URL（必须使用 HTTPS）",
+    "Catalog name": "目录名称",
+    "Priority (lower = higher priority)": "优先级（数值越小优先级越高）",
+    "Allow presets from this catalog to be installed": "允许安装该目录中的预设",
+    "Description of the catalog": "目录描述",
+    "Catalog name to remove": "要移除的目录名称",
+    "Show available extensions from catalog": "显示目录中的可用扩展",
+    "Show both installed and available": "同时显示已安装和可用的扩展",
+    "Allow extensions from this catalog to be installed": "允许安装该目录中的扩展",
+    "Extension name or path": "扩展名称或路径",
+    "Install from local directory": "从本地目录安装",
+    "Install from custom URL": "从自定义 URL 安装",
+    "Extension ID or name to remove": "要移除的扩展 ID 或名称",
+    "Don't remove config files": "不要移除配置文件",
+    "Skip confirmation": "跳过确认",
+    "Search query (optional)": "搜索关键词（可选）",
+    "Show only verified extensions": "仅显示已验证的扩展",
+    "Extension ID or name": "扩展 ID 或名称",
+    "Extension ID or name to update (or all)": "要更新的扩展 ID 或名称（或 all）",
+    "Extension ID or name to enable": "要启用的扩展 ID 或名称",
+    "Extension ID or name to disable": "要禁用的扩展 ID 或名称",
+}
+
+
+def _translate_help_text(text: str | None) -> str | None:
+    """Translate a known help string to Chinese when available."""
+    if text is None:
+        return None
+    return PARAM_HELP_TRANSLATIONS.get(text, text)
+
+
+def _localize_typer_info(typer_app: typer.Typer) -> None:
+    """Localize Typer command and parameter help in-place."""
+    info = typer_app.info
+    if info.help:
+        info.help = APP_HELP_TRANSLATIONS.get(info.help, info.help)
+
+    for command in typer_app.registered_commands:
+        callback_name = command.callback.__name__ if command.callback else ""
+        translated_help = COMMAND_HELP_TRANSLATIONS.get(callback_name)
+        if translated_help:
+            command.help = translated_help
+
+        if command.callback:
+            signature = inspect.signature(command.callback)
+            for parameter in signature.parameters.values():
+                default = parameter.default
+                if hasattr(default, "help"):
+                    default.help = _translate_help_text(getattr(default, "help", None))
+
+    for group in typer_app.registered_groups:
+        _localize_typer_info(group.typer_instance)
+
+
+def _translate_default_help_text(text: str) -> str:
+    """Translate Click/Typer default help labels to Chinese."""
+    return HELP_TEXT_TRANSLATIONS.get(text, text)
+
+
+def _install_help_translations() -> None:
+    """Install Chinese translations for Click/Typer default help labels."""
+    click.core._ = _translate_default_help_text
+    click.formatting._ = _translate_default_help_text
+    click.decorators._ = _translate_default_help_text
+
+    try:
+        import typer.rich_utils as rich_utils
+
+        rich_utils.ARGUMENTS_PANEL_TITLE = HELP_TEXT_TRANSLATIONS["Arguments"]
+        rich_utils.OPTIONS_PANEL_TITLE = HELP_TEXT_TRANSLATIONS["Options"]
+        rich_utils.COMMANDS_PANEL_TITLE = HELP_TEXT_TRANSLATIONS["Commands"]
+        rich_utils.ERRORS_PANEL_TITLE = "错误"
+    except Exception:
+        pass
+
+
+_install_help_translations()
 
 SCRIPT_TYPE_CHOICES = {"sh": "POSIX Shell (bash/zsh)", "ps": "PowerShell"}
 
@@ -349,13 +507,15 @@ CLAUDE_LOCAL_PATH = Path.home() / ".claude" / "local" / "claude"
 BANNER = """
 ███████╗██████╗ ███████╗ ██████╗██╗███████╗██╗   ██╗
 ██╔════╝██╔══██╗██╔════╝██╔════╝██║██╔════╝╚██╗ ██╔╝
-███████╗██████╔╝█████╗  ██║     ██║█████╗   ╚████╔╝ 
-╚════██║██╔═══╝ ██╔══╝  ██║     ██║██╔══╝    ╚██╔╝  
-███████║██║     ███████╗╚██████╗██║██║        ██║   
-╚══════╝╚═╝     ╚══════╝ ╚═════╝╚═╝╚═╝        ╚═╝   
+███████╗██████╔╝█████╗  ██║     ██║█████╗   ╚████╔╝
+╚════██║██╔═══╝ ██╔══╝  ██║     ██║██╔══╝    ╚██╔╝
+███████║██║     ███████╗╚██████╗██║██║        ██║
+╚══════╝╚═╝     ╚══════╝ ╚═════╝╚═╝╚═╝        ╚═╝
 """
 
 TAGLINE = "GitHub Spec Kit - Spec-Driven Development Toolkit"
+
+
 class StepTracker:
     """Track and render hierarchical steps without emojis, similar to Claude Code tree output.
     Supports live auto-refresh via an attached refresh callback.
@@ -549,7 +709,7 @@ class BannerGroup(TyperGroup):
 
 app = typer.Typer(
     name="specify-cn",
-    help="Setup tool for Specify spec-driven development projects",
+    help="设置用于规范驱动开发的 Specify 项目",
     add_completion=False,
     invoke_without_command=True,
     cls=BannerGroup,
@@ -574,7 +734,7 @@ def callback(ctx: typer.Context):
     """Show banner when no subcommand is provided."""
     if ctx.invoked_subcommand is None and "--help" not in sys.argv and "-h" not in sys.argv:
         show_banner()
-        console.print(Align.center("[dim]Run 'specify-cn --help' for usage information[/dim]"))
+        console.print(Align.center("[dim]运行 'specify-cn --help' 查看用法信息[/dim]"))
         console.print()
 
 def run_command(cmd: list[str], check_return: bool = True, capture: bool = False, shell: bool = False) -> Optional[str]:
@@ -1535,16 +1695,28 @@ NATIVE_SKILLS_AGENTS = {"codex", "kimi"}
 
 # Enhanced descriptions for each spec-kit command skill
 SKILL_DESCRIPTIONS = {
-    "specify": "Create or update feature specifications from natural language descriptions. Use when starting new features or refining requirements. Generates spec.md with user stories, functional requirements, and acceptance criteria following spec-driven development methodology.",
-    "plan": "Generate technical implementation plans from feature specifications. Use after creating a spec to define architecture, tech stack, and implementation phases. Creates plan.md with detailed technical design.",
-    "tasks": "Break down implementation plans into actionable task lists. Use after planning to create a structured task breakdown. Generates tasks.md with ordered, dependency-aware tasks.",
-    "implement": "Execute all tasks from the task breakdown to build the feature. Use after task generation to systematically implement the planned solution following TDD approach where applicable.",
-    "analyze": "Perform cross-artifact consistency analysis across spec.md, plan.md, and tasks.md. Use after task generation to identify gaps, duplications, and inconsistencies before implementation.",
-    "clarify": "Structured clarification workflow for underspecified requirements. Use before planning to resolve ambiguities through coverage-based questioning. Records answers in spec clarifications section.",
-    "constitution": "Create or update project governing principles and development guidelines. Use at project start to establish code quality, testing standards, and architectural constraints that guide all development.",
-    "checklist": "Generate custom quality checklists for validating requirements completeness and clarity. Use to create unit tests for English that ensure spec quality before implementation.",
-    "taskstoissues": "Convert tasks from tasks.md into GitHub issues. Use after task breakdown to track work items in GitHub project management.",
+    "specify": "根据自然语言描述创建或更新功能规范。适用于启动新功能或细化需求。会生成包含用户故事、功能需求和验收标准的 spec.md，并遵循规范驱动开发方法。",
+    "plan": "根据功能规范生成技术实施计划。适用于创建规范之后定义架构、技术栈和实施阶段。会生成包含详细技术设计的 plan.md。",
+    "tasks": "将实施计划拆解为可执行的任务清单。适用于完成计划后创建结构化的任务分解。会生成按顺序排列并包含依赖关系的 tasks.md。",
+    "implement": "根据任务清单执行实现并构建功能。适用于任务生成后按计划系统性实施解决方案，并在适用时遵循 TDD 方法。",
+    "analyze": "对 spec.md、plan.md 和 tasks.md 进行跨制品一致性分析。适用于任务生成后在实施前识别缺口、重复项和不一致之处。",
+    "clarify": "用于需求不明确时的结构化澄清流程。适用于计划前通过覆盖式提问消除歧义，并将答案记录到规范澄清部分。",
+    "constitution": "创建或更新项目治理原则与开发指南。适用于项目开始时建立代码质量、测试标准和架构约束，为后续开发提供指导。",
+    "checklist": "生成用于验证需求完整性和清晰度的自定义质量清单。适用于在实施前创建规范质量检查项，确保规格内容充分且明确。",
+    "taskstoissues": "将 tasks.md 中的任务转换为 GitHub issues。适用于任务拆解后在 GitHub 项目管理中跟踪工作项。",
 }
+
+SKILL_COMPATIBILITY_TEXT = "需要包含 .specify/ 目录的 spec-kit 项目结构"
+
+
+def get_skill_fallback_description(command_name: str) -> str:
+    """Return the localized fallback description for a generated skill."""
+    return f"Spec Kit 工作流命令: {command_name}"
+
+
+def get_skill_description(command_name: str, original_desc: str = "") -> str:
+    """Return the best localized description for a generated skill."""
+    return SKILL_DESCRIPTIONS.get(command_name, original_desc or get_skill_fallback_description(command_name))
 
 
 def _get_skills_dir(project_path: Path, selected_ai: str) -> Path:
@@ -1681,7 +1853,7 @@ def install_ai_skills(
 
             # Select the best description available
             original_desc = frontmatter.get("description", "")
-            enhanced_desc = SKILL_DESCRIPTIONS.get(command_name, original_desc or f"Spec-kit workflow command: {command_name}")
+            enhanced_desc = get_skill_description(command_name, original_desc)
 
             # Build SKILL.md following agentskills.io spec
             # Use yaml.safe_dump to safely serialise the frontmatter and
@@ -1698,13 +1870,13 @@ def install_ai_skills(
             frontmatter_data = {
                 "name": skill_name,
                 "description": enhanced_desc,
-                "compatibility": "Requires spec-kit project structure with .specify/ directory",
+                "compatibility": SKILL_COMPATIBILITY_TEXT,
                 "metadata": {
                     "author": "github-spec-kit",
                     "source": f"templates/commands/{source_name}",
                 },
             }
-            frontmatter_text = yaml.safe_dump(frontmatter_data, sort_keys=False).strip()
+            frontmatter_text = yaml.safe_dump(frontmatter_data, sort_keys=False, allow_unicode=True).strip()
             skill_content = (
                 f"---\n"
                 f"{frontmatter_text}\n"
@@ -1806,44 +1978,41 @@ def init(
     branch_numbering: str = typer.Option(None, "--branch-numbering", help="Branch numbering strategy: 'sequential' (001, 002, ...) or 'timestamp' (YYYYMMDD-HHMMSS)"),
 ):
     """
-    Initialize a new Specify project.
+    初始化新的 Specify 项目.
 
-    By default, project files are downloaded from the latest GitHub release.
-    Use --offline to scaffold from assets bundled inside the specify-cn-cli
-    package instead (no internet access required, ideal for air-gapped or
-    enterprise environments).
+    默认情况下, 项目文件会从最新的 GitHub release 下载.
+    你也可以使用 --offline 改为从 specify-cn-cli 包内置的资源初始化,
+    无需网络访问, 适合离线环境或企业环境.
 
-    NOTE: Starting with v0.6.0, bundled assets will be used by default and
-    the --offline flag will be removed. The GitHub download path will be
-    retired because bundled assets eliminate the need for network access,
-    avoid proxy/firewall issues, and guarantee that templates always match
-    the installed CLI version.
+    注意: 从 v0.6.0 开始, 内置资源将成为默认方式, 并移除 --offline 标志.
+    GitHub 下载路径将被弃用, 因为内置资源无需网络访问,
+    可以避免代理或防火墙问题, 并保证模板始终与已安装的 CLI 版本一致.
 
-    This command will:
-    1. Check that required tools are installed (git is optional)
-    2. Let you choose your AI assistant
-    3. Download template from GitHub (or use bundled assets with --offline)
-    4. Initialize a fresh git repository (if not --no-git and no existing repo)
-    5. Optionally set up AI assistant commands
+    此命令将会:
+    1. 检查所需工具是否已安装 (git 为可选)
+    2. 让你选择 AI 助手
+    3. 从 GitHub 下载模板 (或使用 --offline 采用内置资源)
+    4. 初始化一个新的 git 仓库 (如果未使用 --no-git 且当前不存在仓库)
+    5. 可选地设置 AI 助手命令
 
-    Examples:
+    示例:
         specify-cn init my-project
         specify-cn init my-project --ai claude
         specify-cn init my-project --ai copilot --no-git
         specify-cn init --ignore-agent-tools my-project
-        specify-cn init . --ai claude         # Initialize in current directory
-        specify-cn init .                     # Initialize in current directory (interactive AI selection)
-        specify-cn init --here --ai claude    # Alternative syntax for current directory
+        specify-cn init . --ai claude         # 在当前目录初始化
+        specify-cn init .                     # 在当前目录初始化 (交互式选择 AI 助手)
+        specify-cn init --here --ai claude    # 当前目录初始化的另一种写法
         specify-cn init --here --ai codex --ai-skills
         specify-cn init --here --ai codebuddy
-        specify-cn init --here --ai vibe      # Initialize with Mistral Vibe support
+        specify-cn init --here --ai vibe      # 初始化并启用 Mistral Vibe 支持
         specify-cn init --here
-        specify-cn init --here --force  # Skip confirmation when current directory not empty
-        specify-cn init my-project --ai claude --ai-skills   # Install agent skills
+        specify-cn init --here --force  # 当前目录非空时跳过确认
+        specify-cn init my-project --ai claude --ai-skills   # 安装 agent skills
         specify-cn init --here --ai gemini --ai-skills
-        specify-cn init my-project --ai generic --ai-commands-dir .myagent/commands/  # Unsupported agent
-        specify-cn init my-project --offline  # Use bundled assets (no network access)
-        specify-cn init my-project --ai claude --preset healthcare-compliance  # With preset
+        specify-cn init my-project --ai generic --ai-commands-dir .myagent/commands/  # 不受支持的 agent
+        specify-cn init my-project --offline  # 使用内置资源 (无需网络访问)
+        specify-cn init my-project --ai claude --preset healthcare-compliance  # 安装预设
     """
 
     show_banner()
@@ -2470,33 +2639,33 @@ def version():
 
 extension_app = typer.Typer(
     name="extension",
-    help="Manage spec-kit extensions",
+    help="管理 spec-kit 扩展",
     add_completion=False,
 )
 app.add_typer(extension_app, name="extension")
 
 catalog_app = typer.Typer(
     name="catalog",
-    help="Manage extension catalogs",
+    help="管理扩展目录",
     add_completion=False,
 )
 extension_app.add_typer(catalog_app, name="catalog")
 
 preset_app = typer.Typer(
     name="preset",
-    help="Manage spec-kit presets",
+    help="管理 spec-kit 预设",
     add_completion=False,
 )
 app.add_typer(preset_app, name="preset")
 
 preset_catalog_app = typer.Typer(
     name="catalog",
-    help="Manage preset catalogs",
+    help="管理预设目录",
     add_completion=False,
 )
 preset_app.add_typer(preset_catalog_app, name="catalog")
 
-
+_localize_typer_info(app)
 def get_speckit_version() -> str:
     """Get current spec-kit version."""
     import importlib.metadata
@@ -4514,6 +4683,9 @@ def extension_set_priority(
 
     console.print(f"[green]✓[/green] Extension '{display_name}' priority changed: {old_priority} → {priority}")
     console.print("\n[dim]Lower priority = higher precedence in template resolution[/dim]")
+
+
+_localize_typer_info(app)
 
 
 def main():

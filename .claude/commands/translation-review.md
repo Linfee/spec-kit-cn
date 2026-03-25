@@ -46,6 +46,8 @@ $ARGUMENTS
   
 4. review src/specify_cli 目录下python文件的功能与翻译质量
    - 遍历 src/specify_cli 下的python文件, 对比原版文件, review其功能是否保持一致, 是否对脚本中的文案进行了适当的翻译
+   - 对 CLI 代码必须额外检查: `typer.Typer(help=...)`, `add_typer(..., help=...)`, 命令函数 docstring, `typer.Argument/Option(..., help=...)`, 以及 Click/Typer 默认 help 标签
+   - 必须实际运行 `--help` 验证长 docstring、步骤说明和 Examples 注释没有遗漏英文
 
 5. 检查.github/目录更新情况
    - 对比原版.github/目录结构, 列出新增或修改的文件

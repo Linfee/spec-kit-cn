@@ -48,6 +48,7 @@ echo "[4/7] init e2e (all agents, sh)"
 agents=(
   claude copilot gemini cursor-agent qwen opencode codex windsurf kilocode
   auggie codebuddy qodercli roo amp shai tabnine kiro-cli agy bob vibe kimi
+  trae pi iflow
 )
 
 tested_agents=0
@@ -103,10 +104,13 @@ for agent in "${agents[@]}"; do
     shai) test -d "$target/.shai/commands" ;;
     tabnine) test -d "$target/.tabnine/agent/commands" ;;
     kiro-cli) test -d "$target/.kiro/prompts" ;;
-    agy) test -d "$target/.agents/skills" ;;
+    agy) test -d "$target/.agent/skills" ;;
     bob) test -d "$target/.bob/commands" ;;
     vibe) test -d "$target/.vibe/prompts" ;;
     kimi) test -d "$target/.kimi/skills" ;;
+    trae) test -d "$target/.trae/rules" ;;
+    pi) test -d "$target/.pi/prompts" ;;
+    iflow) test -d "$target/.iflow/commands" ;;
   esac
 done
 
@@ -119,7 +123,7 @@ if [ "$skipped_agents" -gt 0 ]; then
 fi
 
 echo "[5/7] script variant smoke (ps)"
-for agent in claude copilot kiro-cli; do
+for agent in claude copilot kiro-cli pi; do
   echo "  - validating $agent (ps)"
   target="$TMP_DIR/init-$agent-ps"
   log="$TMP_DIR/init-$agent-ps.log"
@@ -134,6 +138,21 @@ for agent in claude copilot kiro-cli; do
   fi
   test -f "$target/.specify/scripts/powershell/setup-plan.ps1"
 done
+
+echo "[5.5/7] generic agent smoke"
+target="$TMP_DIR/init-generic-sh"
+log="$TMP_DIR/init-generic-sh.log"
+if ! uv run specify-cn init "$target" --ai generic --ai-commands-dir .myagent/commands --ignore-agent-tools --no-git --script sh >"$log" 2>&1; then
+  if grep -q "No matching release asset found" "$log"; then
+    echo "    skipped generic (sh): latest release has no matching template asset"
+  else
+    echo "init failed for generic (sh):"
+    cat "$log"
+    exit 1
+  fi
+else
+  test -d "$target/.myagent/commands"
+fi
 
 echo "[6/7] build"
 uv build >/dev/null

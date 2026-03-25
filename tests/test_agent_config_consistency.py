@@ -454,6 +454,46 @@ class TestAgentConfigConsistency:
         assert "spec-kit-template-iflow-sh-" in gh_release_text
         assert "spec-kit-template-iflow-ps-" in gh_release_text
 
+    def test_generic_in_agent_config(self):
+        """AGENT_CONFIG should include generic with no fixed folder."""
+        assert "generic" in AGENT_CONFIG
+        assert AGENT_CONFIG["generic"]["folder"] is None
+        assert AGENT_CONFIG["generic"]["commands_subdir"] == "commands"
+        assert AGENT_CONFIG["generic"]["requires_cli"] is False
+
+    def test_generic_in_release_agent_lists(self):
+        """Bash and PowerShell release scripts should include generic in agent lists."""
+        sh_text = (REPO_ROOT / ".github" / "workflows" / "scripts" / "create-release-packages.sh").read_text(encoding="utf-8")
+        ps_text = (REPO_ROOT / ".github" / "workflows" / "scripts" / "create-release-packages.ps1").read_text(encoding="utf-8")
+
+        sh_match = re.search(r"ALL_AGENTS=\(([^)]*)\)", sh_text)
+        assert sh_match is not None
+        sh_agents = sh_match.group(1).split()
+
+        ps_match = re.search(r"\$AllAgents = @\(([^)]*)\)", ps_text)
+        assert ps_match is not None
+        ps_agents = re.findall(r"'([^']+)'", ps_match.group(1))
+
+        assert "generic" in sh_agents
+        assert "generic" in ps_agents
+
+    def test_release_scripts_generate_generic_commands(self):
+        """Release scripts should generate generic commands into .speckit/commands."""
+        sh_text = (REPO_ROOT / ".github" / "workflows" / "scripts" / "create-release-packages.sh").read_text(encoding="utf-8")
+        ps_text = (REPO_ROOT / ".github" / "workflows" / "scripts" / "create-release-packages.ps1").read_text(encoding="utf-8")
+
+        assert ".speckit/commands" in sh_text
+        assert ".speckit/commands" in ps_text
+        assert re.search(r"generic\)\s*\n.*?\.speckit/commands", sh_text, re.S) is not None
+        assert re.search(r"'generic'\s*\{.*?\.speckit/commands", ps_text, re.S) is not None
+
+    def test_generic_in_github_release_output(self):
+        """GitHub release script should include generic template packages."""
+        gh_release_text = (REPO_ROOT / ".github" / "workflows" / "scripts" / "create-github-release.sh").read_text(encoding="utf-8")
+
+        assert "spec-kit-template-generic-sh-" in gh_release_text
+        assert "spec-kit-template-generic-ps-" in gh_release_text
+
     def test_iflow_in_agent_context_scripts(self):
         """Agent context scripts should support iflow agent type."""
         bash_text = (REPO_ROOT / "scripts" / "bash" / "update-agent-context.sh").read_text(encoding="utf-8")

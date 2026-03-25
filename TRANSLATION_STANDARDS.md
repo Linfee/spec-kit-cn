@@ -18,6 +18,10 @@
 - 文档: docs/ 目录下的所有文件
 - 项目章程: memory/constitution.md(包括占位符和说明文本)
 - CLI 界面: src/specify_cli/ 中的输出信息, 帮助文本, 错误消息
+  - **包括 Typer/Click command help**: `app = typer.Typer(help=...)`, `add_typer(..., help=...)`, `@app.command()` 对应函数 docstring
+  - **包括参数帮助文本**: `typer.Argument(..., help=...)`, `typer.Option(..., help=...)`
+  - **包括框架默认帮助标签的本地化**: `Usage`, `Arguments`, `Options`, `Commands`, `Show this message and exit.` 等默认 help 标签
+  - **包括长帮助文案**: 多行 docstring 中的说明段落, 步骤列表, 注意事项和 Examples 注释
 - 项目级文件: CONTRIBUTING.md, SUPPORT.md, SECURITY.md, CODE_OF_CONDUCT.md
 - 预设系统: presets/ 目录下的所有 .md 文件(README.md, ARCHITECTURE.md, PUBLISHING.md 等)
 - 扩展系统: extensions/ 目录下的所有 .md 文件(README.md, EXTENSION-*.md 等)
@@ -94,7 +98,37 @@
 - [ ] 确保发布时不会产生重复的 `.specify.specify/` 路径
 - [ ] 所有内部引用与原版保持一致
 
-## 不可翻译技术标记
+### CLI help 与 docstring 本地化规则
+
+CLI help 属于用户界面的一部分, 不能只翻译运行时输出而遗漏帮助页. 对 `src/specify_cli/` 中的 CLI 代码, 必须同时检查以下来源:
+
+1. `typer.Typer(help=...)` 和 `add_typer(..., help=...)`
+2. `@app.command()` / `@*.command()` 对应函数的 docstring
+3. `typer.Argument(..., help=...)` 与 `typer.Option(..., help=...)`
+4. Click/Typer 默认帮助标签 (如 `Usage`, `Arguments`, `Options`, `Commands`, `Show this message and exit.`)
+5. 长帮助文案中的步骤列表, 注意事项, 示例注释
+
+#### 必检规则
+- **不能只看短 help**: 必须实际运行 `--help` 检查长 docstring 是否仍为英文
+- **不能只翻译参数**: 命令级 docstring 与子命令组 help 也必须翻译
+- **不能漏掉框架默认标签**: `Usage`/`Options`/`Commands` 等默认标签必须显示为中文
+- **Examples 注释要本地化**: 示例命令本身保持命令格式, 但行尾说明注释应翻译为中文
+
+#### 最低验证要求
+至少运行以下命令进行人工或自动校验:
+```bash
+uv run specify-cn --help
+uv run specify-cn init --help
+uv run specify-cn preset --help
+uv run specify-cn preset add --help
+uv run specify-cn extension --help
+uv run specify-cn extension add --help
+```
+
+验证标准:
+- help 页面中不存在成段英文说明文案
+- 默认标签显示为中文
+- command / subcommand / argument / option 的帮助文本均为中文
 
 ### 重要说明
 以下标记是**脚本依赖的技术标记**, 必须保持英文格式, 否则会导致自动化工具失效.
@@ -150,6 +184,9 @@
 - [ ] 错误消息清晰易懂
 - [ ] 交互界面符合中文习惯
 - [ ] 模板文件占位符保持正确格式
+- [ ] `specify-cn --help` 与关键子命令 `--help` 页面不存在成段英文帮助文案
+- [ ] 长 docstring、步骤说明、Examples 注释已完成中文化
+- [ ] Click/Typer 默认帮助标签(`Usage`/`Arguments`/`Options`/`Commands`)已显示为中文
 
 ### 路径和链接检查
 - [ ] 所有路径和斜杠命令遵循路径和斜杠命令处理准则

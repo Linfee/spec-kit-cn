@@ -1170,10 +1170,19 @@ class TestPresetCatalog:
         assert not catalog.cache_file.exists()
         assert not catalog.cache_metadata_file.exists()
 
-    def test_search_with_cached_data(self, project_dir):
+    def test_search_with_cached_data(self, project_dir, monkeypatch):
         """Test search with cached catalog data."""
         catalog = PresetCatalog(project_dir)
         catalog.cache_dir.mkdir(parents=True, exist_ok=True)
+        monkeypatch.setattr(catalog, "get_active_catalogs", lambda: [
+            PresetCatalogEntry(
+                url=catalog.DEFAULT_CATALOG_URL,
+                name="default",
+                priority=1,
+                install_allowed=True,
+                description="Built-in catalog of installable presets",
+            )
+        ])
 
         catalog_data = {
             "schema_version": "1.0",
@@ -1198,6 +1207,7 @@ class TestPresetCatalog:
         catalog.cache_file.write_text(json.dumps(catalog_data))
         catalog.cache_metadata_file.write_text(json.dumps({
             "cached_at": datetime.now(timezone.utc).isoformat(),
+            "catalog_url": catalog.DEFAULT_CATALOG_URL,
         }))
 
         # Search by query

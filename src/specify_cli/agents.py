@@ -12,6 +12,8 @@ from typing import Dict, List, Any
 import platform
 import yaml
 
+from . import SKILL_COMPATIBILITY_TEXT, get_skill_fallback_description
+
 
 class CommandRegistrar:
     """Handles registration of commands with AI agents.
@@ -311,11 +313,11 @@ class CommandRegistrar:
         if agent_name == "codex":
             body = self._resolve_codex_skill_placeholders(frontmatter, body, project_root)
 
-        description = frontmatter.get("description", f"Spec-kit workflow command: {skill_name}")
+        description = frontmatter.get("description", get_skill_fallback_description(skill_name))
         skill_frontmatter = {
             "name": skill_name,
             "description": description,
-            "compatibility": "Requires spec-kit project structure with .specify/ directory",
+            "compatibility": SKILL_COMPATIBILITY_TEXT,
             "metadata": {
                 "author": "github-spec-kit",
                 "source": f"{source_id}:{source_file}",
