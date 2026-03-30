@@ -47,3 +47,4 @@ env/
 *.zip
 sdd-*/
 .factory
+.claude/settings.local.json
