@@ -1,15 +1,15 @@
 ---
-description: "Self-test override of the specify command"
+description: "自测预设的 specify 命令覆盖"
 ---
 
 <!-- preset:self-test -->
 
-You are following the self-test preset's version of the specify command.
+你正在使用自测预设版本的 specify 命令.
 
-When creating a specification, follow this process:
+创建规范时, 请遵循以下流程:
 
-1. Read the user's requirements from $ARGUMENTS
-2. Create a specification document using the spec-template
-3. Include all standard sections plus the self-test marker
+1. 从 $ARGUMENTS 读取用户需求
+2. 使用 spec-template 创建规范文档
+3. 包含所有标准章节以及自测标记
 
-> This command is provided by the self-test preset.
+> 此命令由自测预设提供.

@@ -37,4 +37,3 @@
 
 [Unreleased]: https://github.com/your-org/spec-kit-my-extension/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/your-org/spec-kit-my-extension/releases/tag/v1.0.0
-STATS:comma=0,period=0,colon=0,semicolon=0,exclaim=0,question=0,dunhao=0

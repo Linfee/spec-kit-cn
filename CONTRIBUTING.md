@@ -1,6 +1,6 @@
-# 为 Spec Kit CN 做贡献
+# 为 Spec Kit 做贡献
 
-你好! 我们很高兴你愿意为 Spec Kit CN 做出贡献. 本项目的贡献内容根据[项目开源许可证](LICENSE)[发布](https://help.github.com/articles/github-terms-of-service/#6-contributions-under-repository-license)给公众.
+你好! 我们很高兴你愿意为 Spec Kit 做出贡献. 本项目的贡献内容根据[项目开源许可证](LICENSE)[发布](https://help.github.com/articles/github-terms-of-service/#6-contributions-under-repository-license)给公众.
 
 请注意, 本项目随[贡献者行为准则](CODE_OF_CONDUCT.md)一起发布. 参与本项目即表示你同意遵守其条款.
 
@@ -14,7 +14,7 @@
 1. 准备一个可用的 [AI 编码代理](README.md#-supported-ai-agents)
 
 <details>
-<summary><b>💡 如果你使用 <code>VSCode</code> 或 <code>GitHub Codespaces</code> 作为 IDE 的提示</b></summary>
+<summary><b>如果你使用 <code>VSCode</code> 或 <code>GitHub Codespaces</code> 作为 IDE 的提示</b></summary>
 
 <br>
 
@@ -24,7 +24,7 @@
 
 - 检出仓库
 - 使用 VSCode 打开
-- 打开 [命令面板](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette) 并选择 "Dev Containers: Open Folder in Container..."
+- 打开[命令面板](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette) 并选择 "Dev Containers: Open Folder in Container..."
 
 在 [GitHub Codespaces](https://github.com/features/codespaces) 上更简单, 因为它在打开 codespace 时自动利用 `.devcontainer/devcontainer.json`.
 
@@ -32,41 +32,46 @@
 
 ## 提交拉取请求
 
->[!NOTE]
->如果你的拉取请求引入了对 CLI 或仓库其他部分工作产生实质性影响的大型更改(例如, 引入新模板, 参数或其他重大更改), 请确保该更改已**经过项目维护者的讨论和同意**. 未经事先对话和同意的大型更改拉取请求将被关闭.
+> [!NOTE]
+> 如果你的拉取请求引入了对 CLI 或仓库其他部分工作产生实质性影响的大型更改(例如, 引入新模板, 参数或其他重大更改), 请确保该更改已**经过项目维护者的讨论和同意**. 未经事先对话和同意的大型更改拉取请求将被关闭.
 
-1. Fork 并克隆仓库
-1. 配置和安装依赖项: `uv sync`
+1. Fork 并克隆 [Linfee/spec-kit-cn](https://github.com/Linfee/spec-kit-cn) 仓库
+1. 配置和安装依赖项: `uv sync --extra test`
 1. 确保 CLI 在你的机器上正常工作: `uv run specify-cn --help`
 1. 创建新分支: `git checkout -b my-branch-name`
 1. 进行更改, 添加测试, 并确保一切仍然正常工作
-1. 运行发布前自动化验证: `./tests/e2e/validate-release.sh`
 1. 如果相关, 使用示例项目测试 CLI 功能
 1. 推送到你的 fork 并提交拉取请求
 1. 等待你的拉取请求被审查和合并.
 
-以下是一些可以增加你的拉取请求被接受几率的方法: 
+有关详细的测试工作流, 命令选择提示和 PR 报告模板, 请参阅 [`TESTING.md`](./TESTING.md).
+激活项目虚拟环境(参见 [`TESTING.md`](./TESTING.md) 中的 Setup 块), 然后从工作树安装 CLI(`uv sync --extra test` 后运行 `uv pip install -e .`), 或以其他方式确保 shell 使用本地 `specify-cn` 二进制文件, 然后再运行下面描述的手动斜杠命令测试.
+
+以下是一些可以增加你的拉取请求被接受几率的方法:
 
 - 遵循项目的编码规范.
 - 为新功能编写测试.
 - 如果你的更改影响用户可见的功能, 请更新文档(`README.md`, `spec-driven.md`).
 - 尽可能保持你的更改专注. 如果你想进行多个相互不依赖的更改, 考虑将它们作为单独的拉取请求提交.
 - 编写[良好的提交消息](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html).
-- 使用 Spec-Driven Development 工作流测试你的更改以确保兼容性.
+- 使用规范驱动开发工作流测试你的更改以确保兼容性.
 
 ## 开发工作流
 
-在处理 spec-kit 时:
+在处理 spec-kit-cn 时:
 
 1. 在你选择的编码代理中使用 `specify-cn` CLI 命令(`/speckit.specify`, `/speckit.plan`, `/speckit.tasks`)测试更改
 2. 验证 `templates/` 目录中的模板是否正常工作
 3. 测试 `scripts/` 目录中的脚本功能
 4. 如果进行了重大的流程更改, 确保更新内存文件(`memory/constitution.md`)
 
-> [!IMPORTANT]
-> 请不要把本项目自定义脚本放入 `scripts/` 目录.
-> 该目录会在与上游同步时通过 `rsync --delete` 覆盖.
-> 本项目自定义验证脚本统一放在 `tests/e2e/`.
+### 推荐验证流程
+
+为了获得最顺畅的审查体验, 按以下顺序验证更改:
+
+1. **先运行有针对性的自动化检查** — 使用 [`TESTING.md`](./TESTING.md) 中的快速验证命令尽早捕获打包, 脚手架和配置回归问题.
+2. **再运行手动工作流测试** — 如果你的更改影响斜杠命令或开发者工作流, 按照 [`TESTING.md`](./TESTING.md) 选择正确的命令, 在代理中运行它们, 并为你的 PR 捕获结果.
+3. **调试打包输出时使用本地发布包** — 如果你需要检查 CI 风格打包产生的确切文件, 按照下面的描述生成本地发布包.
 
 ### 本地测试模板和命令更改
 
@@ -76,6 +81,7 @@
 1. **创建发布包**
 
    运行以下命令生成本地包:
+
    ```bash
    ./.github/workflows/scripts/create-release-packages.sh v1.0.0
    ```
@@ -83,34 +89,35 @@
 2. **将相关包复制到你的测试项目**
 
    ```bash
-   cp -r .genreleases/sdd-copilot-package-sh/. <path-to-test-project>/
+   cp -r .genreleases/sdd-copilot-package-sh/. <path-to-test-project>/ # sdd-copilot-package 替换为你需要的包名
    ```
 
 3. **打开并测试代理**
 
    导航到你的测试项目文件夹并打开代理来验证你的实现.
 
+如果你只需要在手动代理测试前验证生成的文件结构和内容, 请先使用 [`TESTING.md`](./TESTING.md) 中的有针对性的自动化检查. 仅在需要本地检查确切打包输出时使用本节.
+
 ## Spec Kit 中的 AI 贡献
 
 > [!IMPORTANT]
->
-> 如果你使用**任何类型的 AI 辅助**为 Spec Kit 做出贡献, 
-> 必须在拉取请求或 issue 中披露.
+> 如果你使用**任何类型的 AI 辅助**为 Spec Kit 做出贡献,
+> 必须在拉取请求或 issue 中披露这一点.
 
 我们欢迎并鼓励使用 AI 工具来帮助改进 Spec Kit! 许多有价值的贡献都通过 AI 辅助进行了代码生成, 问题检测和功能定义的增强.
 
-也就是说, 如果你在为 Spec Kit 做贡献时使用任何类型的 AI 辅助(例如, 代理, ChatGPT), 
+也就是说, 如果你在为 Spec Kit 做贡献时使用任何类型的 AI 辅助(例如, 代理, ChatGPT),
 **必须在拉取请求或 issue 中披露这一点**, 同时说明使用 AI 辅助的程度(例如, 文档注释 vs 代码生成).
 
 如果你的 PR 响应或评论是由 AI 生成的, 也要披露这一点.
 
 作为例外, 琐碎的间距或拼写错误修复不需要披露, 只要更改仅限于代码的小部分或短语.
 
-披露示例: 
+披露示例:
 
 > 此 PR 主要由 GitHub Copilot 编写.
 
-或者更详细的披露: 
+或者更详细的披露:
 
 > 我咨询了 ChatGPT 来理解代码库, 但解决方案
 > 完全由我手动编写.
@@ -123,7 +130,7 @@
 
 ### 我们在寻找什么
 
-提交 AI 辅助贡献时, 请确保它们包括: 
+提交 AI 辅助贡献时, 请确保它们包括:
 
 - **明确披露 AI 使用** - 你对 AI 使用透明, 并说明你在贡献中使用它的程度
 - **人类理解和测试** - 你亲自测试了更改并理解它们的作用
@@ -133,7 +140,7 @@
 
 ### 我们会关闭的内容
 
-我们保留关闭看起来是以下内容的贡献的权利: 
+我们保留关闭看起来是以下内容的贡献的权利:
 
 - 未经验证提交的未测试更改
 - 不解决特定 Spec Kit 需求的通用建议

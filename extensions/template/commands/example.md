@@ -40,7 +40,7 @@ config_file=".specify/extensions/my-extension/my-extension-config.yml"
 
 if [ ! -f "$config_file" ]; then
   echo "❌ Error: Configuration not found at $config_file"
-  echo "Run 'specify extension add my-extension' to install and configure"
+  echo "Run 'specify-cn extension add my-extension' to install and configure"
   exit 1
 fi
 
@@ -146,7 +146,7 @@ export SPECKIT_MY_EXTENSION_KEY="override-value"
 
 **解决方案**: 安装扩展并创建配置：
 ```bash
-specify extension add my-extension
+specify-cn extension add my-extension
 cp .specify/extensions/my-extension/config-template.yml \
    .specify/extensions/my-extension/my-extension-config.yml
 ```
@@ -198,5 +198,4 @@ export SPECKIT_MY_EXTENSION_KEY="custom-value"
 
 ---
 
-*更多信息，请参阅扩展 README，或运行 `specify extension info my-extension`*
-STATS:comma=0,period=0,colon=0,semicolon=0,exclaim=0,question=0,dunhao=0
+*更多信息，请参阅扩展 README，或运行 `specify-cn extension info my-extension`*

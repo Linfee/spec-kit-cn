@@ -19,7 +19,7 @@ description: "验证目录中某个扩展的生命周期。"
 执行下面的命令，并验证它成功完成，且返回的扩展 ID 与 `$ARGUMENTS` 完全一致。如果命令失败，或 ID 与 `$ARGUMENTS` 不匹配，则测试失败。
 
 ```bash
-specify extension info "$ARGUMENTS"
+specify-cn extension info "$ARGUMENTS"
 ```
 
 ### 步骤 2：模拟安装
@@ -27,14 +27,14 @@ specify extension info "$ARGUMENTS"
 首先，尝试直接将该扩展添加到当前工作区配置中。如果目录将该扩展标记为 `install_allowed: false`（仅发现，不允许直接安装），那么此步骤**预期**会失败。
 
 ```bash
-specify extension add "$ARGUMENTS"
+specify-cn extension add "$ARGUMENTS"
 ```
 
 随后，通过目录中的下载 URL 来模拟添加该扩展，这应当绕过限制。
 从目录元数据中获取扩展的 `download_url`（例如通过目录信息命令或 UI），然后运行：
 
 ```bash
-specify extension add "$ARGUMENTS" --from "<download_url>"
+specify-cn extension add "$ARGUMENTS" --from "<download_url>"
 ```
 
 ### 步骤 3：验证注册结果
@@ -57,10 +57,10 @@ cat .specify/extensions/.registry/$ARGUMENTS.json
 collected 3 items
 
 test_selftest_discovery.py::test_catalog_search [PASS/FAIL]
-  Details: [Provide execution result of specify extension search]
+  Details: [Provide execution result of specify-cn extension search]
 
 test_selftest_installation.py::test_extension_add [PASS/FAIL]
-  Details: [Provide execution result of specify extension add]
+  Details: [Provide execution result of specify-cn extension add]
 
 test_selftest_registration.py::test_config_verification [PASS/FAIL]
   Details: [Provide execution result of registry record verification]

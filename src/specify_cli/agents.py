@@ -10,9 +10,21 @@ from pathlib import Path
 from typing import Dict, List, Any
 
 import platform
+import re
+from copy import deepcopy
 import yaml
 
-from . import SKILL_COMPATIBILITY_TEXT, get_skill_fallback_description
+
+def _build_agent_configs() -> dict[str, Any]:
+    """Derive CommandRegistrar.AGENT_CONFIGS from INTEGRATION_REGISTRY."""
+    from specify_cli.integrations import INTEGRATION_REGISTRY
+    configs: dict[str, dict[str, Any]] = {}
+    for key, integration in INTEGRATION_REGISTRY.items():
+        if key == "generic":
+            continue
+        if integration.registrar_config:
+            configs[key] = dict(integration.registrar_config)
+    return configs
 
 
 class CommandRegistrar:
@@ -23,147 +35,26 @@ class CommandRegistrar:
     and companion files (e.g. Copilot .prompt.md).
     """
 
-    # Agent configurations with directory, format, and argument placeholder
-    AGENT_CONFIGS = {
-        "claude": {
-            "dir": ".claude/commands",
-            "format": "markdown",
-            "args": "$ARGUMENTS",
-            "extension": ".md"
-        },
-        "gemini": {
-            "dir": ".gemini/commands",
-            "format": "toml",
-            "args": "{{args}}",
-            "extension": ".toml"
-        },
-        "copilot": {
-            "dir": ".github/agents",
-            "format": "markdown",
-            "args": "$ARGUMENTS",
-            "extension": ".agent.md"
-        },
-        "cursor": {
-            "dir": ".cursor/commands",
-            "format": "markdown",
-            "args": "$ARGUMENTS",
-            "extension": ".md"
-        },
-        "qwen": {
-            "dir": ".qwen/commands",
-            "format": "markdown",
-            "args": "$ARGUMENTS",
-            "extension": ".md"
-        },
-        "opencode": {
-            "dir": ".opencode/command",
-            "format": "markdown",
-            "args": "$ARGUMENTS",
-            "extension": ".md"
-        },
-        "codex": {
-            "dir": ".agents/skills",
-            "format": "markdown",
-            "args": "$ARGUMENTS",
-            "extension": "/SKILL.md",
-        },
-        "windsurf": {
-            "dir": ".windsurf/workflows",
-            "format": "markdown",
-            "args": "$ARGUMENTS",
-            "extension": ".md"
-        },
-        "junie": {
-            "dir": ".junie/commands",
-            "format": "markdown",
-            "args": "$ARGUMENTS",
-            "extension": ".md"
-        },
-        "kilocode": {
-            "dir": ".kilocode/workflows",
-            "format": "markdown",
-            "args": "$ARGUMENTS",
-            "extension": ".md"
-        },
-        "auggie": {
-            "dir": ".augment/commands",
-            "format": "markdown",
-            "args": "$ARGUMENTS",
-            "extension": ".md"
-        },
-        "roo": {
-            "dir": ".roo/commands",
-            "format": "markdown",
-            "args": "$ARGUMENTS",
-            "extension": ".md"
-        },
-        "codebuddy": {
-            "dir": ".codebuddy/commands",
-            "format": "markdown",
-            "args": "$ARGUMENTS",
-            "extension": ".md"
-        },
-        "qodercli": {
-            "dir": ".qoder/commands",
-            "format": "markdown",
-            "args": "$ARGUMENTS",
-            "extension": ".md"
-        },
-        "kiro-cli": {
-            "dir": ".kiro/prompts",
-            "format": "markdown",
-            "args": "$ARGUMENTS",
-            "extension": ".md"
-        },
-        "pi": {
-            "dir": ".pi/prompts",
-            "format": "markdown",
-            "args": "$ARGUMENTS",
-            "extension": ".md"
-        },
-        "amp": {
-            "dir": ".agents/commands",
-            "format": "markdown",
-            "args": "$ARGUMENTS",
-            "extension": ".md"
-        },
-        "shai": {
-            "dir": ".shai/commands",
-            "format": "markdown",
-            "args": "$ARGUMENTS",
-            "extension": ".md"
-        },
-        "tabnine": {
-            "dir": ".tabnine/agent/commands",
-            "format": "toml",
-            "args": "{{args}}",
-            "extension": ".toml"
-        },
-        "bob": {
-            "dir": ".bob/commands",
-            "format": "markdown",
-            "args": "$ARGUMENTS",
-            "extension": ".md"
-        },
-        "kimi": {
-            "dir": ".kimi/skills",
-            "format": "markdown",
-            "args": "$ARGUMENTS",
-            "extension": "/SKILL.md",
-        },
-        "trae": {
-            "dir": ".trae/rules",
-            "format": "markdown",
-            "args": "$ARGUMENTS",
-            "extension": ".md"
-        },
-        "iflow": {
-            "dir": ".iflow/commands",
-            "format": "markdown",
-            "args": "$ARGUMENTS",
-            "extension": ".md"
-        }
-    }
+    # Derived from INTEGRATION_REGISTRY — single source of truth.
+    # Populated lazily via _ensure_configs() on first use.
+    AGENT_CONFIGS: dict[str, dict[str, Any]] = {}
+    _configs_loaded: bool = False
+
+    def __init__(self) -> None:
+        self._ensure_configs()
+
+    def __init_subclass__(cls, **kwargs: Any) -> None:
+        super().__init_subclass__(**kwargs)
+        cls._ensure_configs()
+
+    @classmethod
+    def _ensure_configs(cls) -> None:
+        if not cls._configs_loaded:
+            try:
+                cls.AGENT_CONFIGS = _build_agent_configs()
+                cls._configs_loaded = True
+            except ImportError:
+                pass  # Circular import during module init; retry on next access
 
     @staticmethod
     def parse_frontmatter(content: str) -> tuple[dict, str]:
@@ -213,23 +104,51 @@ class CommandRegistrar:
         return f"---\n{yaml_str}---\n"
 
     def _adjust_script_paths(self, frontmatter: dict) -> dict:
-        """Adjust script paths from extension-relative to repo-relative.
+        """Normalize script paths in frontmatter to generated project locations.
+
+        Rewrites known repo-relative and top-level script paths under the
+        `scripts` and `agent_scripts` keys (for example `../../scripts/`,
+        `../../templates/`, `../../memory/`, `scripts/`, `templates/`, and
+        `memory/`) to the `.specify/...` paths used in generated projects.
 
         Args:
             frontmatter: Frontmatter dictionary
 
         Returns:
-            Modified frontmatter with adjusted paths
+            Modified frontmatter with normalized project paths
         """
+        frontmatter = deepcopy(frontmatter)
+
         for script_key in ("scripts", "agent_scripts"):
             scripts = frontmatter.get(script_key)
             if not isinstance(scripts, dict):
                 continue
 
             for key, script_path in scripts.items():
-                if isinstance(script_path, str) and script_path.startswith("../../scripts/"):
-                    scripts[key] = f".specify/scripts/{script_path[14:]}"
+                if isinstance(script_path, str):
+                    scripts[key] = self.rewrite_project_relative_paths(script_path)
         return frontmatter
+
+    @staticmethod
+    def rewrite_project_relative_paths(text: str) -> str:
+        """Rewrite repo-relative paths to their generated project locations."""
+        if not isinstance(text, str) or not text:
+            return text
+
+        for old, new in (
+            ("../../memory/", ".specify/memory/"),
+            ("../../scripts/", ".specify/scripts/"),
+            ("../../templates/", ".specify/templates/"),
+        ):
+            text = text.replace(old, new)
+
+        # Only rewrite top-level style references so extension-local paths like
+        # ".specify/extensions/<ext>/scripts/..." remain intact.
+        text = re.sub(r'(^|[\s`"\'(])(?:\.?/)?memory/', r"\1.specify/memory/", text)
+        text = re.sub(r'(^|[\s`"\'(])(?:\.?/)?scripts/', r"\1.specify/scripts/", text)
+        text = re.sub(r'(^|[\s`"\'(])(?:\.?/)?templates/', r"\1.specify/templates/", text)
+
+        return text.replace(".specify/.specify/", ".specify/").replace(".specify.specify/", ".specify/")
 
     def render_markdown_command(
         self,
@@ -279,9 +198,25 @@ class CommandRegistrar:
         toml_lines.append(f"# Source: {source_id}")
         toml_lines.append("")
 
-        toml_lines.append('prompt = """')
-        toml_lines.append(body)
-        toml_lines.append('"""')
+        # Keep TOML output valid even when body contains triple-quote delimiters.
+        # Prefer multiline forms, then fall back to escaped basic string.
+        if '"""' not in body:
+            toml_lines.append('prompt = """')
+            toml_lines.append(body)
+            toml_lines.append('"""')
+        elif "'''" not in body:
+            toml_lines.append("prompt = '''")
+            toml_lines.append(body)
+            toml_lines.append("'''")
+        else:
+            escaped_body = (
+                body.replace("\\", "\\\\")
+                .replace('"', '\\"')
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("\t", "\\t")
+            )
+            toml_lines.append(f'prompt = "{escaped_body}"')
 
         return "\n".join(toml_lines)
 
@@ -310,29 +245,43 @@ class CommandRegistrar:
         if not isinstance(frontmatter, dict):
             frontmatter = {}
 
-        if agent_name == "codex":
-            body = self._resolve_codex_skill_placeholders(frontmatter, body, project_root)
+        if agent_name in {"codex", "kimi"}:
+            body = self.resolve_skill_placeholders(agent_name, frontmatter, body, project_root)
 
-        description = frontmatter.get("description", get_skill_fallback_description(skill_name))
-        skill_frontmatter = {
-            "name": skill_name,
-            "description": description,
-            "compatibility": SKILL_COMPATIBILITY_TEXT,
-            "metadata": {
-                "author": "github-spec-kit",
-                "source": f"{source_id}:{source_file}",
-            },
-        }
+        description = frontmatter.get("description", f"Spec-kit workflow command: {skill_name}")
+        skill_frontmatter = self.build_skill_frontmatter(
+            agent_name,
+            skill_name,
+            description,
+            f"{source_id}:{source_file}",
+        )
         return self.render_frontmatter(skill_frontmatter) + "\n" + body
 
     @staticmethod
-    def _resolve_codex_skill_placeholders(frontmatter: dict, body: str, project_root: Path) -> str:
-        """Resolve script placeholders for Codex skill overrides.
+    def build_skill_frontmatter(
+        agent_name: str,
+        skill_name: str,
+        description: str,
+        source: str,
+    ) -> dict:
+        """Build consistent SKILL.md frontmatter across all skill generators."""
+        skill_frontmatter = {
+            "name": skill_name,
+            "description": description,
+            "compatibility": "Requires spec-kit project structure with .specify/ directory",
+            "metadata": {
+                "author": "github-spec-kit",
+                "source": source,
+            },
+        }
+        if agent_name == "claude":
+            # Claude skills should only run when explicitly invoked.
+            skill_frontmatter["disable-model-invocation"] = True
+        return skill_frontmatter
 
-        This intentionally scopes the fix to Codex, which is the newly
-        migrated runtime path in this PR. Existing Kimi behavior is left
-        unchanged for now.
-        """
+    @staticmethod
+    def resolve_skill_placeholders(agent_name: str, frontmatter: dict, body: str, project_root: Path) -> str:
+        """Resolve script placeholders for skills-backed agents."""
         try:
             from . import load_init_options
         except ImportError:
@@ -348,7 +297,11 @@ class CommandRegistrar:
         if not isinstance(agent_scripts, dict):
             agent_scripts = {}
 
-        script_variant = load_init_options(project_root).get("script")
+        init_opts = load_init_options(project_root)
+        if not isinstance(init_opts, dict):
+            init_opts = {}
+
+        script_variant = init_opts.get("script")
         if script_variant not in {"sh", "ps"}:
             fallback_order = []
             default_variant = "ps" if platform.system().lower().startswith("win") else "sh"
@@ -378,7 +331,8 @@ class CommandRegistrar:
             agent_script_command = agent_script_command.replace("{ARGS}", "$ARGUMENTS")
             body = body.replace("{AGENT_SCRIPT}", agent_script_command)
 
-        return body.replace("{ARGS}", "$ARGUMENTS").replace("__AGENT__", "codex")
+        body = body.replace("{ARGS}", "$ARGUMENTS").replace("__AGENT__", agent_name)
+        return CommandRegistrar.rewrite_project_relative_paths(body)
 
     def _convert_argument_placeholder(self, content: str, from_placeholder: str, to_placeholder: str) -> str:
         """Convert argument placeholder format.
@@ -402,8 +356,9 @@ class CommandRegistrar:
         short_name = cmd_name
         if short_name.startswith("speckit."):
             short_name = short_name[len("speckit."):]
+        short_name = short_name.replace(".", "-")
 
-        return f"speckit.{short_name}" if agent_name == "kimi" else f"speckit-{short_name}"
+        return f"speckit-{short_name}"
 
     def register_commands(
         self,
@@ -430,6 +385,7 @@ class CommandRegistrar:
         Raises:
             ValueError: If agent is not supported
         """
+        self._ensure_configs()
         if agent_name not in self.AGENT_CONFIGS:
             raise ValueError(f"Unsupported agent: {agent_name}")
 
@@ -529,6 +485,7 @@ class CommandRegistrar:
         """
         results = {}
 
+        self._ensure_configs()
         for agent_name, agent_config in self.AGENT_CONFIGS.items():
             agent_dir = project_root / agent_config["dir"]
 
@@ -556,6 +513,7 @@ class CommandRegistrar:
             registered_commands: Dict mapping agent names to command name lists
             project_root: Path to project root
         """
+        self._ensure_configs()
         for agent_name, cmd_names in registered_commands.items():
             if agent_name not in self.AGENT_CONFIGS:
                 continue
@@ -573,3 +531,13 @@ class CommandRegistrar:
                     prompt_file = project_root / ".github" / "prompts" / f"{cmd_name}.prompt.md"
                     if prompt_file.exists():
                         prompt_file.unlink()
+
+
+# Populate AGENT_CONFIGS after class definition.
+# Catches ImportError from circular imports during module loading;
+# _configs_loaded stays False so the next explicit access retries.
+try:
+    CommandRegistrar._ensure_configs()
+except ImportError:
+    pass
+

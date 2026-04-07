@@ -87,14 +87,15 @@ $ARGUMENTS
    - 使用渐进式披露: 仅在检测到差距时添加后续检索
    - 如果源文档很大, 生成临时摘要项目而不是嵌入原始文本
 
-5. **生成清单** - 创建"需求的单元测试": 
-   - Create `FEATURE_DIR/checklists/` directory if it doesn't exist
-   - Generate unique checklist filename:
-     - Use short, descriptive name based on domain (e.g., `ux.md`, `api.md`, `security.md`)
-     - Format: `[domain].md` 
-     - If file exists, append to existing file
-   - Number items sequentially starting from CHK001
-   - Each `/speckit.checklist` run creates a NEW file (never overwrites existing checklists)
+5. **生成清单** - 创建"需求的单元测试":
+   - 如果 `FEATURE_DIR/checklists/` 目录不存在, 则创建该目录
+   - 生成唯一的清单文件名:
+     - 使用基于领域的简短描述性名称(例如: `ux.md`, `api.md`, `security.md`)
+     - 格式: `[domain].md`
+   - 文件处理行为:
+     - 如果文件不存在: 创建新文件, 编号从 CHK001 开始
+     - 如果文件已存在: 将新项目追加到现有文件, 从上一个 CHK ID 继续编号(例如, 如果最后一项是 CHK015, 则新项目从 CHK016 开始)
+   - 永远不要删除或替换现有清单内容 - 始终保留并追加
 
    **核心原则 - 测试需求, 而非实现**: 
    每个清单项目必须评估需求本身, 检查: 
@@ -131,16 +132,15 @@ $ARGUMENTS
    - "Are loading states defined for asynchronous episode data?" [Completeness]
    - "Does the spec define visual hierarchy for competing UI elements?" [Clarity]
    
-   **项目结构**: 
-   Each item should follow this pattern:
-   - Question format asking about requirement quality
-   - Focus on what's WRITTEN (or not written) in the spec/plan
-   - Include quality dimension in brackets [Completeness/Clarity/Consistency/etc.]
-   - Reference spec section `[Spec §X.Y]` when checking existing requirements
-   - Use `[Gap]` marker when checking for missing requirements
+   **项目结构**:
+   每个项目应遵循以下模式:
+   - 询问需求质量的问句格式
+   - 关注规范/计划中已编写(或未编写)的内容
+   - 在方括号中包含质量维度 [完整性/清晰度/一致性/等]
+   - 检查现有需求时引用规范章节 `[Spec §X.Y]`
+   - 检查缺失的需求时使用 `[Gap]` 标记
    
-   **按质量维度分类的示例**: 
-   
+   **按质量维度分类的示例**:   
    完整性: 
    - "Are error handling requirements defined for all API failure modes? [Gap]"
    - "Are accessibility requirements specified for all interactive elements? [Completeness]"
@@ -164,29 +164,29 @@ $ARGUMENTS
    - "Are visual hierarchy requirements measurable/testable? [Acceptance Criteria, Spec §FR-1]"
    - "Can 'balanced visual weight' be objectively verified? [Measurability, Spec §FR-2]"
 
-   **场景分类与覆盖度**(需求质量焦点): 
-   - Check if requirements exist for: Primary, Alternate, Exception/Error, Recovery, Non-Functional scenarios
-   - For each scenario class, ask: "Are [scenario type] requirements complete, clear, and consistent?"
-   - If scenario class missing: "Are [scenario type] requirements intentionally excluded or missing? [Gap]"
-   - Include resilience/rollback when state mutation occurs: "Are rollback requirements defined for migration failures? [Gap]"
+   **场景分类与覆盖度**(需求质量焦点):
+   - 检查以下场景类型的需求是否存在: 主要场景, 备选场景, 异常/错误场景, 恢复场景, 非功能场景
+   - 对于每个场景类别, 询问: "[场景类型] 需求是否完整, 清晰且一致?"
+   - 如果缺少某个场景类别: "[场景类型] 需求是被有意排除的还是缺失的? [Gap]"
+   - 当发生状态变更时包含弹性/回滚: "是否为迁移失败定义了回滚需求? [Gap]"
 
-   **可追溯性要求**: 
-   - MINIMUM: ≥80% of items MUST include at least one traceability reference
-   - Each item should reference: spec section `[Spec §X.Y]`, or use markers: `[Gap]`, `[Ambiguity]`, `[Conflict]`, `[Assumption]`
-   - If no ID system exists: "Is a requirement & acceptance criteria ID scheme established? [Traceability]"
+   **可追溯性要求**:
+   - 最低要求: >=80% 的项目必须包含至少一个可追溯性引用
+   - 每个项目应引用: 规范章节 `[Spec §X.Y]`, 或使用标记: `[Gap]`, `[Ambiguity]`, `[Conflict]`, `[Assumption]`
+   - 如果不存在 ID 体系: "是否已建立需求和验收标准的 ID 体系? [Traceability]"
 
-   **发现和解决问题**(需求质量问题): 
-   Ask questions about the requirements themselves:
-   - Ambiguities: "Is the term 'fast' quantified with specific metrics? [Ambiguity, Spec §NFR-1]"
-   - Conflicts: "Do navigation requirements conflict between §FR-10 and §FR-10a? [Conflict]"
-   - Assumptions: "Is the assumption of 'always available podcast API' validated? [Assumption]"
-   - Dependencies: "Are external podcast API requirements documented? [Dependency, Gap]"
-   - Missing definitions: "Is 'visual hierarchy' defined with measurable criteria? [Gap]"
+   **发现和解决问题**(需求质量问题):
+   针对需求本身提出问题:
+   - 歧义: "术语 'fast' 是否已用具体指标量化? [Ambiguity, Spec §NFR-1]"
+   - 冲突: "§FR-10 和 §FR-10a 之间的导航需求是否存在冲突? [Conflict]"
+   - 假设: "'始终可用的播客 API' 这一假设是否经过验证? [Assumption]"
+   - 依赖: "外部播客 API 的需求是否已记录? [Dependency, Gap]"
+   - 缺失定义: "'视觉层次' 是否已用可测量的标准定义? [Gap]"
 
-   **内容整合**: 
-   - Soft cap: If raw candidate items > 40, prioritize by risk/impact
-   - Merge near-duplicates checking the same requirement aspect
-   - If >5 low-impact edge cases, create one item: "Are edge cases X, Y, Z addressed in requirements? [Coverage]"
+   **内容整合**:
+   - 软上限: 如果原始候选项目超过 40 个, 按风险/影响优先级排序
+   - 合并检查相同需求方面的近似重复项
+   - 如果超过 5 个低影响的边缘情况, 创建一个项目: "边缘情况 X, Y, Z 是否在需求中得到处理? [Coverage]"
 
    **🚫 ABSOLUTELY PROHIBITED** - These make it an implementation test, not a requirements test:
    - ❌ Any item starting with "Verify", "Test", "Confirm", "Check" + implementation behavior

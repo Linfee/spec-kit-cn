@@ -385,6 +385,22 @@
 
 ---
 
+## Presets/Extensions系统术语
+
+| 英文 | 中文 | 说明 |
+|------|------|------|
+| Preset | 预设 | 可堆叠的模板和命令覆盖集合 |
+| Extension | 扩展 | 为 Spec Kit 添加新功能的模块化包 |
+| Catalog | 目录 | 扩展和预设的发现列表 |
+| Resolution Stack | 解析栈 | 模板查找的优先级顺序 |
+| Override | 覆盖 | 替换默认模板或命令 |
+| Stack | 堆叠 | 多个预设的叠加使用 |
+| Resolution Priority | 解析优先级 | 数值越小优先级越高 |
+| Enabled | 已启用 | 预设/扩展的启用状态 |
+| Disabled | 已禁用 | 预设/扩展的禁用状态 |
+
+---
+
 ## Checklist方法论术语
 
 | 英文 | 中文 | 说明 |
@@ -416,6 +432,6 @@
 
 ---
 
-*本术语表由Spec Kit CN项目维护, 最后更新时间: 2026-03-24(新增 Preset/Extension 相关术语)*
+*本术语表由Spec Kit CN项目维护, 最后更新时间: 2026-04-07(新增 CLI Help 检查脚本、Presets/Extensions 系统术语、质量检查相关术语)*
 
 *如有疑问或建议, 请通过GitHub Issues反馈: https://github.com/linfee/spec-kit-cn/issues*

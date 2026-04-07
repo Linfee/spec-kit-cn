@@ -28,22 +28,22 @@ $ARGUMENTS
     ```
     ## 扩展钩子
 
-    **Optional Pre-Hook**: {extension}
-    Command: `/{command}`
-    Description: {description}
+    **可选前置钩子**: {extension}
+    命令: `/{command}`
+    描述: {description}
 
-    Prompt: {prompt}
-    To execute: `/{command}`
+    提示: {prompt}
+    执行方式: `/{command}`
     ```
   - **强制钩子** (`optional: false`):
     ```
     ## 扩展钩子
 
-    **Automatic Pre-Hook**: {extension}
-    Executing: `/{command}`
+    **自动前置钩子**: {extension}
+    正在执行: `/{command}`
     EXECUTE_COMMAND: {command}
 
-    Wait for the result of the hook command before proceeding to the Outline.
+    等待钩子命令的结果后再继续执行大纲。
     ```
 - 如果没有注册钩子或 `.specify/extensions.yml` 不存在, 静默跳过
 
@@ -183,19 +183,19 @@ $ARGUMENTS
         ```
         ## 扩展钩子
 
-        **Optional Hook**: {extension}
-        Command: `/{command}`
-        Description: {description}
+        **可选钩子**: {extension}
+        命令: `/{command}`
+        描述: {description}
 
-        Prompt: {prompt}
-        To execute: `/{command}`
+        提示: {prompt}
+        执行方式: `/{command}`
         ```
       - **强制钩子** (`optional: false`):
         ```
         ## 扩展钩子
 
-        **Automatic Hook**: {extension}
-        Executing: `/{command}`
+        **自动钩子**: {extension}
+        正在执行: `/{command}`
         EXECUTE_COMMAND: {command}
         ```
     - 如果没有注册钩子或 `.specify/extensions.yml` 不存在, 静默跳过

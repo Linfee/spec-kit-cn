@@ -8,7 +8,7 @@
 
 > **💡 这是 [GitHub Spec Kit](https://github.com/github/spec-kit) 的非官方中文复刻版本**
 >
-> **🔄 对应原版版本**: [v0.4.0](https://github.com/github/spec-kit/releases/tag/v0.4.0)
+> **🔄 对应原版版本**: [v0.5.0](https://github.com/github/spec-kit/releases/tag/v0.5.0)
 >
 > **📦 包名**: `specify-cn-cli`
 >
@@ -36,7 +36,10 @@
     - [5. 分解任务](#5-分解任务)
     - [6. 执行实施](#6-执行实施)
   - [📽️ 视频概述](#️-视频概述)
+  - [🧩 社区扩展](#-社区扩展)
+  - [🎨 社区预设](#-社区预设)
   - [🚶 社区演练](#-社区演练)
+  - [🛠️ 社区项目](#️-社区项目)
   - [🤖 支持的 AI 代理](#-支持的-ai-代理)
   - [🔧 Specify CLI 参考](#-specify-cli-参考)
     - [命令](#命令)
@@ -121,9 +124,13 @@ specify-cn init my-project --ai agy --offline --ai-skills
 
 #### 方式 1: 持久化安装(推荐)
 
-一次安装, 随处使用: 
+一次安装, 随处使用. 固定到特定的发布标签以获得稳定性 (查看 [Releases](https://github.com/linfee/spec-kit-cn/releases) 获取最新版本):
 
 ```bash
+# 安装特定的稳定版本(推荐 — 将 vX.Y.Z 替换为最新标签)
+uv tool install specify-cn-cli --from git+https://github.com/linfee/spec-kit-cn.git@vX.Y.Z
+
+# 或安装最新的 main 分支(可能包含未发布的变更)
 uv tool install specify-cn-cli --from git+https://github.com/linfee/spec-kit-cn.git
 ```
 
@@ -142,18 +149,24 @@ specify-cn init --here --ai claude
 specify-cn check
 ```
 
-要升级 Specify CLI, 请参阅 [升级指南](./docs/upgrade.md) 获取详细说明. 快速升级: 
+要升级 Specify CLI, 请参阅 [升级指南](./docs/upgrade.md) 获取详细说明. 快速升级:
 
 ```bash
-uv tool install specify-cn-cli --force --from git+https://github.com/linfee/spec-kit-cn.git
+uv tool install specify-cn-cli --force --from git+https://github.com/linfee/spec-kit-cn.git@vX.Y.Z
 ```
 
 #### 方式 2: 一次性使用
 
-直接运行, 无需安装: 
+直接运行, 无需安装:
 
 ```bash
-uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <PROJECT_NAME>
+# 创建新项目(固定到稳定版本 — 将 vX.Y.Z 替换为最新标签)
+uvx --from git+https://github.com/linfee/spec-kit-cn.git@vX.Y.Z specify-cn init <PROJECT_NAME>
+
+# 或在现有项目中初始化
+uvx --from git+https://github.com/linfee/spec-kit-cn.git@vX.Y.Z specify-cn init . --ai claude
+# 或
+uvx --from git+https://github.com/linfee/spec-kit-cn.git@vX.Y.Z specify-cn init --here --ai claude
 ```
 
 **持久化安装的优势**:
@@ -163,9 +176,13 @@ uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <PROJEC
 - 更好的工具管理: `uv tool list`, `uv tool upgrade`, `uv tool uninstall`
 - 更简洁的 shell 配置
 
+#### 方式 3: 企业级/离线环境安装
+
+如果你的环境阻止访问 PyPI 或 GitHub, 请参阅[企业级/离线环境安装](./docs/installation.md#enterprise--air-gapped-installation)指南, 了解如何使用 `pip download` 在联网机器上创建可移植的, 特定于操作系统的 wheel 包的分步说明.
+
 ### 2. 建立项目原则
 
-在项目目录中启动你的 AI 助手. 助手可使用 `/speckit.*` 命令.
+在项目目录中启动你的 AI 助手. 大多数代理以 `/speckit.*` 斜杠命令的形式暴露 spec-kit; Codex CLI 在技能模式下使用 `$speckit-*` 代替.
 
 使用 `**/speckit.constitution`** 命令创建项目的指导原则和开发指南, 这将指导所有后续开发.
 
@@ -211,18 +228,122 @@ uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <PROJEC
 
 想要观看 Spec Kit 的实际操作? 观看我们的[视频概述](https://www.youtube.com/watch?v=a9eR1xsfvHg&pp=0gcJCckJAYcqIYzv)! 
 
-[Spec Kit 视频标题](https://www.youtube.com/watch?v=a9eR1xsfvHg&pp=0gcJCckJAYcqIYzv)
+[![Spec Kit video header](/media/spec-kit-video-header.jpg)](https://www.youtube.com/watch?v=a9eR1xsfvHg&pp=0gcJCckJAYcqIYzv)
+
+## 🧩 社区扩展
+
+> [!NOTE]
+> 社区扩展由各自作者独立创建和维护. GitHub 和 Spec Kit 维护者可能会审查向社区目录添加条目的拉取请求的格式, 目录结构或策略合规性, 但他们**不审查, 审计, 认可或支持扩展代码本身**. 社区扩展网站也是第三方资源. 请在安装前审查扩展源代码, 并自行判断使用.
+
+🔍 **在 [社区扩展网站](https://speckit-community.github.io/extensions/) 上浏览和搜索社区扩展.**
+
+以下社区贡献的扩展可在 [`catalog.community.json`](extensions/catalog.community.json) 中找到:
+
+**类别:**
+
+- `docs` — 读取, 验证或生成规范制品
+- `code` — 审查, 验证或修改源代码
+- `process` — 跨阶段编排工作流
+- `integration` — 与外部平台同步
+- `visibility` — 报告项目健康或进度
+
+**效果:**
+
+- `Read-only` — 生成报告但不修改文件
+- `Read+Write` — 修改文件, 创建制品或更新规范
+
+| 扩展 | 用途 | 类别 | 效果 | URL |
+|------|------|------|------|-----|
+| AI-Driven Engineering (AIDE) | 结构化的 7 步工作流, 使用 AI 助手从零构建新项目 — 从愿景到实施 | `process` | Read+Write | [aide](https://github.com/mnriem/spec-kit-extensions/tree/main/aide) |
+| Archive Extension | 将已合并的功能归档到主项目记忆中 | `docs` | Read+Write | [spec-kit-archive](https://github.com/stn1slv/spec-kit-archive) |
+| Azure DevOps Integration | 使用 OAuth 认证将用户故事和任务同步到 Azure DevOps 工作项 | `integration` | Read+Write | [spec-kit-azure-devops](https://github.com/pragya247/spec-kit-azure-devops) |
+| Checkpoint Extension | 在实施过程中提交变更, 避免最终只有一个非常大的提交 | `code` | Read+Write | [spec-kit-checkpoint](https://github.com/aaronrsun/spec-kit-checkpoint) |
+| Cleanup Extension | 实施后的质量关卡, 审查变更, 修复小问题(童子军规则), 为中等问题创建任务, 为大问题生成分析 | `code` | Read+Write | [spec-kit-cleanup](https://github.com/dsrednicki/spec-kit-cleanup) |
+| Conduct Extension | 通过子代理委派编排 spec-kit 阶段, 减少上下文污染 | `process` | Read+Write | [spec-kit-conduct-ext](https://github.com/twbrandon7/spec-kit-conduct-ext) |
+| DocGuard — CDD Enforcement | 规范驱动开发(CDD)强制执行. 通过自动化检查, AI 驱动的工作流和 spec-kit 钩子验证, 评分和追踪项目文档. 零 NPM 运行时依赖 | `docs` | Read+Write | [spec-kit-docguard](https://github.com/raccioly/docguard) |
+| Extensify | 创建和验证扩展及扩展目录 | `process` | Read+Write | [extensify](https://github.com/mnriem/spec-kit-extensions/tree/main/extensify) |
+| Fix Findings | 自动化的分析-修复-再分析循环, 解决规范发现直到清除 | `code` | Read+Write | [spec-kit-fix-findings](https://github.com/Quratulain-bilal/spec-kit-fix-findings) |
+| Fleet Orchestrator | 通过人工审批关卡编排完整的功能生命周期, 覆盖所有 SpecKit 阶段 | `process` | Read+Write | [spec-kit-fleet](https://github.com/sharathsatish/spec-kit-fleet) |
+| Iterate | 使用两阶段定义和应用工作流迭代规范文档 — 在实施中途细化规范, 然后直接继续构建 | `docs` | Read+Write | [spec-kit-iterate](https://github.com/imviancagrace/spec-kit-iterate) |
+| Jira Integration | 从 spec-kit 规范和任务分解创建 Jira Epic, Story 和 Issue, 支持可配置的层级和自定义字段 | `integration` | Read+Write | [spec-kit-jira](https://github.com/mbachorik/spec-kit-jira) |
+| Learning Extension | 从实施中生成教育指南, 并通过导师上下文增强澄清环节 | `docs` | Read+Write | [spec-kit-learn](https://github.com/imviancagrace/spec-kit-learn) |
+| MAQA — Multi-Agent & Quality Assurance | 协调者 → 功能 → QA 代理工作流, 支持基于 worktree 的并行实施. 语言无关. 自动检测已安装的看板插件. 可选 CI 关卡 | `process` | Read+Write | [spec-kit-maqa-ext](https://github.com/GenieRobot/spec-kit-maqa-ext) |
+| MAQA Azure DevOps Integration | MAQA 的 Azure DevOps Boards 集成 — 随功能进展同步用户故事和子任务 | `integration` | Read+Write | [spec-kit-maqa-azure-devops](https://github.com/GenieRobot/spec-kit-maqa-azure-devops) |
+| MAQA CI/CD Gate | 自动检测 GitHub Actions, CircleCI, GitLab CI 和 Bitbucket Pipelines. 在流水线通过前阻止 QA 交接 | `process` | Read+Write | [spec-kit-maqa-ci](https://github.com/GenieRobot/spec-kit-maqa-ci) |
+| MAQA GitHub Projects Integration | MAQA 的 GitHub Projects v2 集成 — 随功能进展同步草拟 issue 和状态列 | `integration` | Read+Write | [spec-kit-maqa-github-projects](https://github.com/GenieRobot/spec-kit-maqa-github-projects) |
+| MAQA Jira Integration | MAQA 的 Jira 集成 — 随功能在看板中的进展同步 Story 和 Subtask | `integration` | Read+Write | [spec-kit-maqa-jira](https://github.com/GenieRobot/spec-kit-maqa-jira) |
+| MAQA Linear Integration | MAQA 的 Linear 集成 — 随功能进展跨工作流状态同步 issue 和子 issue | `integration` | Read+Write | [spec-kit-maqa-linear](https://github.com/GenieRobot/spec-kit-maqa-linear) |
+| MAQA Trello Integration | MAQA 的 Trello 看板集成 — 从规范填充看板, 移动卡片, 实时勾选清单 | `integration` | Read+Write | [spec-kit-maqa-trello](https://github.com/GenieRobot/spec-kit-maqa-trello) |
+| Onboard | 为 spec-kit 项目新开发者提供上下文引导和渐进式成长. 解释规范, 映射依赖, 验证理解, 指导下一步 | `process` | Read+Write | [spec-kit-onboard](https://github.com/dmux/spec-kit-onboard) |
+| Plan Review Gate | 要求 spec.md 和 plan.md 通过 MR/PR 合并后才能生成任务 | `process` | Read-only | [spec-kit-plan-review-gate](https://github.com/luno/spec-kit-plan-review-gate) |
+| Presetify | 创建和验证预设及预设目录 | `process` | Read+Write | [presetify](https://github.com/mnriem/spec-kit-extensions/tree/main/presetify) |
+| Product Forge | 完整产品生命周期: 研究 → 产品规范 → SpecKit → 实施 → 验证 → 测试 | `process` | Read+Write | [speckit-product-forge](https://github.com/VaiYav/speckit-product-forge) |
+| Project Health Check | 诊断 Spec Kit 项目并报告结构, 代理, 功能, 脚本, 扩展和 Git 方面的健康问题 | `visibility` | Read-only | [spec-kit-doctor](https://github.com/KhawarHabibKhan/spec-kit-doctor) |
+| Project Status | 显示当前 SDD 工作流进度 — 活跃功能, 制品状态, 任务完成度, 工作流阶段和扩展摘要 | `visibility` | Read-only | [spec-kit-status](https://github.com/KhawarHabibKhan/spec-kit-status) |
+| QA Testing Extension | 使用浏览器驱动或基于 CLI 的验收标准系统化 QA 测试 | `code` | Read-only | [spec-kit-qa](https://github.com/arunt14/spec-kit-qa) |
+| Ralph Loop | 使用 AI 代理 CLI 的自主实施循环 | `code` | Read+Write | [spec-kit-ralph](https://github.com/Rubiss/spec-kit-ralph) |
+| Reconcile Extension | 通过精确更新功能制品来协调实施偏差 | `docs` | Read+Write | [spec-kit-reconcile](https://github.com/stn1slv/spec-kit-reconcile) |
+| Repository Index | 为现有仓库生成概览, 架构和模块级别的索引 | `docs` | Read-only | [spec-kit-repoindex](https://github.com/liuyiyu/spec-kit-repoindex) |
+| Retro Extension | 冲刺回顾分析, 包含指标, 规范准确性评估和改进建议 | `process` | Read+Write | [spec-kit-retro](https://github.com/arunt14/spec-kit-retro) |
+| Retrospective Extension | 实施后回顾, 包含规范遵循评分, 偏差分析和人工审批的规范更新 | `docs` | Read+Write | [spec-kit-retrospective](https://github.com/emi-dm/spec-kit-retrospective) |
+| Review Extension | 实施后全面代码审查, 使用专门的代理检查代码质量, 注释, 测试, 错误处理, 类型设计和简化 | `code` | Read-only | [spec-kit-review](https://github.com/ismaelJimenez/spec-kit-review) |
+| SDD Utilities | 恢复中断的工作流, 验证项目健康状态, 验证规范到任务的追溯性 | `process` | Read+Write | [speckit-utils](https://github.com/mvanhorn/speckit-utils) |
+| Staff Review Extension | 资深工程师级别的代码审查, 根据规范验证实施, 检查安全性, 性能和测试覆盖率 | `code` | Read-only | [spec-kit-staff-review](https://github.com/arunt14/spec-kit-staff-review) |
+| Superpowers Bridge | 在 spec-kit SDD 工作流中编排 obra/superpowers 技能, 覆盖完整生命周期(澄清, TDD, 审查, 验证, 评审, 调试, 分支完成) | `process` | Read+Write | [superpowers-bridge](https://github.com/RbBtSn0w/spec-kit-extensions/tree/main/superpowers-bridge) |
+| Ship Release Extension | 自动化发布流水线: 预检, 分支同步, 变更日志生成, CI 验证和 PR 创建 | `process` | Read+Write | [spec-kit-ship](https://github.com/arunt14/spec-kit-ship) |
+| Spec Critique Extension | 从产品策略和工程风险两个角度对规范和计划进行批判性审查 | `docs` | Read-only | [spec-kit-critique](https://github.com/arunt14/spec-kit-critique) |
+| Spec Sync | 检测并解决规范与实施之间的偏差. AI 辅助解决, 需人工审批 | `docs` | Read+Write | [spec-kit-sync](https://github.com/bgervin/spec-kit-sync) |
+| V-Model Extension Pack | 强制 V-Model 配对生成开发规范和测试规范, 提供完整的追溯性 | `docs` | Read+Write | [spec-kit-v-model](https://github.com/leocamello/spec-kit-v-model) |
+| Verify Extension | 实施后质量关卡, 根据规范制品验证已实施的代码 | `code` | Read-only | [spec-kit-verify](https://github.com/ismaelJimenez/spec-kit-verify) |
+| Verify Tasks Extension | 检测虚假完成: tasks.md 中标记为 [X] 但没有实际实施的任务 | `code` | Read-only | [spec-kit-verify-tasks](https://github.com/datastone-inc/spec-kit-verify-tasks) |
+
+要提交你自己的扩展, 请参阅 [扩展发布指南](extensions/EXTENSION-PUBLISHING-GUIDE.md).
+
+## 🎨 社区预设
+
+> [!NOTE]
+> 社区预设由各自作者独立创建和维护. GitHub 和 Spec Kit 维护者可能会审查向社区目录添加条目的拉取请求的格式, 目录结构或策略合规性, 但他们**不审查, 审计, 认可或支持预设代码本身**. 请在安装前审查预设源代码, 并自行判断使用.
+
+以下社区贡献的预设自定义 Spec Kit 的行为方式 — 覆盖模板, 命令和术语而不更改任何工具. 预设可在 [`catalog.community.json`](presets/catalog.community.json) 中找到:
+
+| 预设 | 用途 | 提供 | 依赖 | URL |
+|------|------|------|------|-----|
+| AIDE In-Place Migration | 将 AIDE 扩展工作流适配为就地技术迁移(X → Y 模式) — 添加迁移目标, 验证关卡, 知识文档和行为等价标准 | 2 个模板, 8 个命令 | AIDE 扩展 | [spec-kit-presets](https://github.com/mnriem/spec-kit-presets) |
+| Pirate Speak (Full) | 将所有 Spec Kit 输出转换为海盗语言 — 规范变成"航海宣言", 计划变成"作战计划", 任务变成"船员分配" | 6 个模板, 9 个命令 | — | [spec-kit-presets](https://github.com/mnriem/spec-kit-presets) |
+
+要构建和发布你自己的预设, 请参阅 [预设发布指南](presets/PUBLISHING.md).
 
 ## 🚶 社区演练
+
+> [!NOTE]
+> 社区演练由各自作者独立创建和维护. 它们**未经 GitHub 审查, 认可或支持**. 请在跟随演练前审查其内容, 并自行判断使用.
 
 通过这些社区贡献的演练, 在不同场景中观看规范驱动开发的实际操作:
 
 - **[全新 .NET CLI 工具](https://github.com/mnriem/spec-kit-dotnet-cli-demo)** — 从空白目录构建时区工具作为 .NET 单一二进制 CLI 工具, 涵盖完整的 spec-kit 工作流: constitution, specify, plan, tasks, 以及使用 GitHub Copilot 代理的多轮实现。
+
 - **[全新 Spring Boot + React 平台](https://github.com/mnriem/spec-kit-spring-react-demo)** — 使用 Spring Boot, 嵌入式 React, PostgreSQL 和 Docker Compose 从零构建 LLM 性能分析平台(REST API, 图表, 迭代跟踪), 包含 clarify 步骤和跨制品一致性分析。
+
 - **[存量 ASP.NET CMS 扩展](https://github.com/mnriem/spec-kit-aspnet-brownfield-demo)** — 扩展现有的开源 .NET CMS(CarrotCakeCMS-Core, 约 307,000 行 C#, Razor, SQL, JavaScript 和配置文件), 添加两个新功能 — 跨平台 Docker Compose 基础设施和令牌认证的无头 REST API — 展示 spec-kit 如何在没有预先规范或章程的情况下融入现有代码库。
+
 - **[存量 Java 运行时扩展](https://github.com/mnriem/spec-kit-java-brownfield-demo)** — 扩展现有的开源 Jakarta EE 运行时(Piranha, 约 420,000 行 Java, XML, JSP, HTML 和配置文件, 跨 180 个 Maven 模块), 添加密码保护的服务器管理控制台, 展示在没有预先规范或章程的大型多模块 Java 项目上使用 spec-kit。
+
 - **[存量 Go / React 仪表板演示](https://github.com/mnriem/spec-kit-go-brownfield-demo)** — 展示完全从**终端使用 GitHub Copilot CLI** 驱动 spec-kit。扩展 NASA 的开源 Hermes 地面支持系统(Go), 添加轻量级的基于 React 的 Web 遥测仪表板, 展示完整的 constitution → specify → plan → tasks → implement 工作流可以从终端运行。
+
 - **[使用自定义预设的全新 Spring Boot MVC](https://github.com/mnriem/spec-kit-pirate-speak-preset-demo)** — 使用自定义海盗语言预设从零构建 Spring Boot MVC 应用程序, 展示预设如何重塑整个 spec-kit 体验: 规范变成"航海宣言", 计划变成"作战计划", 任务变成"船员分配" — 全部以完整的海盗方言生成, 而无需更改任何工具。
+
+- **[使用自定义扩展的全新 Spring Boot + React](https://github.com/mnriem/spec-kit-aide-extension-demo)** — 演练 **AIDE 扩展**, 这是一个社区扩展, 为 spec-kit 添加了另一种规范驱动工作流, 使用高层规范(愿景)和低层规范(工作项)组织为 7 步迭代生命周期: 愿景 → 路线图 → 进度跟踪 → 工作队列 → 工作项 → 执行 → 反馈循环. 使用家庭交易平台(Spring Boot 4, React 19, PostgreSQL, Docker Compose)作为场景, 展示扩展机制如何让你插入不同风格的规范驱动开发而无需更改任何核心工具 — 真正利用 Spec Kit 中的"Kit".
+
+## 🛠️ 社区项目
+
+> [!NOTE]
+> 此处列出的社区项目由各自作者独立创建和维护. 它们**未经 GitHub 审查, 认可或支持**. 请在安装前审查其源代码, 并自行判断使用.
+
+扩展, 可视化或基于 Spec Kit 构建的社区项目:
+
+- **[cc-spex](https://github.com/rhuss/cc-spex)** — Claude Code 插件, 在 Spec Kit 之上添加可组合的特性, 包括基于 [Superpowers](https://github.com/obra/superpowers) 的质量关卡, 规范/代码审查, git worktree 隔离和通过代理团队进行并行实施.
+
+- **[Spec Kit Assistant](https://marketplace.visualstudio.com/items?itemName=rfsales.speckit-assistant)** — VS Code 扩展, 提供完整 SDD 工作流(constitution → specification → planning → tasks → implementation)的可视化编排器, 包含阶段状态可视化, 交互式任务清单, DAG 可视化, 以及对 Claude, Gemini, GitHub Copilot 和 OpenAI 后端的支持. 需要在 PATH 中安装 `specify` CLI.
 
 ## 🤖 支持的 AI 代理
 
@@ -230,12 +351,12 @@ uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <PROJEC
 | 代理                                                                                 | 支持 | 说明                                                                                                             |
 | ------------------------------------------------------------------------------------ | ---- | ---------------------------------------------------------------------------------------------------------------- |
 | [Qoder CLI](https://qoder.com/cli)                                                   | ✅    |                                                                                                                  |
-| [Amazon Q Developer CLI](https://aws.amazon.com/developer/learning/q-developer-cli/) | ⚠️    | Amazon Q Developer CLI [不支持](https://github.com/aws/amazon-q-developer-cli/issues/3064) 斜杠命令的自定义参数. |
+| [Kiro CLI](https://kiro.dev/docs/cli/)                                               | ✅    | 使用 `--ai kiro-cli` (别名: `--ai kiro`)                                                                         |
 | [Amp](https://ampcode.com/)                                                          | ✅    |                                                                                                                  |
 | [Auggie CLI](https://docs.augmentcode.com/cli/overview)                              | ✅    |                                                                                                                  |
-| [Claude Code](https://www.anthropic.com/claude-code)                                 | ✅    |                                                                                                                  |
+| [Claude Code](https://www.anthropic.com/claude-code)                                 | ✅    | 将技能安装到 `.claude/skills`; 以 `/speckit-constitution`, `/speckit-plan` 等方式调用                            |
 | [CodeBuddy CLI](https://www.codebuddy.ai/cli)                                        | ✅    |                                                                                                                  |
-| [Codex CLI](https://github.com/openai/codex)                                         | ✅    |                                                                                                                  |
+| [Codex CLI](https://github.com/openai/codex)                                         | ✅    | 需要 `--ai-skills`. Codex 推荐 [skills](https://developers.openai.com/codex/skills) 并将 [custom prompts](https://developers.openai.com/codex/custom-prompts) 视为已弃用. Spec-kit 将 Codex 技能安装到 `.agents/skills` 并以 `$speckit-<command>` 方式调用 |
 | [Cursor](https://cursor.sh/)                                                         | ✅    |                                                                                                                  |
 | [Gemini CLI](https://github.com/google-gemini/gemini-cli)                            | ✅    |                                                                                                                  |
 | [GitHub Copilot](https://code.visualstudio.com/)                                     | ✅    |                                                                                                                  |
@@ -243,11 +364,18 @@ uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <PROJEC
 | [Jules](https://jules.google.com/)                                                   | ✅    |                                                                                                                  |
 | [Kilo Code](https://github.com/Kilo-Org/kilocode)                                    | ✅    |                                                                                                                  |
 | [opencode](https://opencode.ai/)                                                     | ✅    |                                                                                                                  |
+| [Pi Coding Agent](https://pi.dev)                                                    | ✅    | Pi 开箱不支持 MCP, 因此 `taskstoissues` 无法按预期工作. 可通过 [extensions](https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent#extensions) 添加 MCP 支持 |
 | [Qwen Code](https://github.com/QwenLM/qwen-code)                                     | ✅    |                                                                                                                  |
 | [Roo Code](https://roocode.com/)                                                     | ✅    |                                                                                                                  |
 | [SHAI (OVHcloud)](https://github.com/ovh/shai)                                       | ✅    |                                                                                                                  |
+| [Tabnine CLI](https://docs.tabnine.com/main/getting-started/tabnine-cli)             | ✅    |                                                                                                                  |
+| [Mistral Vibe](https://github.com/mistralai/mistral-vibe)                            | ✅    |                                                                                                                  |
+| [Kimi Code](https://code.kimi.com/)                                                  | ✅    |                                                                                                                  |
+| [iFlow CLI](https://docs.iflow.cn/en/cli/quickstart)                                 | ✅    |                                                                                                                  |
 | [Windsurf](https://windsurf.com/)                                                    | ✅    |                                                                                                                  |
-| [Antigravity (agy)](https://agy.ai/)                                                 | ✅    |                                                                                                                  |
+| [Junie](https://junie.jetbrains.com/)                                                | ✅    |                                                                                                                  |
+| [Antigravity (agy)](https://antigravity.google/)                                     | ✅    | 需要 `--ai-skills`                                                                                               |
+| [Trae](https://www.trae.ai/)                                                         | ✅    |                                                                                                                  |
 | Generic                                                                              | ✅    | 自带代理 — 使用 `--ai generic --ai-commands-dir <path>` 支持未列出的代理                                         |
 
 
@@ -261,7 +389,7 @@ uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <PROJEC
 | 命令      | 描述                                                                                                                                        |
 | ------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | `init`  | 从最新模板初始化新的 Specify 项目                                                                                                                     |
-| `check` | 检查已安装的工具 (`git`, `claude`, `gemini`, `code`/`code-insiders`, `cursor-agent`, `windsurf`, `qwen`, `opencode`, `codex`, `shai`, `qodercli`) |
+| `check` | 检查已安装的工具: `git` 以及 `AGENT_CONFIG` 中配置的所有基于 CLI 的代理 (例如: `claude`, `gemini`, `code`/`code-insiders`, `cursor-agent`, `windsurf`, `junie`, `qwen`, `opencode`, `codex`, `kiro-cli`, `shai`, `qodercli`, `vibe`, `kimi`, `iflow`, `pi` 等) |
 
 
 ### `specify-cn init` 参数和选项
@@ -270,7 +398,7 @@ uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <PROJEC
 | 参数/选项              | 类型 | 描述                                                                                                                                                                                                                                      |
 | ---------------------- | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `<project-name>`       | 参数 | 新项目目录的名称(使用 `--here` 时可选, 或使用 `.` 表示当前目录)                                                                                                                                                                           |
-| `--ai`                 | 选项 | 要使用的 AI 助手: `claude`, `gemini`, `copilot`, `cursor-agent`, `qwen`, `opencode`, `codex`, `windsurf`, `kilocode`, `auggie`, `roo`, `codebuddy`, `amp`, `shai`, `q`, `agy`, `bob`, `qodercli`, 或 `generic` (需要 `--ai-commands-dir`) |
+| `--ai`                 | 选项 | 要使用的 AI 助手 (完整列表参见 `AGENT_CONFIG`): `claude`, `gemini`, `copilot`, `cursor-agent`, `qwen`, `opencode`, `codex`, `windsurf`, `junie`, `kilocode`, `auggie`, `roo`, `codebuddy`, `amp`, `shai`, `kiro-cli` (`kiro` 别名), `agy`, `bob`, `qodercli`, `vibe`, `kimi`, `iflow`, `pi`, 或 `generic` (需要 `--ai-commands-dir`) |
 | `--ai-commands-dir`    | 选项 | 代理命令文件的目录 (与 `--ai generic` 一起使用, 例如 `.myagent/commands/`)                                                                                                                                                                |
 | `--script`             | 选项 | 要使用的脚本变体: `sh` (bash/zsh) 或 `ps` (PowerShell)                                                                                                                                                                                    |
 | `--ignore-agent-tools` | 标志 | 跳过 AI 代理工具的检查, 如 Claude Code                                                                                                                                                                                                    |
@@ -280,7 +408,8 @@ uvx --from git+https://github.com/linfee/spec-kit-cn.git specify-cn init <PROJEC
 | `--skip-tls`           | 标志 | 跳过 SSL/TLS 验证(不推荐)                                                                                                                                                                                                                 |
 | `--debug`              | 标志 | 启用详细调试输出以进行故障排除                                                                                                                                                                                                            |
 | `--github-token`       | 选项 | API 请求的 GitHub 令牌(或设置 GH_TOKEN/GITHUB_TOKEN 环境变量)                                                                                                                                                                             |
-| `--ai-skills`          | 标志 | 将 Prompt.MD 模板作为代理技能安装到代理特定的 `skills/` 目录中 (需要 `--ai`)                                                                                                                                                              |
+| `--ai-skills`          | 标志 | 将 Prompt.MD 模板作为代理技能安装到代理特定的 `skills/` 目录中 (需要 `--ai`). 稍后添加扩展时, 扩展命令也会自动注册为技能                                                                                                                                                |
+| `--branch-numbering`   | 选项 | 分支编号策略: `sequential` (默认 — `001`, `002`, `003`) 或 `timestamp` (`YYYYMMDD-HHMMSS`). 时间戳模式适用于分布式团队以避免编号冲突                                                                                                                                    |
 
 
 ### 示例
@@ -298,6 +427,9 @@ specify-cn init my-project --ai cursor-agent
 # 使用 Qoder 支持初始化
 specify-cn init my-project --ai qodercli
 
+# 使用 Kiro CLI 支持初始化
+specify-cn init my-project --ai kiro-cli
+
 # 使用 Windsurf 支持初始化
 specify-cn init my-project --ai windsurf
 
@@ -307,8 +439,20 @@ specify-cn init my-project --ai amp
 # 使用 SHAI 支持初始化
 specify-cn init my-project --ai shai
 
+# 使用 Mistral Vibe 支持初始化
+specify-cn init my-project --ai vibe
+
 # 使用 IBM Bob 支持初始化
 specify-cn init my-project --ai bob
+
+# 使用 Pi Coding Agent 支持初始化
+specify-cn init my-project --ai pi
+
+# 使用 Codex CLI 支持初始化
+specify-cn init my-project --ai codex --ai-skills
+
+# 使用 Antigravity 支持初始化
+specify-cn init my-project --ai agy --ai-skills
 
 # 使用不支持的代理初始化(通用/自带代理)
 specify-cn init my-project --ai generic --ai-commands-dir .myagent/commands/
@@ -341,13 +485,22 @@ specify-cn init my-project --ai claude --ai-skills
 # 在当前目录初始化并安装代理技能
 specify-cn init --here --ai gemini --ai-skills
 
+# 使用基于时间戳的分支编号(适用于分布式团队)
+specify-cn init my-project --ai claude --branch-numbering timestamp
+
 # 检查系统要求
 specify-cn check
 ```
 
 ### 可用的斜杠命令
 
-运行 `specify-cn init` 后, 你的 AI 编码代理将可以使用这些斜杠命令进行结构化开发: 
+运行 `specify-cn init` 后, 你的 AI 编码代理将可以使用这些结构化开发命令.
+
+大多数代理以传统的点分隔斜杠命令形式暴露以下命令, 如 `/speckit.plan`.
+
+Claude Code 将 spec-kit 安装为技能, 并以 `/speckit-constitution`, `/speckit-specify`, `/speckit-plan`, `/speckit-tasks` 和 `/speckit-implement` 的方式调用.
+
+对于 Codex CLI, `--ai-skills` 将 spec-kit 安装为代理技能而非斜杠命令提示文件. 在 Codex 技能模式下, 以 `$speckit-constitution`, `$speckit-specify`, `$speckit-plan`, `$speckit-tasks` 和 `$speckit-implement` 的方式调用.
 
 #### 核心命令
 
@@ -511,7 +664,8 @@ specify-cn preset add <preset-name>
 
 ## 📋 详细流程
 
-点击展开详细的分步演练
+<details>
+<summary>点击展开详细的分步演练</summary>
 
 你可以使用 Specify CLI 来引导你的项目, 这将在你的环境中引入所需的制品. 运行:
 
@@ -540,13 +694,13 @@ specify-cn init <project_name> --ai claude
 specify-cn init <project_name> --ai gemini
 specify-cn init <project_name> --ai copilot
 
-# 或在当前目录: 
+# 或在当前目录:
 specify-cn init . --ai claude
-specify-cn init . --ai codex
+specify-cn init . --ai codex --ai-skills
 
 # 或使用 --here 标志
 specify-cn init --here --ai claude
-specify-cn init --here --ai codex
+specify-cn init --here --ai codex --ai-skills
 
 # 强制合并到非空的当前目录
 specify-cn init . --force --ai claude
@@ -555,7 +709,7 @@ specify-cn init . --force --ai claude
 specify-cn init --here --force --ai claude
 ```
 
-CLI 会检查你是否安装了 Claude Code, Gemini CLI, Cursor CLI, Qwen CLI, opencode, Codex CLI, Qoder CLI 或 Amazon Q Developer CLI. 如果你没有安装, 或者你希望在不检查正确工具的情况下获取模板, 请在命令中使用 `--ignore-agent-tools`:
+CLI 会检查你是否安装了 Claude Code, Gemini CLI, Cursor CLI, Qwen CLI, opencode, Codex CLI, Qoder CLI, Tabnine CLI, Kiro CLI, Pi 或 Mistral Vibe. 如果你没有安装, 或者你希望在不检查正确工具的情况下获取模板, 请在命令中使用 `--ignore-agent-tools`:
 
 ```bash
 specify-cn init <project_name> --ai claude --ignore-agent-tools
@@ -782,7 +936,7 @@ Blazor服务器与拖拽任务板, 实时更新. 应该创建一个REST API, 包
 
 实施完成后, 测试应用程序并解决任何在CLI日志中可能不可见的运行时错误(例如, 浏览器控制台错误). 你可以将此类错误复制粘贴回AI代理以进行解决.
 
-
+</details>
 
 ---
 

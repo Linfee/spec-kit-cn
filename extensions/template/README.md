@@ -32,7 +32,7 @@
 
    ```bash
    cd /path/to/spec-kit-project
-   specify extension add --dev /path/to/my-extension
+   specify-cn extension add --dev /path/to/my-extension
    ```
 
 7. **发布** (可选):
@@ -77,4 +77,3 @@
 - 版本: 1.0.0
 - 最后更新: 2026-01-28
 - 兼容 Spec Kit: >=0.1.0
-STATS:comma=0,period=0,colon=0,semicolon=0,exclaim=0,question=0,dunhao=0

@@ -23,10 +23,10 @@
 
 ```bash
 # 从目录安装
-specify extension add my-extension
+specify-cn extension add my-extension
 
 # 或从本地开发目录安装
-specify extension add --dev /path/to/my-extension
+specify-cn extension add --dev /path/to/my-extension
 ```
 
 ## 配置
@@ -135,7 +135,7 @@ export SPECKIT_MY_EXTENSION_CONNECTION_API_KEY="custom-key"
 
 **解决方案**：
 
-1. 检查扩展是否已安装：`specify extension list`
+1. 检查扩展是否已安装：`specify-cn extension list`
 2. 重启 AI 代理
 3. 重新安装扩展
 
@@ -156,4 +156,3 @@ MIT License - 参见 LICENSE 文件
 
 *扩展版本: 1.0.0*
 *Spec Kit: >=0.1.0*
-STATS:comma=0,period=0,colon=0,semicolon=0,exclaim=0,question=0,dunhao=0

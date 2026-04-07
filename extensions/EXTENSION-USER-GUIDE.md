@@ -1,11 +1,11 @@
 # 扩展用户指南
 
-使用 Spec Kit 扩展增强工作流程的完整指南. 
+使用 Spec Kit 扩展增强工作流的完整指南。
 
 ## 目录
 
 1. [简介](#简介)
-2. [快速开始](#快速开始)
+2. [入门](#入门)
 3. [查找扩展](#查找扩展)
 4. [安装扩展](#安装扩展)
 5. [使用扩展](#使用扩展)
@@ -20,54 +20,54 @@
 
 ### 什么是扩展?
 
-扩展是模块化的包, 可以在不膨胀核心框架的情况下为 Spec Kit 添加新命令和功能. 它们允许你:
+扩展是模块化的包, 可以为 Spec Kit 添加新命令和功能, 而不会膨胀核心框架。它们允许你:
 
-- **集成** 外部工具 (Jira, Linear, GitHub 等)
-- **自动化** 重复性任务
-- **自定义** 你团队的工作流程
-- **共享** 跨项目的解决方案
+- **集成**外部工具 (Jira, Linear, GitHub 等)
+- **自动化**重复性任务(通过钩子)
+- **自定义**团队工作流
+- **跨项目**共享解决方案
 
 ### 为什么使用扩展?
 
-- **精简核心**: 保持 spec-kit 轻量级和专注
-- **可选功能**: 只安装你需要的
+- **精简核心**: 保持 spec-kit 轻量和专注
+- **可选功能**: 只安装你需要的内容
 - **社区驱动**: 任何人都可以创建和分享扩展
-- **版本控制**: 扩展独立版本化
+- **版本控制**: 扩展独立版本控制
 
 ---
 
-## 快速开始
+## 入门
 
 ### 先决条件
 
 - Spec Kit 版本 0.1.0 或更高
 - 一个 spec-kit 项目 (包含 `.specify/` 文件夹的目录)
 
-### 检查你的版本
+### 检查版本
 
 ```bash
-specify version
-# 应该显示 0.1.0 或更高
+specify-cn version
+# 应显示 0.1.0 或更高
 ```
 
 ### 第一个扩展
 
-让我们以安装 Jira 扩展为例:
+以安装 Jira 扩展为例:
 
 ```bash
 # 1. 搜索扩展
-specify extension search jira
+specify-cn extension search jira
 
 # 2. 获取详细信息
-specify extension info jira
+specify-cn extension info jira
 
-# 3. 安装它
-specify extension add jira
+# 3. 安装
+specify-cn extension add jira
 
-# 4. 配置它
+# 4. 配置
 vim .specify/extensions/jira/jira-config.yml
 
-# 5. 使用它
+# 5. 使用
 # (命令现在在 Claude Code 中可用)
 /speckit.jira.specstoissues
 ```
@@ -76,55 +76,55 @@ vim .specify/extensions/jira/jira-config.yml
 
 ## 查找扩展
 
-**注意**: 默认情况下, `specify extension search` 使用你组织的目录 (`catalog.json`). 如果目录为空, 你不会看到任何结果. 请参阅 [扩展目录](#扩展目录) 了解如何从社区参考目录填充你的目录. 
+`specify-cn extension search` 同时搜索**所有活跃目录**, 默认包含社区目录。结果标注了源目录和安装状态。
 
 ### 浏览所有扩展
 
 ```bash
-specify extension search
+specify-cn extension search
 ```
 
-显示你组织目录中的所有扩展. 
+显示所有活跃目录中的所有扩展 (默认包含默认目录和社区目录)。
 
 ### 按关键词搜索
 
 ```bash
 # 搜索 "jira"
-specify extension search jira
+specify-cn extension search jira
 
 # 搜索 "issue tracking"
-specify extension search issue
+specify-cn extension search issue
 ```
 
 ### 按标签过滤
 
 ```bash
-# 查找所有问题跟踪扩展
-specify extension search --tag issue-tracking
+# 查找所有 issue-tracking 扩展
+specify-cn extension search --tag issue-tracking
 
 # 查找所有 Atlassian 工具
-specify extension search --tag atlassian
+specify-cn extension search --tag atlassian
 ```
 
 ### 按作者过滤
 
 ```bash
 # Stats Perform 的扩展
-specify extension search --author "Stats Perform"
+specify-cn extension search --author "Stats Perform"
 ```
 
-### 仅显示已验证的
+### 仅显示已验证的扩展
 
 ```bash
-# 只显示已验证的扩展
-specify extension search --verified
+# 仅显示已验证的扩展
+specify-cn extension search --verified
 ```
 
 ### 获取扩展详情
 
 ```bash
 # 详细信息
-specify extension info jira
+specify-cn extension info jira
 ```
 
 显示:
@@ -133,7 +133,7 @@ specify extension info jira
 - 要求
 - 提供的命令
 - 可用的钩子
-- 链接 (文档, 仓库, 变更日志)
+- 链接 (文档、仓库、更新日志)
 - 安装状态
 
 ---
@@ -144,48 +144,63 @@ specify extension info jira
 
 ```bash
 # 按名称 (从目录)
-specify extension add jira
+specify-cn extension add jira
 ```
 
 这将:
 
 1. 从 GitHub 下载扩展
 2. 验证清单
-3. 检查与你的 spec-kit 版本的兼容性
+3. 检查与你 spec-kit 版本的兼容性
 4. 安装到 `.specify/extensions/jira/`
-5. 向你的 AI 代理注册命令
+5. 注册命令到你的 AI 代理
 6. 创建配置模板
 
 ### 从 URL 安装
 
 ```bash
-# 从 GitHub release
-specify extension add --from https://github.com/org/spec-kit-ext/archive/refs/tags/v1.0.0.zip
+# 从 GitHub Release
+specify-cn extension add <extension-name> --from https://github.com/org/spec-kit-ext/archive/refs/tags/v1.0.0.zip
 ```
 
 ### 从本地目录安装 (开发)
 
 ```bash
 # 用于测试或开发
-specify extension add --dev /path/to/extension
+specify-cn extension add --dev /path/to/extension
 ```
 
 ### 安装输出
 
 ```text
-✓ 扩展安装成功!
+✓ Extension installed successfully!
 
 Jira Integration (v1.0.0)
-  从 spec-kit 制品创建 Jira Epic, Story 和 Issue
+  Create Jira Epics, Stories, and Issues from spec-kit artifacts
 
-提供的命令:
-  • speckit.jira.specstoissues - 从规范和任务创建 Jira 层级结构
-  • speckit.jira.discover-fields - 发现 Jira 自定义字段用于配置
-  • speckit.jira.sync-status - 将任务完成状态同步到 Jira
+Provided commands:
+  • speckit.jira.specstoissues - Create Jira hierarchy from spec and tasks
+  • speckit.jira.discover-fields - Discover Jira custom fields for configuration
+  • speckit.jira.sync-status - Sync task completion status to Jira
 
-⚠  可能需要配置
-   检查: .specify/extensions/jira/
+⚠  Configuration may be required
+   Check: .specify/extensions/jira/
 ```
+
+### 自动代理技能注册
+
+如果你的项目使用 `--ai-skills` 初始化, 扩展命令在安装期间会**自动注册为代理技能**。这确保使用 [agentskills.io](https://agentskills.io) 技能规范的代理可以发现这些扩展。
+
+```text
+✓ Extension installed successfully!
+
+Jira Integration (v1.0.0)
+  ...
+
+✓ 3 agent skill(s) auto-registered
+```
+
+当扩展被移除时, 其对应的技能也会自动清理。手动自定义的预存技能永远不会被覆盖。
 
 ---
 
@@ -199,8 +214,8 @@ Jira Integration (v1.0.0)
 # 在 Claude Code 中
 > /speckit.jira.specstoissues
 
-# 或使用短别名 (如果提供)
-> /speckit.specstoissues
+# 或使用命名空间别名 (如果提供)
+> /speckit.jira.sync
 ```
 
 ### 扩展配置
@@ -211,7 +226,7 @@ Jira Integration (v1.0.0)
 # 1. 找到配置文件
 ls .specify/extensions/jira/
 
-# 2. 从模板复制配置
+# 2. 从模板复制到配置
 cp .specify/extensions/jira/jira-config.template.yml \
    .specify/extensions/jira/jira-config.yml
 
@@ -219,12 +234,12 @@ cp .specify/extensions/jira/jira-config.template.yml \
 vim .specify/extensions/jira/jira-config.yml
 
 # 4. 使用扩展
-# (命令现在将使用你的配置工作)
+# (命令现在将使用你的配置)
 ```
 
 ### 扩展钩子
 
-一些扩展提供在核心命令后执行的钩子:
+某些扩展提供在核心命令后执行的钩子:
 
 **示例**: Jira 扩展挂钩到 `/speckit.tasks`
 
@@ -232,18 +247,18 @@ vim .specify/extensions/jira/jira-config.yml
 # 运行核心命令
 > /speckit.tasks
 
-# 输出包括:
-## 扩展钩子
+# 输出包含:
+## Extension Hooks
 
-**可选钩子**: jira
-命令: `/speckit.jira.specstoissues`
-描述: 任务生成后自动创建 Jira 层级结构
+**Optional Hook**: jira
+Command: `/speckit.jira.specstoissues`
+Description: Automatically create Jira hierarchy after task generation
 
-提示: 从任务创建 Jira issue?
-执行: `/speckit.jira.specstoissues`
+Prompt: Create Jira issues from tasks?
+To execute: `/speckit.jira.specstoissues`
 ```
 
-然后你可以选择运行钩子或跳过它. 
+然后你可以选择运行钩子或跳过。
 
 ---
 
@@ -252,72 +267,72 @@ vim .specify/extensions/jira/jira-config.yml
 ### 列出已安装的扩展
 
 ```bash
-specify extension list
+specify-cn extension list
 ```
 
 输出:
 
 ```text
-已安装的扩展:
+Installed Extensions:
 
   ✓ Jira Integration (v1.0.0)
-     从 spec-kit 制品创建 Jira Epic, Story 和 Issue
-     命令: 3 | 钩子: 1 | 状态: 已启用
+     Create Jira Epics, Stories, and Issues from spec-kit artifacts
+     Commands: 3 | Hooks: 1 | Status: Enabled
 ```
 
 ### 更新扩展
 
 ```bash
 # 检查更新 (所有扩展)
-specify extension update
+specify-cn extension update
 
 # 更新特定扩展
-specify extension update jira
+specify-cn extension update jira
 ```
 
 输出:
 
 ```text
-🔄 检查更新...
+🔄 Checking for updates...
 
-可用更新:
+Updates available:
 
   • jira: 1.0.0 → 1.1.0
 
-更新这些扩展? [y/N]:
+Update these extensions? [y/N]:
 ```
 
 ### 临时禁用扩展
 
 ```bash
 # 禁用但不移除
-specify extension disable jira
+specify-cn extension disable jira
 
-✓ 扩展 'jira' 已禁用
+✓ Extension 'jira' disabled
 
-命令将不再可用. 钩子将不会执行. 
-重新启用: specify extension enable jira
+命令将不再可用。钩子不会执行。
+重新启用: specify-cn extension enable jira
 ```
 
 ### 重新启用扩展
 
 ```bash
-specify extension enable jira
+specify-cn extension enable jira
 
-✓ 扩展 'jira' 已启用
+✓ Extension 'jira' enabled
 ```
 
 ### 移除扩展
 
 ```bash
 # 移除扩展 (带确认)
-specify extension remove jira
+specify-cn extension remove jira
 
 # 移除时保留配置
-specify extension remove jira --keep-config
+specify-cn extension remove jira --keep-config
 
 # 强制移除 (无确认)
-specify extension remove jira --force
+specify-cn extension remove jira --force
 ```
 
 ---
@@ -331,11 +346,11 @@ specify extension remove jira --force
 ```text
 .specify/extensions/jira/
 ├── jira-config.yml           # 主配置 (版本控制)
-├── jira-config.local.yml     # 本地覆盖 (gitignore)
+├── jira-config.local.yml     # 本地覆盖 (gitignored)
 └── jira-config.template.yml  # 模板 (参考)
 ```
 
-### 配置层级
+### 配置层
 
 配置按以下顺序合并 (最后优先级最高):
 
@@ -361,7 +376,7 @@ defaults:
 
 ```yaml
 project:
-  key: "MYTEST"  # 本地开发覆盖
+  key: "MYTEST"  # Override for local development
 ```
 
 **环境变量**:
@@ -370,7 +385,7 @@ project:
 export SPECKIT_JIRA_PROJECT_KEY="DEVTEST"
 ```
 
-最终解析的配置使用来自环境变量的 `DEVTEST`. 
+最终解析的配置使用来自环境变量的 `DEVTEST`。
 
 ### 项目级扩展设置
 
@@ -387,13 +402,16 @@ settings:
   auto_execute_hooks: true
 
 # 钩子配置
+# 可用事件: before_specify, after_specify, before_plan, after_plan,
+#           before_tasks, after_tasks, before_implement, after_implement
+# 计划中 (尚未接入核心模板): before_commit, after_commit
 hooks:
   after_tasks:
     - extension: jira
       command: speckit.jira.specstoissues
       enabled: true
       optional: true
-      prompt: "从任务创建 Jira issue?"
+      prompt: "Create Jira issues from tasks?"
 ```
 
 ### 核心环境变量
@@ -402,16 +420,16 @@ hooks:
 
 | 变量 | 描述 | 默认值 |
 |------|------|--------|
-| `SPECKIT_CATALOG_URL`       | 覆盖扩展目录 URL | GitHub 托管的目录 |
-| `GH_TOKEN` / `GITHUB_TOKEN` | 用于下载的 GitHub API token | 无 |
+| `SPECKIT_CATALOG_URL`       | 使用单个 URL 覆盖整个目录栈 (向后兼容) | 内置默认栈 |
+| `GH_TOKEN` / `GITHUB_TOKEN` | GitHub API 令牌用于下载 | None |
 
 #### 示例: 使用自定义目录进行测试
 
 ```bash
-# 指向本地或替代目录
+# 指向本地或替代目录 (替换整个栈)
 export SPECKIT_CATALOG_URL="http://localhost:8000/catalog.json"
 
-# 或使用暂存目录
+# 或使用预发布目录
 export SPECKIT_CATALOG_URL="https://example.com/staging/catalog.json"
 ```
 
@@ -419,24 +437,107 @@ export SPECKIT_CATALOG_URL="https://example.com/staging/catalog.json"
 
 ## 扩展目录
 
-有关 Spec Kit 双目录系统如何工作的信息 (`catalog.json` vs `catalog.community.json`), 请参阅主 [扩展 README](README.md#扩展目录). 
+Spec Kit 使用**目录栈** - 一个同时搜索的有序目录列表。默认激活两个目录:
+
+| 优先级 | 目录 | 允许安装 | 用途 |
+|----------|---------|-----------------|---------|
+| 1 | `catalog.json` (默认) | ✅ 是 | 可安装的策划扩展 |
+| 2 | `catalog.community.json` (社区) | ❌ 否 (仅发现) | 浏览社区扩展 |
+
+### 列出活跃目录
+
+```bash
+specify-cn extension catalog list
+```
+
+### 通过 CLI 管理目录
+
+你可以使用 `--help` 查看主要的目录管理命令:
+
+```text
+specify-cn extension catalog --help
+
+ Usage: specify-cn extension catalog [OPTIONS] COMMAND [ARGS]...
+
+ Manage extension catalogs
+╭─ Options ────────────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                      │
+╰──────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────────╮
+│ list     List all active extension catalogs.                                     │
+│ add      Add a catalog to .specify/extension-catalogs.yml.                       │
+│ remove   Remove a catalog from .specify/extension-catalogs.yml.                  │
+╰──────────────────────────────────────────────────────────────────────────────────╯
+```
+
+### 添加目录 (项目级)
+
+```bash
+# 添加允许安装的内部目录
+specify-cn extension catalog add \
+  --name "internal" \
+  --priority 2 \
+  --install-allowed \
+  https://internal.company.com/spec-kit/catalog.json
+
+# 添加仅发现目录
+specify-cn extension catalog add \
+  --name "partner" \
+  --priority 5 \
+  https://partner.example.com/spec-kit/catalog.json
+```
+
+这会创建或更新 `.specify/extension-catalogs.yml`。
+
+### 移除目录
+
+```bash
+specify-cn extension catalog remove internal
+```
+
+### 手动配置文件
+
+你也可以直接编辑 `.specify/extension-catalogs.yml`:
+
+```yaml
+catalogs:
+  - name: "default"
+    url: "https://raw.githubusercontent.com/github/spec-kit/main/extensions/catalog.json"
+    priority: 1
+    install_allowed: true
+    description: "Built-in catalog of installable extensions"
+
+  - name: "internal"
+    url: "https://internal.company.com/spec-kit/catalog.json"
+    priority: 2
+    install_allowed: true
+    description: "Internal company extensions"
+
+  - name: "community"
+    url: "https://raw.githubusercontent.com/github/spec-kit/main/extensions/catalog.community.json"
+    priority: 3
+    install_allowed: false
+    description: "Community-contributed extensions (discovery only)"
+```
+
+用户级别的等效文件位于 `~/.specify/extension-catalogs.yml`。当项目级配置包含一个或多个目录条目时, 它完全优先。空的 `catalogs: []` 列表会回退到内置默认值。
 
 ## 组织目录自定义
 
-### 为什么要自定义你的目录
+### 为什么自定义你的目录
 
-组织自定义他们的 `catalog.json` 以:
+组织自定义目录以:
 
-- **控制可用扩展** - 精选团队可以安装哪些扩展
+- **控制可用扩展** - 策划团队可以安装的扩展
 - **托管私有扩展** - 不应公开的内部工具
 - **合规性自定义** - 满足安全/审计要求
-- **支持离线环境** - 在没有互联网访问的情况下工作
+- **支持离线环境** - 在无网络访问的情况下工作
 
 ### 设置自定义目录
 
 #### 1. 创建你的目录文件
 
-创建一个包含你的扩展的 `catalog.json` 文件:
+创建包含你扩展的 `catalog.json` 文件:
 
 ```json
 {
@@ -447,7 +548,7 @@ export SPECKIT_CATALOG_URL="https://example.com/staging/catalog.json"
     "jira": {
       "name": "Jira Integration",
       "id": "jira",
-      "description": "从 spec-kit 制品创建 Jira issue",
+      "description": "Create Jira issues from spec-kit artifacts",
       "author": "Your Organization",
       "version": "2.1.0",
       "download_url": "https://github.com/your-org/spec-kit-jira/archive/refs/tags/v2.1.0.zip",
@@ -469,7 +570,7 @@ export SPECKIT_CATALOG_URL="https://example.com/staging/catalog.json"
     "internal-tool": {
       "name": "Internal Tool Integration",
       "id": "internal-tool",
-      "description": "连接到内部公司系统",
+      "description": "Connect to internal company systems",
       "author": "Your Organization",
       "version": "1.0.0",
       "download_url": "https://internal.your-org.com/extensions/internal-tool-1.0.0.zip",
@@ -492,64 +593,80 @@ export SPECKIT_CATALOG_URL="https://example.com/staging/catalog.json"
 
 托管目录的选项:
 
-| 方法 | URL 示例 | 用例 |
-| ---- | -------- | ---- |
+| 方式 | URL 示例 | 使用场景 |
+| ------ | ----------- | -------- |
 | GitHub Pages | `https://your-org.github.io/spec-kit-catalog/catalog.json` | 公开或组织可见 |
 | 内部 Web 服务器 | `https://internal.company.com/spec-kit/catalog.json` | 企业网络 |
-| S3/云存储 | `https://s3.amazonaws.com/your-bucket/catalog.json` | 云托管团队 |
+| S3/云存储 | `https://s3.amazonaws.com/your-bucket/catalog.json` | 云端团队 |
 | 本地文件服务器 | `http://localhost:8000/catalog.json` | 开发/测试 |
 
-**安全要求**: URL 必须使用 HTTPS (测试用的 `localhost` 除外). 
+**安全要求**: URL 必须使用 HTTPS (测试用的 `localhost` 除外)。
 
 #### 3. 配置你的环境
 
-##### 选项 A: 环境变量 (推荐用于 CI/CD)
+##### 方式 A: 目录栈配置文件 (推荐)
+
+在项目中的 `.specify/extension-catalogs.yml` 中添加:
+
+```yaml
+catalogs:
+  - name: "my-org"
+    url: "https://your-org.com/spec-kit/catalog.json"
+    priority: 1
+    install_allowed: true
+```
+
+或使用 CLI:
+
+```bash
+specify-cn extension catalog add \
+  --name "my-org" \
+  --install-allowed \
+  https://your-org.com/spec-kit/catalog.json
+```
+
+##### 方式 B: 环境变量 (推荐用于 CI/CD, 单目录)
 
 ```bash
 # 在 ~/.bashrc, ~/.zshrc 或 CI 管道中
 export SPECKIT_CATALOG_URL="https://your-org.com/spec-kit/catalog.json"
 ```
 
-##### 选项 B: 每项目配置
-
-创建 `.env` 或在运行 spec-kit 命令前在 shell 中设置:
-
-```bash
-SPECKIT_CATALOG_URL="https://your-org.com/spec-kit/catalog.json" specify extension search
-```
-
 #### 4. 验证配置
 
 ```bash
-# 搜索现在应该显示你目录中的扩展
-specify extension search
+# 列出活跃目录
+specify-cn extension catalog list
+
+# 搜索应该显示你目录中的扩展
+specify-cn extension search
 
 # 从你的目录安装
-specify extension add jira
+specify-cn extension add jira
 ```
 
-### 目录 JSON Schema
+### 目录 JSON 模式
 
-每个扩展条目的必需字段:
+每个扩展条目的必填字段:
 
-| 字段 | 类型 | 必需 | 描述 |
-| ---- | ---- | ---- | ---- |
-| `name` | string | 是 | 人类可读的名称 |
+| 字段 | 类型 | 必填 | 描述 |
+| ----- | ---- | -------- | ----------- |
+| `name` | string | 是 | 人类可读名称 |
 | `id` | string | 是 | 唯一标识符 (小写, 连字符) |
-| `version` | string | 是 | 语义版本 (X.Y.Z) |
-| `download_url` | string | 是 | ZIP 归档的 URL |
+| `version` | string | 是 | 语义化版本 (X.Y.Z) |
+| `download_url` | string | 是 | ZIP 归档 URL |
 | `repository` | string | 是 | 源代码 URL |
 | `description` | string | 否 | 简短描述 |
 | `author` | string | 否 | 作者/组织 |
 | `license` | string | 否 | SPDX 许可证标识符 |
 | `requires.speckit_version` | string | 否 | 版本约束 |
-| `requires.tools` | array | 否 | 必需的外部工具 |
+| `requires.tools` | array | 否 | 所需的外部工具 |
 | `provides.commands` | number | 否 | 命令数量 |
 | `provides.hooks` | number | 否 | 钩子数量 |
 | `tags` | array | 否 | 搜索标签 |
 | `verified` | boolean | 否 | 验证状态 |
 
-### 用例
+### 使用场景
 
 #### 私有/内部扩展
 
@@ -565,9 +682,9 @@ specify extension add jira
 }
 ```
 
-#### 精选团队目录
+#### 策划的团队目录
 
-限制团队可以安装哪些扩展:
+限制团队可以安装的扩展:
 
 ```json
 {
@@ -578,13 +695,13 @@ specify extension add jira
 }
 ```
 
-只有 `jira` 和 `github` 会出现在 `specify extension search` 中. 
+只有 `jira` 和 `github` 会出现在 `specify-cn extension search` 中。
 
 #### 离线环境
 
-对于没有互联网访问的网络:
+对于没有网络访问的环境:
 
-1. 下载扩展 ZIP 到内部文件服务器
+1. 将扩展 ZIP 下载到内部文件服务器
 2. 创建指向内部 URL 的目录
 3. 在内部 Web 服务器上托管目录
 
@@ -604,29 +721,29 @@ specify extension add jira
 # 启动本地服务器
 python -m http.server 8000 --directory ./my-catalog/
 
-# 将 spec-kit 指向本地目录
+# 指定 spec-kit 使用本地目录
 export SPECKIT_CATALOG_URL="http://localhost:8000/catalog.json"
 
 # 测试安装
-specify extension add my-new-extension
+specify-cn extension add my-new-extension
 ```
 
-### 与直接安装结合使用
+### 结合直接安装
 
 你仍然可以使用 `--from` 安装不在你目录中的扩展:
 
 ```bash
 # 从目录
-specify extension add jira
+specify-cn extension add jira
 
 # 直接 URL (绕过目录)
-specify extension add --from https://github.com/someone/spec-kit-ext/archive/v1.0.0.zip
+specify-cn extension add <extension-name> --from https://github.com/someone/spec-kit-ext/archive/v1.0.0.zip
 
 # 本地开发
-specify extension add --dev /path/to/extension
+specify-cn extension add --dev /path/to/extension
 ```
 
-**注意**: 直接 URL 安装会显示安全警告, 因为扩展不是来自你配置的目录. 
+**注意**: 直接 URL 安装会显示安全警告, 因为该扩展不是来自你配置的目录。
 
 ---
 
@@ -638,9 +755,9 @@ specify extension add --dev /path/to/extension
 
 **解决方案**:
 
-1. 检查拼写: `specify extension search jira`
-2. 刷新目录: `specify extension search --help`
-3. 检查互联网连接
+1. 检查拼写: `specify-cn extension search jira`
+2. 刷新目录: `specify-cn extension search --help`
+3. 检查网络连接
 4. 扩展可能尚未发布
 
 ### 找不到配置
@@ -649,7 +766,7 @@ specify extension add --dev /path/to/extension
 
 **解决方案**:
 
-1. 检查扩展是否已安装: `specify extension list`
+1. 检查扩展是否已安装: `specify-cn extension list`
 2. 从模板创建配置:
 
    ```bash
@@ -657,7 +774,7 @@ specify extension add --dev /path/to/extension
       .specify/extensions/jira/jira-config.yml
    ```
 
-3. 重新安装扩展: `specify extension remove jira && specify extension add jira`
+3. 重新安装扩展: `specify-cn extension remove jira && specify-cn extension add jira`
 
 ### 命令不可用
 
@@ -665,7 +782,7 @@ specify extension add --dev /path/to/extension
 
 **解决方案**:
 
-1. 检查扩展是否已启用: `specify extension list`
+1. 检查扩展是否已启用: `specify-cn extension list`
 2. 重启 AI 代理 (Claude Code)
 3. 检查命令文件是否存在:
 
@@ -684,13 +801,13 @@ specify extension add --dev /path/to/extension
 1. 升级 spec-kit:
 
    ```bash
-   uv tool upgrade specify-cli
+   uv tool upgrade specify-cn-cli
    ```
 
 2. 安装旧版本的扩展:
 
    ```bash
-   specify extension add --from https://github.com/org/ext/archive/v1.0.0.zip
+   specify-cn extension add <extension-name> --from https://github.com/org/ext/archive/v1.0.0.zip
    ```
 
 ### MCP 工具不可用
@@ -699,20 +816,20 @@ specify extension add --dev /path/to/extension
 
 **解决方案**:
 
-1. 检查 MCP server 是否已安装
-2. 检查 AI 代理 MCP 配置
+1. 检查 MCP 服务器是否已安装
+2. 检查 AI 代理的 MCP 配置
 3. 重启 AI 代理
-4. 检查扩展要求: `specify extension info jira`
+4. 检查扩展要求: `specify-cn extension info jira`
 
 ### 权限被拒绝
 
-**错误**: 访问 Jira 时 `Permission denied`
+**错误**: `Permission denied` 访问 Jira 时
 
 **解决方案**:
 
-1. 检查 MCP server 配置中的 Jira 凭据
+1. 检查 MCP 服务器配置中的 Jira 凭据
 2. 验证 Jira 中的项目权限
-3. 独立测试 MCP server 连接
+3. 独立测试 MCP 服务器连接
 
 ---
 
@@ -720,12 +837,12 @@ specify extension add --dev /path/to/extension
 
 ### 1. 版本控制
 
-**要提交**:
+**应该提交**:
 
 - `.specify/extensions.yml` (项目扩展配置)
 - `.specify/extensions/*/jira-config.yml` (项目配置)
 
-**不要提交**:
+**不应提交**:
 
 - `.specify/extensions/.cache/` (目录缓存)
 - `.specify/extensions/.backup/` (配置备份)
@@ -741,26 +858,26 @@ specify extension add --dev /path/to/extension
 .specify/extensions/.registry
 ```
 
-### 2. 团队工作流程
+### 2. 团队工作流
 
-**对于团队**:
+**适用于团队**:
 
-1. 商定使用哪些扩展
+1. 约定使用的扩展
 2. 提交扩展配置
-3. 在 README 中记录扩展使用
-4. 一起保持扩展更新
+3. 在 README 中记录扩展用法
+4. 共同保持扩展更新
 
 **示例 README 部分**:
 
 ```markdown
-## 扩展
+## Extensions
 
-此项目使用:
-- **jira** (v1.0.0) - Jira 集成
-  - 配置: `.specify/extensions/jira/jira-config.yml`
-  - 需要: jira-mcp-server
+This project uses:
+- **jira** (v1.0.0) - Jira integration
+  - Config: `.specify/extensions/jira/jira-config.yml`
+  - Requires: jira-mcp-server
 
-安装: `specify extension add jira`
+To install: `specify-cn extension add jira`
 ```
 
 ### 3. 本地开发
@@ -770,17 +887,17 @@ specify extension add --dev /path/to/extension
 ```yaml
 # .specify/extensions/jira/jira-config.local.yml
 project:
-  key: "DEVTEST"  # 你的测试项目
+  key: "DEVTEST"  # Your test project
 
 defaults:
   task:
     custom_fields:
-      customfield_10002: 1  # 测试用较低的 story points
+      customfield_10002: 1  # Lower story points for testing
 ```
 
 ### 4. 环境特定配置
 
-为 CI/CD 使用环境变量:
+在 CI/CD 中使用环境变量:
 
 ```bash
 # .github/workflows/deploy.yml
@@ -788,7 +905,7 @@ env:
   SPECKIT_JIRA_PROJECT_KEY: ${{ secrets.JIRA_PROJECT }}
 
 - name: Create Jira Issues
-  run: specify extension add jira && ...
+  run: specify-cn extension add jira && ...
 ```
 
 ### 5. 扩展更新
@@ -796,8 +913,8 @@ env:
 **定期检查更新**:
 
 ```bash
-# 每周或主要发布前
-specify extension update
+# 每周或重大发布前
+specify-cn extension update
 ```
 
 **固定版本以保持稳定性**:
@@ -806,12 +923,12 @@ specify extension update
 # .specify/extensions.yml
 installed:
   - id: jira
-    version: "1.0.0"  # 固定到特定版本
+    version: "1.0.0"  # Pin to specific version
 ```
 
-### 6. 最小化扩展
+### 6. 精简扩展
 
-只安装你积极使用的扩展:
+只安装你实际使用的扩展:
 
 - 减少复杂性
 - 更快的命令加载
@@ -819,74 +936,73 @@ installed:
 
 ### 7. 文档
 
-在项目中记录扩展使用:
+在项目中记录扩展用法:
 
 ```markdown
 # PROJECT.md
 
-## 使用 Jira
+## Working with Jira
 
-创建任务后, 同步到 Jira:
-1. 运行 `/speckit.tasks` 生成任务
-2. 运行 `/speckit.jira.specstoissues` 创建 Jira issue
-3. 运行 `/speckit.jira.sync-status` 更新状态
+After creating tasks, sync to Jira:
+1. Run `/speckit.tasks` to generate tasks
+2. Run `/speckit.jira.specstoissues` to create Jira issues
+3. Run `/speckit.jira.sync-status` to update status
 ```
 
 ---
 
-## 常见问题
+## FAQ
 
 ### Q: 我可以同时使用多个扩展吗?
 
-**A**: 可以! 扩展被设计为可以一起工作. 根据需要安装任意数量. 
+**A**: 可以! 扩展设计为协同工作。安装你需要的任意数量。
 
-### Q: 扩展会减慢 spec-kit 吗?
+### Q: 扩展会拖慢 spec-kit 吗?
 
-**A**: 不会. 扩展按需加载, 且仅在使用其命令时加载. 
+**A**: 不会。扩展按需加载, 只在使用其命令时才加载。
 
 ### Q: 我可以创建私有扩展吗?
 
-**A**: 可以. 使用 `--dev` 或 `--from` 安装并保持私有. 公开目录提交是可选的. 
+**A**: 可以。使用 `--dev` 或 `--from` 安装并保持私有。公共目录提交是可选的。
 
 ### Q: 我如何知道扩展是否安全?
 
-**A**: 查找 ✓ Verified 徽章. 已验证的扩展由维护者审核. 安装前始终审核扩展代码. 
+**A**: 查找 ✓ Verified 标志。已验证的扩展由维护者审查。安装前务必审查扩展代码。
 
 ### Q: 扩展可以修改 spec-kit 核心吗?
 
-**A**: 不可以. 扩展只能添加命令和钩子. 它们不能修改核心功能. 
+**A**: 不可以。扩展只能添加命令和钩子。它们不能修改核心功能。
 
 ### Q: 如果两个扩展有相同的命令名怎么办?
 
-**A**: 扩展使用命名空间命令 (`speckit.{extension}.{command}`), 所以冲突非常罕见. 扩展系统会在发生冲突时警告你. 
+**A**: 扩展使用命名空间命令 (`speckit.{extension}.{command}`), 所以冲突非常罕见。扩展系统会在冲突发生时发出警告。
 
 ### Q: 我可以为现有扩展做贡献吗?
 
-**A**: 可以! 大多数扩展是开源的. 在 `specify extension info {extension}` 中查看仓库链接. 
+**A**: 可以! 大多数扩展都是开源的。查看 `specify-cn extension info {extension}` 中的仓库链接。
 
-### Q: 如何报告扩展 bug?
+### Q: 如何报告扩展缺陷?
 
-**A**: 前往扩展的仓库 (在 `specify extension info` 中显示) 并创建 issue. 
+**A**: 前往扩展的仓库 (在 `specify-cn extension info` 中显示) 并创建 Issue。
 
-### Q: 扩展可以离线工作吗?
+### Q: 扩展可以离线使用吗?
 
-**A**: 一旦安装, 扩展可以离线工作. 但是, 某些扩展可能需要互联网才能实现其功能 (例如 Jira 需要 Jira API 访问). 
+**A**: 安装后, 扩展可以离线使用。但某些扩展可能需要网络连接才能实现其功能 (如 Jira 需要 Jira API 访问)。
 
 ### Q: 如何备份我的扩展配置?
 
-**A**: 扩展配置在 `.specify/extensions/{extension}/` 中. 备份此目录或将配置提交到 git. 
+**A**: 扩展配置位于 `.specify/extensions/{extension}/`。备份此目录或将配置提交到 Git。
 
 ---
 
 ## 支持
 
-- **扩展问题**: 报告到扩展仓库 (参见 `specify extension info`)
-- **Spec Kit 问题**: <https://github.com/statsperform/spec-kit/issues>
-- **扩展目录**: <https://github.com/statsperform/spec-kit/tree/main/extensions>
+- **扩展问题**: 报告到扩展仓库 (参见 `specify-cn extension info`)
+- **Spec Kit 问题**: <https://github.com/Linfee/spec-kit-cn/issues>
+- **扩展目录**: <https://github.com/Linfee/spec-kit-cn/tree/main/extensions>
 - **文档**: 参见 EXTENSION-DEVELOPMENT-GUIDE.md 和 EXTENSION-PUBLISHING-GUIDE.md
 
 ---
 
 *最后更新: 2026-01-28*
 *Spec Kit 版本: 0.1.0*
-STATS:comma=0,period=0,colon=0,semicolon=0,exclaim=0,question=0,dunhao=0

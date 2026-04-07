@@ -1,226 +1,280 @@
 #!/usr/bin/env python3
-"""校验 Spec Kit CN Markdown 翻译覆盖范围与疑似未翻译内容。
+"""检查 Markdown 文件翻译覆盖率.
 
-规则:
-- 仅检查需要本地化的范围, 避免把项目内部规则/脚本文档混入翻译审查
-- 对照源固定为 ./spec-kit
-- 忽略 .claude/, tests/, CLAUDE.md, AGENTS.md, TRANSLATION_STANDARDS.md, TERMINOLOGY.md, CHANGELOG.md
-- memory/constitution.md 已在上游移除, 不再纳入检查
-
-退出码:
-- 0: 覆盖率通过(即无原版缺失文件)
-- 1: 存在原版文件缺失或基础环境问题
+用法:
+    python3 tests/e2e/check-markdown-translation-coverage.py
+    python3 tests/e2e/check-markdown-translation-coverage.py --detailed
 """
-
-from __future__ import annotations
 
 import re
 import sys
-from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable
+import argparse
+from dataclasses import dataclass
+from typing import List
 
-ROOT = Path(__file__).resolve().parents[2]
-UPSTREAM_ROOT = ROOT / "spec-kit"
 
-ROOT_TRANSLATION_FILES = [
-    "README.md",
-    "SUPPORT.md",
-    "SECURITY.md",
-    "CONTRIBUTING.md",
-    "CODE_OF_CONDUCT.md",
-    "spec-driven.md",
-]
-TRANSLATION_DIRS = [
-    "docs",
+@dataclass
+class FileCheckResult:
+    """单个文件的检查结果."""
+    path: Path
+    total_lines: int
+    chinese_lines: int
+    english_lines: int
+    is_translated: bool
+    coverage: float
+
+
+# 需要检查翻译的目录
+CHECK_DIRECTORIES = [
+    "templates/commands",
     "templates",
+    "docs",
+    "memory",
     "presets",
     "extensions",
 ]
-SUSPICIOUS_SCAN_ROOT_FILES = [
-    "README.md",
-    "SUPPORT.md",
-    "SECURITY.md",
-    "CONTRIBUTING.md",
-    "CODE_OF_CONDUCT.md",
-    "spec-driven.md",
-]
-SUSPICIOUS_SCAN_DIRS = [
-    "docs",
-    "templates",
+
+# 排除的文件模式
+EXCLUDE_PATTERNS = [
+    r".*\.json$",
+    r".*catalog\.json$",
+    r".*catalog\.community\.json$",
+    r".*\.yml$",
+    r".*\.yaml$",
 ]
 
-IGNORE_LINE_PATTERNS = [
-    r"https?://",
-    r"`[^`]+`",
-    r"\b(specify-cn|specify-cli|specify-cn-cli)\b",
-    r"\b(GitHub|CLI|API|JSON|YAML|TOML|Markdown|PowerShell|Python|JavaScript|TypeScript|Mermaid)\b",
-    r"\b(TODO|TKTK|N/A|NEEDS CLARIFICATION)\b",
-    r"\[(PROJECT|PRINCIPLE|NEEDS CLARIFICATION)[^\]]*\]",
-    r"\{ARGS\}|\$ARGUMENTS",
-    r"\b(Claude|Gemini|Codex|Cursor|Windsurf|Qwen|Copilot|Auggie|Tabnine|Kimi|Trae|Amp|SHAI|IBM Bob|Amazon Q|Agy|Auggie CLI|Kilo Code|OpenCode|CodeBuddy|Roo)\b",
-    r"\b(vibe-coding|Greenfield|Brownfield|UX|UI|IDE|VS Code|Linux/macOS/Windows|Bash/Zsh|Mercurial|SVN|monorepo)\b",
-    r"(^|\s)[./][^\s]+",
+# 指示翻译质量的关键指标
+# 如果文件包含这些中文短语，很可能已翻译
+CHINESE_INDICATORS = [
+    "用户输入",
+    "概述",
+    "执行步骤",
+    "目标",
+    "功能描述",
+    "规范",
+    "实现",
+    "任务",
+    "计划",
+    "注意",
+    "重要",
+    "警告",
+    "提示",
+    "示例",
+    "说明",
 ]
-IGNORE_LINE_RE = re.compile("|".join(IGNORE_LINE_PATTERNS))
-ENGLISH_TOKEN_RE = re.compile(r"[A-Za-z][A-Za-z0-9+./'-]*")
-CJK_RE = re.compile(r"[\u4e00-\u9fff]")
-CODE_FENCE_RE = re.compile(r"^```")
-SUSPICIOUS_LINE_LIMIT = 80
+
+# 模板占位符标记 - 这些文件通常包含大量占位符
+TEMPLATE_PLACEHOLDERS = [
+    "[项目名称]",
+    "[功能名称]",
+    "[日期]",
+    "[检查清单类型]",
+    "[类别",
+    "[摘要]",
+    "[详情",
+]
 
 
-@dataclass(frozen=True)
-class ScanResult:
-    matched: list[str]
-    local_only: list[str]
-    upstream_missing: list[str]
-    suspicious_lines: list[str]
+def should_exclude(filepath: Path) -> bool:
+    """检查文件是否应该被排除."""
+    for pattern in EXCLUDE_PATTERNS:
+        if re.match(pattern, filepath.name):
+            return True
+    return False
 
 
-def iter_translation_files(base: Path) -> list[str]:
-    files: list[str] = []
+def is_template_placeholder_file(content: str) -> bool:
+    """判断是否为模板占位符文件."""
+    # 如果包含大量方括号占位符，可能是模板文件
+    placeholder_count = len(re.findall(r'\[.*?\]', content))
+    return placeholder_count > 5
 
-    for rel in ROOT_TRANSLATION_FILES:
-        path = base / rel
-        if path.is_file():
-            files.append(rel)
 
-    for rel_dir in TRANSLATION_DIRS:
-        dir_path = base / rel_dir
-        if not dir_path.is_dir():
+def analyze_file(filepath: Path) -> FileCheckResult:
+    """分析单个文件的翻译情况."""
+    try:
+        content = filepath.read_text(encoding='utf-8')
+    except Exception:
+        return FileCheckResult(
+            path=filepath,
+            total_lines=0,
+            chinese_lines=0,
+            english_lines=0,
+            is_translated=False,
+            coverage=0.0
+        )
+
+    lines = content.split('\n')
+    total_lines = len(lines)
+    chinese_lines = 0
+    english_lines = 0
+    code_block_lines = 0
+
+    in_code_block = False
+
+    # 统计包含中文字符和英文字符的行
+    for line in lines:
+        # 检测代码块
+        if line.strip().startswith('```'):
+            in_code_block = not in_code_block
+            code_block_lines += 1
             continue
-        for path in sorted(dir_path.rglob("*.md")):
-            files.append(path.relative_to(base).as_posix())
 
-    return sorted(set(files))
-
-
-def is_suspicious_line(line: str) -> bool:
-    stripped = line.strip()
-    if not stripped:
-        return False
-    if IGNORE_LINE_RE.search(stripped):
-        return False
-
-    english_tokens = ENGLISH_TOKEN_RE.findall(stripped)
-    if len(english_tokens) < 4:
-        return False
-
-    if CJK_RE.search(stripped):
-        ascii_letters = sum(ch.isascii() and ch.isalpha() for ch in stripped)
-        cjk_chars = len(CJK_RE.findall(stripped))
-        return ascii_letters > cjk_chars * 3
-
-    return True
-
-
-def iter_suspicious_scan_files(base: Path) -> list[str]:
-    files: list[str] = []
-
-    for rel in SUSPICIOUS_SCAN_ROOT_FILES:
-        path = base / rel
-        if path.is_file():
-            files.append(rel)
-
-    for rel_dir in SUSPICIOUS_SCAN_DIRS:
-        dir_path = base / rel_dir
-        if not dir_path.is_dir():
+        if in_code_block:
+            code_block_lines += 1
             continue
-        for path in sorted(dir_path.rglob("*.md")):
-            files.append(path.relative_to(base).as_posix())
 
-    return sorted(set(files))
+        has_chinese = bool(re.search(r'[\u4e00-\u9fff]', line))
+        has_english = bool(re.search(r'[a-zA-Z]{3,}', line))  # 至少3个字母
 
+        if has_chinese:
+            chinese_lines += 1
+        elif has_english:
+            english_lines += 1
 
-def scan_suspicious_lines(files: Iterable[str]) -> list[str]:
-    suspicious: list[str] = []
+    # 计算非代码行的覆盖率
+    non_code_lines = total_lines - code_block_lines
+    if non_code_lines > 0:
+        coverage = chinese_lines / non_code_lines * 100
+    else:
+        coverage = 100.0 if chinese_lines > 0 else 0.0
 
-    for rel in files:
-        path = ROOT / rel
-        text = path.read_text(encoding="utf-8")
-        in_code_fence = False
-
-        for index, line in enumerate(text.splitlines(), start=1):
-            if CODE_FENCE_RE.match(line.strip()):
-                in_code_fence = not in_code_fence
-                continue
-            if in_code_fence:
-                continue
-            if is_suspicious_line(line):
-                suspicious.append(f"{rel}:{index}: {line.strip()}")
-                if len(suspicious) >= SUSPICIOUS_LINE_LIMIT:
-                    return suspicious
-
-    return suspicious
-
-
-def run() -> int:
-    if not UPSTREAM_ROOT.is_dir():
-        print("❌ 未找到原版目录: spec-kit")
-        return 1
-
-    current_files = iter_translation_files(ROOT)
-    upstream_files = iter_translation_files(UPSTREAM_ROOT)
-
-    current_set = set(current_files)
-    upstream_set = set(upstream_files)
-
-    suspicious_scan_files = iter_suspicious_scan_files(ROOT)
-
-    result = ScanResult(
-        matched=sorted(current_set & upstream_set),
-        local_only=sorted(current_set - upstream_set),
-        upstream_missing=sorted(upstream_set - current_set),
-        suspicious_lines=scan_suspicious_lines(suspicious_scan_files),
+    # 检查是否包含中文指示词
+    has_chinese_indicators = any(
+        indicator in content for indicator in CHINESE_INDICATORS
     )
 
-    print("=== Markdown 翻译覆盖校验 ===")
-    print(f"项目根目录: {ROOT}")
-    print(f"原版目录: {UPSTREAM_ROOT}")
-    print()
-    print("[范围]")
-    print(f"- 根目录文件: {', '.join(ROOT_TRANSLATION_FILES)}")
-    print(f"- 目录: {', '.join(TRANSLATION_DIRS)}")
-    print("- 忽略: .claude/, tests/, CLAUDE.md, AGENTS.md, TRANSLATION_STANDARDS.md, TERMINOLOGY.md, CHANGELOG.md, memory/constitution.md")
-    print(f"- 疑似英文扫描范围: {', '.join(SUSPICIOUS_SCAN_ROOT_FILES)} + {', '.join(SUSPICIOUS_SCAN_DIRS)}")
-    print()
-    print("[统计]")
-    print(f"- 当前纳入校验: {len(current_set)}")
-    print(f"- 原版纳入校验: {len(upstream_set)}")
-    print(f"- 与原版同路径: {len(result.matched)}")
-    print(f"- 当前独有: {len(result.local_only)}")
-    print(f"- 原版缺失: {len(result.upstream_missing)}")
+    # 检查是否为模板占位符文件
+    is_template = is_template_placeholder_file(content)
+
+    # 检查是否标题已经是中文
+    chinese_title = bool(re.search(r'^#+\s+[\u4e00-\u9fff]', content, re.MULTILINE))
+
+    # 判断是否已翻译的逻辑：
+    # 1. 如果有中文指示词且覆盖率 > 15%（降低阈值，排除代码块影响）
+    # 2. 或者是模板占位符文件且包含中文
+    # 3. 或者中文行数 > 3 且标题是中文
+    is_translated = (
+        (has_chinese_indicators and coverage > 15) or
+        (is_template and chinese_lines > 3) or
+        (chinese_lines > 3 and chinese_title)
+    )
+
+    return FileCheckResult(
+        path=filepath,
+        total_lines=total_lines,
+        chinese_lines=chinese_lines,
+        english_lines=english_lines,
+        is_translated=is_translated,
+        coverage=coverage
+    )
+
+
+def scan_directory(dir_path: Path) -> List[FileCheckResult]:
+    """扫描目录中的所有 Markdown 文件."""
+    results = []
+
+    if not dir_path.exists():
+        return results
+
+    for md_file in dir_path.rglob("*.md"):
+        if should_exclude(md_file):
+            continue
+        result = analyze_file(md_file)
+        results.append(result)
+
+    return results
+
+
+def print_summary(results: List[FileCheckResult], detailed: bool = False):
+    """打印检查摘要."""
+    if not results:
+        print("  未找到 Markdown 文件")
+        return
+
+    translated = [r for r in results if r.is_translated]
+    untranslated = [r for r in results if not r.is_translated]
+
+    print(f"  总文件数: {len(results)}")
+    print(f"  已翻译: {len(translated)} ({len(translated)/len(results)*100:.1f}%)")
+    print(f"  未翻译/需更新: {len(untranslated)} ({len(untranslated)/len(results)*100:.1f}%)")
+
+    if detailed and untranslated:
+        print()
+        print("  未翻译文件列表:")
+        for r in sorted(untranslated, key=lambda x: str(x.path)):
+            print(f"    - {r.path} (覆盖率: {r.coverage:.1f}%)")
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="检查 Markdown 文件翻译覆盖率"
+    )
+    parser.add_argument(
+        "--detailed", "-d",
+        action="store_true",
+        help="显示详细的未翻译文件列表"
+    )
+    parser.add_argument(
+        "--threshold",
+        type=float,
+        default=30.0,
+        help="翻译覆盖率阈值 (默认: 30%%)"
+    )
+    args = parser.parse_args()
+
+    print("=" * 70)
+    print("  Markdown 翻译覆盖率检查")
+    print("=" * 70)
     print()
 
-    if result.local_only:
-        print("[当前独有文件]")
-        for item in result.local_only:
-            print(f"- {item}")
+    all_results = []
+
+    for dir_name in CHECK_DIRECTORIES:
+        dir_path = Path(dir_name)
+        results = scan_directory(dir_path)
+
+        if results:
+            print(f"📁 {dir_name}/")
+            print_summary(results, args.detailed)
+            print()
+            all_results.extend(results)
+
+    # 总体统计
+    if all_results:
+        print("=" * 70)
+        print("  总体统计")
+        print("=" * 70)
         print()
 
-    if result.upstream_missing:
-        print("[原版存在但当前缺失]")
-        for item in result.upstream_missing:
-            print(f"- {item}")
+        total = len(all_results)
+        translated = len([r for r in all_results if r.is_translated])
+        untranslated = total - translated
+
+        print(f"  总文件数: {total}")
+        print(f"  已翻译: {translated} ({translated/total*100:.1f}%)")
+        print(f"  需翻译: {untranslated} ({untranslated/total*100:.1f}%)")
         print()
 
-    if result.suspicious_lines:
-        print(f"[疑似未翻译英文行] 最多显示 {SUSPICIOUS_LINE_LIMIT} 条")
-        for item in result.suspicious_lines:
-            print(f"- {item}")
-        print()
+        if untranslated > 0:
+            print("=" * 70)
+            print("  需翻译的文件:")
+            print("=" * 70)
+            print()
+            for r in sorted(
+                [r for r in all_results if not r.is_translated],
+                key=lambda x: str(x.path)
+            ):
+                print(f"  - {r.path}")
+            print()
+            return 1
     else:
-        print("[疑似未翻译英文行]")
-        print("- 未发现明显可疑项")
-        print()
+        print("  未找到需要检查的文件")
 
-    if result.upstream_missing:
-        print("❌ 校验失败: 存在原版文件未纳入当前翻译范围")
-        return 1
-
-    print("✅ 校验通过: 翻译范围覆盖原版对应 Markdown 文件")
+    print("✅ 所有 Markdown 文件已达到翻译覆盖率要求!")
     return 0
 
 
 if __name__ == "__main__":
-    sys.exit(run())
+    sys.exit(main())

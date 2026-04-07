@@ -330,6 +330,30 @@ uv run specify-cn extension add --help
 - **Wheel Bundle** → Wheel 包 / 离线安装包
 - **Native Extensions** → 原生扩展
 
+## Python 代码中的 YAML 输出本地化
+
+在 Python 代码中使用 `yaml.dump()` 或 `yaml.safe_dump()` 输出包含中文的 YAML 内容时, **必须**设置 `allow_unicode=True` 参数, 否则中文字符会被转义为 `\uXXXX` 格式。
+
+### 正确写法
+
+```python
+# ✅ 正确: allow_unicode=True 保证中文原样输出
+yaml.dump(data, allow_unicode=True)
+yaml.safe_dump(data, allow_unicode=True)
+
+# ❌ 错误: 默认会将中文转义为 \uXXXX
+yaml.dump(data)
+yaml.safe_dump(data)
+```
+
+### 检查方法
+
+同步原版代码后, 搜索所有新增或修改的 `yaml.dump` / `yaml.safe_dump` 调用:
+
+```bash
+grep -rn "yaml\.safe_dump\|yaml\.dump" src/specify_cli/ --include="*.py" | grep -v allow_unicode
+```
+
 ## 参考资源
 
 - [原版项目](https://github.com/github/spec-kit)

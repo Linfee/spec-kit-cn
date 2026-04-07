@@ -16,7 +16,7 @@
 
 ## 第一部分: 升级 CLI 工具
 
-CLI 工具(`specify`)与你的项目文件是分开的. 升级它以获取最新功能和错误修复.
+CLI 工具(`specify-cn`)与你的项目文件是分开的. 升级它以获取最新功能和错误修复.
 
 ### 如果你使用 `uv tool install` 安装
 
@@ -395,7 +395,7 @@ uv tool install specify-cn-cli --from git+https://github.com/linfee/spec-kit-cn.
 
 **解释:**
 
-`specify` CLI 工具用于:
+`specify-cn` CLI 工具用于:
 
 - **初始设置:** `specify-cn init` 在项目中引导 Spec Kit
 - **升级:** `specify-cn init --here --force` 更新模板和命令
@@ -424,7 +424,7 @@ uv tool install specify-cn-cli --from git+https://github.com/linfee/spec-kit-cn.
 
 4. **对于某些代理**, 你可能需要重新加载工作区或清除缓存
 
-**相关问题:** 如果 Copilot 无法打开本地文件或意外使用 PowerShell 命令, 这通常是 IDE 上下文问题, 与 `specify` 无关. 尝试:
+**相关问题:** 如果 Copilot 无法打开本地文件或意外使用 PowerShell 命令, 这通常是 IDE 上下文问题, 与 `specify-cn` 无关. 尝试:
 
 - 重启 VS Code
 - 检查文件权限

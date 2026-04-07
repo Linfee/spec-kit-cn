@@ -1,13 +1,13 @@
 ---
 description: 使用计划模板执行实施计划工作流, 生成设计制品.
 handoffs:
-  - label: Create Tasks
+  - label: 创建任务
     agent: speckit.tasks
-    prompt: Break the plan into tasks
+    prompt: 将计划分解为任务
     send: true
-  - label: Create Checklist
+  - label: 创建清单
     agent: speckit.checklist
-    prompt: Create a checklist for the following domain...
+    prompt: 为以下领域创建清单...
 scripts:
   sh: scripts/bash/setup-plan.sh --json
   ps: scripts/powershell/setup-plan.ps1 -Json

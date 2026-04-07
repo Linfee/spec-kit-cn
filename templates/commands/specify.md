@@ -183,22 +183,22 @@ $ARGUMENTS
         3. 对于每个需要澄清的问题(最多 3 个), 以此格式向用户展示选项:
 
            ```markdown
-           ## Question [N]: [Topic]
+           ## 问题 [N]: [主题]
 
-           **Context**: [Quote relevant spec section]
+           **上下文**: [引用相关规范章节]
 
-           **What we need to know**: [Specific question from NEEDS CLARIFICATION marker]
+           **需要了解**: [来自 NEEDS CLARIFICATION 标记的具体问题]
 
-           **Suggested Answers**:
+           **建议答案**:
 
-           | Option | Answer | Implications |
-           |--------|--------|--------------|
-           | A      | [First suggested answer] | [What this means for the feature] |
-           | B      | [Second suggested answer] | [What this means for the feature] |
-           | C      | [Third suggested answer] | [What this means for the feature] |
-           | Custom | Provide your own answer | [Explain how to provide custom input] |
+           | 选项 | 答案 | 影响 |
+           |------|------|------|
+           | A      | [第一个建议答案] | [这对功能意味着什么] |
+           | B      | [第二个建议答案] | [这对功能意味着什么] |
+           | C      | [第三个建议答案] | [这对功能意味着什么] |
+           | 自定义 | 提供你自己的答案 | [说明如何提供自定义输入] |
 
-           **Your choice**: _[Wait for user response]_
+           **你的选择**: _[等待用户响应]_
            ```
 
         4. **关键 - 表格格式**: 确保 markdown 表格格式正确:

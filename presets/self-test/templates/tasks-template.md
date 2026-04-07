@@ -1,17 +1,17 @@
-# Tasks (Self-Test Preset)
+# 任务 (自测预设)
 
 <!-- preset:self-test -->
 
-> This template is provided by the self-test preset.
+> 此模板由自测预设提供.
 
-## Task List
+## 任务列表
 
-- [ ] Task 1
-- [ ] Task 2
+- [ ] 任务 1
+- [ ] 任务 2
 
-## Estimation
+## 估算
 
-| Task | Estimate |
-|------|----------|
-| Task 1 | TBD |
-| Task 2 | TBD |
+| 任务 | 估算 |
+|------|------|
+| 任务 1 | 待定 |
+| 任务 2 | 待定 |

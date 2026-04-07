@@ -5,7 +5,23 @@
 格式基于[Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/),
 并且本项目遵循[语义化版本](https://semver.org/lang/zh-CN/).
 
+<!-- insert new changelog below this comment -->
+
 ## [Unreleased]
+
+### 变更
+- **同步原版 v0.5.0**: 从原版 [github/spec-kit](https://github.com/github/spec-kit) v0.5.0 同步全部功能变更
+  - **Integrations 插件系统**: 新增 `src/specify_cli/integrations/` 模块, 含 27 个 AI agent 集成插件和完整的 manifest/registry 系统
+  - **`--integration` 和 `--integration-options` 参数**: `init` 命令支持新的集成系统参数
+  - **Forgecode agent 支持**: 新增 forge (Forgecode) agent 集成
+  - **模板术语更新**: "Non-Functional Requirements" → "Success Criteria" 术语重命名
+  - **新增 "假设" 章节**: `spec-template.md` 新增 Assumptions 部分
+  - **Release workflow 重构**: CI 从外部脚本改为内联方式, 移除 `.github/workflows/scripts/` 目录
+  - **pyproject.toml 清理**: 移除已删除的 release scripts force-include 引用
+  - **新增 DEVELOPMENT.md 和 TESTING.md**: 完整翻译
+  - **README 新增社区章节**: 社区扩展列表(40+), 社区预设, 社区项目, 新增演练
+  - **scripts 增强**: `create-new-feature` 新增 `--dry-run` 和 `--allow-existing-branch` 标志
+  - **Agent 配置重构**: 从硬编码 AGENT_CONFIG 改为从 INTEGRATION_REGISTRY 动态构建
 
 ### 变更
 - **CLI help 本地化补全**: 修复 `specify-cn init --help` 中长 docstring 仍为英文的问题

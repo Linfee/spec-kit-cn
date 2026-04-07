@@ -1,15 +1,15 @@
-# Checklist (Self-Test Preset)
+# 清单 (自测预设)
 
 <!-- preset:self-test -->
 
-> This template is provided by the self-test preset.
+> 此模板由自测预设提供.
 
-## Pre-Implementation
+## 实施前
 
-- [ ] Spec reviewed
-- [ ] Plan approved
+- [ ] 规范已审查
+- [ ] 计划已批准
 
-## Post-Implementation
+## 实施后
 
-- [ ] Tests passing
-- [ ] Documentation updated
+- [ ] 测试通过
+- [ ] 文档已更新
