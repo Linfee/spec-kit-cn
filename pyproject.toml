@@ -5,7 +5,7 @@ description = "Specify CN CLI, part of GitHub Spec Kit CN. A tool to bootstrap y
 requires-python = ">=3.11"
 dependencies = [
     "typer",
-    "click>=8.1",
+    "click>=8.3.2",
     "rich",
     "httpx[socks]",
     "platformdirs",
